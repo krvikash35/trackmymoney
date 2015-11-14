@@ -1,0 +1,24 @@
+{
+  "name": "trackmymoney",
+  "description": "Simple web app to track the expense, income and transfer for personal or group",
+  "main": "server.js",
+  "authors": [
+    "Vikash Kumar"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/krvikash35/trackmymoney",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ngstorage": "~0.3.10",
+    "angular": "latest",
+    "bootstrap-css": "~3.3.4"
+  }
+}
