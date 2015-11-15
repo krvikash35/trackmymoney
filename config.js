@@ -16,7 +16,7 @@ module.exports = {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
   },
-  "accountLoginMethod":   [email,phone],
+  "accountLoginMethod":   ["email","phone"],
   "moneyAccountType":   ["SavingAccount", "CreditCard","DigitalWallet","CashAccount"],
   "initIncomeSource":   ["Salary","Dividend","Interest-Principal","Borrwo","Gift","Refund"],
   "initExpenseSource":  ["Fooding","DailyUsageItem","On Family","Travel","Entertainment",
@@ -30,10 +30,10 @@ module.exports = {
       {"name": "CreditCard-Others",      "type": "CreditCard",    "subAccountBalance": 0},
       {"name": "DigitalWallet-Paytm",    "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "DigitalWallet-Mobikwik", "type": "DigitalWallet", "subAccountBalance": 0},
-      {"name": "DigitalWallet-Others"    "type": "DigitalWallet", "subAccountBalance": 0},
+      {"name": "DigitalWallet-Others",   "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "Cash",                   "type": "Cash",          "subAccountBalance": 0}
     ],
-  emailRegex:             "",
-  moneyAccountNameRegex:  "",
+  emailRegex:             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gmi,
+  moneyAccountNameRegex:  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/mi,
 
 };

@@ -5,10 +5,10 @@ var sConfig      = require('../config')
 // user schema, will map to user_info collection
 var userInfo = new schema({
   "account":  {
-      "email":                { type: String, required: true, unique: true, index: true, match=sConfig.emailRegex },
-      "phone":                { type: Number },
-      "name":                 { type: String },
-      "password":             { type: String },
+      "email":                { type: String, maxlength: 25, required: true, unique: true, index: true, match: sConfig.emailRegex },
+      "phone":                { type: Number, maxlength: 12 },
+      "name":                 { type: String, maxlength: 25},
+      "password":             { type: String, maxlength: 25 },
       "accountVerified": [{
           "method":           { type: String, enum: sConfig.accountLoginMethod },
           "isVerified":       { type: Boolean }
@@ -30,7 +30,7 @@ var userInfo = new schema({
   "moneyAccount": [{
       "name":                 { type: String, unique: true, match:sConfig.moneyAccountNameRegex , maxlength: 25},
       "type":                 { type: String, enum: sConfig.moneyAccountType},
-      "savingAccountBalance": { type: Number }
+      "subAccountBalance":    { type: Number, default: 0 }
   }]
 });
 
