@@ -1,14 +1,14 @@
 var mongoose     = require('mongoose');
 var schema       = mongoose.Schema;
-var sConfig      = require('../config')
+var sConfig      = require('../config');
 
 // user schema, will map to user_info collection
-var userInfo = new schema({
+var userInfoSchema = new schema({
   "account":  {
-      "email":                { type: String, maxlength: 25, required: true, unique: true, index: true, match: sConfig.emailRegex },
-      "phone":                { type: Number, maxlength: 12 },
-      "name":                 { type: String, maxlength: 25},
-      "password":             { type: String, maxlength: 25 },
+      "email":                { type: String, maxlength: 25, required: true, lowercase: true, unique: true, index: true, match: sConfig.emailRegex },
+      "phone":                { type: Number, maxlength: 12},
+      "fullname":             { type: String, maxlength: 25},
+      "password":             { type: String, maxlength: 25, required: true},
       "accountVerified": [{
           "method":           { type: String, enum: sConfig.accountLoginMethod },
           "isVerified":       { type: Boolean }
@@ -38,7 +38,18 @@ var userInfo = new schema({
 
 
 
-// user personal transaction schema, will map to this collection
-var userPersonalTrx = new schema({
+// user personal transaction schema, will map to user_prsnl_trx collection
+var userPrsnlTrxSchema = new schema({
 
 });
+
+
+//database containing all the schema
+var trackmymoneydb = {
+  "userInfoDoc":      mongoose.model("userInfoModels",userInfoSchema),
+  "userPrsnlTrxDoc":  mongoose.model("",userPrsnlTrxSchema)
+}
+
+
+//export this module so that other pages can use
+module.exports=trackmymoneydb;

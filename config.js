@@ -12,6 +12,12 @@ module.exports = {
     "appUrl": "localhost",
     "appPort": "8080"
   },
+  "serverSecret": "ILoveCoding",
+  "tokenExpiresInSecond": 120,
+  "dbValidationMsg": {
+    "req": "please enter the required field",
+
+  },
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
