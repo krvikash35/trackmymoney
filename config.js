@@ -13,7 +13,7 @@ module.exports = {
     "appPort": "8080"
   },
   "serverSecret": "ILoveCoding",
-  "tokenExpiresInSecond": 120,
+  "tokenExpiresInSecond": 50,
   "dbValidationMsg": {
     "req": "please enter the required field",
 

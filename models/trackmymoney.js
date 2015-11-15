@@ -6,9 +6,9 @@ var sConfig      = require('../config');
 var userInfoSchema = new schema({
   "account":  {
       "email":                { type: String, maxlength: 25, required: true, lowercase: true, unique: true, index: true, match: sConfig.emailRegex },
-      "phone":                { type: Number, maxlength: 12},
-      "fullname":             { type: String, maxlength: 25},
-      "password":             { type: String, maxlength: 25, required: true},
+      "phone":                { type: Number, maxlength: 12, minlength: 12},
+      "fullname":             { type: String, maxlength: 25, minlength: 3},
+      "password":             { type: String, maxlength: 25, minimum:   3, required: true},
       "accountVerified": [{
           "method":           { type: String, enum: sConfig.accountLoginMethod },
           "isVerified":       { type: Boolean }
