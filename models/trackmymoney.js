@@ -5,10 +5,10 @@ var sConfig      = require('../config');
 // user schema, will map to user_info collection
 var userInfoSchema = new schema({
   "account":  {
-      "email":                { type: String, maxlength: 25, required: true, lowercase: true, unique: true, index: true, match: sConfig.emailRegex },
+      "email":                { type: String, maxlength: 25, required: true, lowercase: true, unique: true, index: true },
       "phone":                { type: Number, maxlength: 12, minlength: 12},
-      "fullname":             { type: String, maxlength: 25, minlength: 3},
-      "password":             { type: String, maxlength: 25, minimum:   3, required: true},
+      "fullname":             { type: String, maxlength: 25},
+      "password":             { type: String, required: true},
       "accountVerified": [{
           "method":           { type: String, enum: sConfig.accountLoginMethod },
           "isVerified":       { type: Boolean }
@@ -40,7 +40,13 @@ var userInfoSchema = new schema({
 
 // user personal transaction schema, will map to user_prsnl_trx collection
 var userPrsnlTrxSchema = new schema({
-
+  "amount":       { type: Number, required: true},
+  "type":         { type: String, enum:sConfig.trxType},
+  "Source":       { type: String },
+  "destination":  { type: String},
+  "description":  { type: String},
+  "accountId":    { type: String},
+  "date":         { type: Date, default: Date.now }
 });
 
 

@@ -13,16 +13,13 @@ module.exports = {
     "appPort": "8080"
   },
   "serverSecret": "ILoveCoding",
-  "tokenExpiresInSecond": 50,
-  "dbValidationMsg": {
-    "req": "please enter the required field",
-
-  },
+  "tokenExpiresInSecond": 3600,
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
   },
-  "accountLoginMethod":   ["email","phone"],
+  "trxType":            ["Income, Expense, Transfer"],
+  "accountLoginMethod": ["email","phone"],
   "moneyAccountType":   ["SavingAccount", "CreditCard","DigitalWallet","CashAccount"],
   "initIncomeSource":   ["Salary","Dividend","Interest-Principal","Borrwo","Gift","Refund"],
   "initExpenseSource":  ["Fooding","DailyUsageItem","On Family","Travel","Entertainment",
@@ -39,7 +36,10 @@ module.exports = {
       {"name": "DigitalWallet-Others",   "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "Cash",                   "type": "Cash",          "subAccountBalance": 0}
     ],
-  emailRegex:             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gmi,
-  moneyAccountNameRegex:  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/mi,
-
+  "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
+  "moneyAccountNameRegex":  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/i,
+  "pwdLength": {
+    "min": 4,
+    "max": 25
+  }
 };

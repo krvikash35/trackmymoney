@@ -9,13 +9,14 @@
   "author": "Vikash Kumar",
   "license": "ISC",
   "engine": "5.0.0",
-  "dependencies":{
-    "express": "latest",
-    "mongoose": "latest",
-    "bower": "latest",
-    "jsonwebtoken": "latest",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
     "body-parser": "latest",
-    "nodemon": "latest",
-    "morgan": "latest"
+    "bower": "latest",
+    "express": "latest",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "morgan": "latest",
+    "nodemon": "latest"
   }
 }
