@@ -17,8 +17,8 @@ var userInfoSchema = new schema({
       "updateDate":           { type: Date, default: Date.now }
   },
   "sourceOfMoneyTrx": {
-      "incomeSource":         { type: [String], maxlength: 25, minlength: 3},
-      "expenseSource":        { type: [String], maxlength: 25, minlength: 3 }
+      "incomeSource":         { type: [String], maxlength: 25, minlength: 3, default: sConfig.initIncomeSource},
+      "expenseSource":        { type: [String], maxlength: 25, minlength: 3, default: sConfig.initExpenseSource }
   },
   "accountBalance":  {
       "allAccountBalance":    { type: Number, default: 0 },
@@ -28,7 +28,7 @@ var userInfoSchema = new schema({
       "cashAccountBalance":   { type: Number, default: 0 },
   },
   "moneyAccount": [{
-      "name":                 { type: String, unique: true, match:sConfig.moneyAccountNameRegex , maxlength: 25},
+      "name":                 { type: String, maxlength: 25},
       "type":                 { type: String, enum: sConfig.moneyAccountType},
       "subAccountBalance":    { type: Number, default: 0 }
   }]
@@ -52,8 +52,8 @@ var userPrsnlTrxSchema = new schema({
 
 //database containing all the schema
 var trackmymoneydb = {
-  "userInfoDoc":      mongoose.model("userInfoModels",userInfoSchema),
-  "userPrsnlTrxDoc":  mongoose.model("",userPrsnlTrxSchema)
+  "userInfoDoc":      mongoose.model("userInfo",userInfoSchema),
+  "userPrsnlTrxDoc":  mongoose.model("userPrsnlTrx",userPrsnlTrxSchema)
 }
 
 

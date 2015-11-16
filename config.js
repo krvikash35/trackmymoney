@@ -34,7 +34,7 @@ module.exports = {
       {"name": "DigitalWallet-Paytm",    "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "DigitalWallet-Mobikwik", "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "DigitalWallet-Others",   "type": "DigitalWallet", "subAccountBalance": 0},
-      {"name": "Cash",                   "type": "Cash",          "subAccountBalance": 0}
+      {"name": "Cash",                   "type": "CashAccount",   "subAccountBalance": 0}
     ],
   "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
   "moneyAccountNameRegex":  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/i,

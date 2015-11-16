@@ -135,12 +135,13 @@ pubRouter.post('/signup', function(req,res){
       return res.send({"data": "Invalid Email length or pattern"});
     }
     var hashpwd               = bcrypt.hashSync(pwd, 10);
-    var usrDoc                = new usrInfo();
-    usrDoc.account.email      = req.body.email;
-    usrDoc.account.phone      = req.body.phone;
-    usrDoc.account.fullname   = req.body.fullname;
-    usrDoc.account.password   = hashpwd;
-    usrDoc.save(function(err, data){
+    var usrInfoDoc                = new usrInfo();
+    usrInfoDoc.account.email      = req.body.email;
+    usrInfoDoc.account.phone      = req.body.phone;
+    usrInfoDoc.account.fullname   = req.body.fullname;
+    usrInfoDoc.account.password   = hashpwd;
+    usrInfoDoc.moneyAccount       = sConfig.initMoneyAccount;
+    usrInfoDoc.save(function(err, data){
       if(err){
         res.status(400);
         res.send({"msg": "Invalid signup data"});
@@ -168,14 +169,33 @@ privRouter.get('/:user_id',function(req, res){
   })
 });
 
-//
-// //Handle any uncaught Exception, to prevent server from crashing
-// process.on('uncaughtException', function(err) {
-//   console.log("uncaughtException: "+err);
-// });
-
-
-// Start Server
-app.listen(port, function () {
-  console.log( "Express server listening on port " + port);
+privRouter.post('/:user_id/trx',function(req, res){
+  var userPrsnlTrx            = new usrPrsTrx();
+  userPrsnlTrx.amount         = req.body.amount;
+  userPrsnlTrx.type           = req.body.type;
+  userPrsnlTrx.Source         = req.body.Source;
+  userPrsnlTrx.destination    = req.body.destination
+  userPrsnlTrx.description    = req.body.description;
+  userPrsnlTrx.accountId      = req.params.user_id;
+  userPrsnlTrx.save(function(err, data){
+    if(err){
+      res.status(400);
+      res.send({"msg": "Invalid trnsaction data"});
+      throw new Error(err);
+    }else{
+      return res.sendStatus(201);
+    }
+  });
 });
+
+  //
+  // //Handle any uncaught Exception, to prevent server from crashing
+  // process.on('uncaughtException', function(err) {
+  //   console.log("uncaughtException: "+err);
+  // });
+
+
+  // Start Server
+  app.listen(port, function () {
+    console.log( "Express server listening on port " + port);
+  });
