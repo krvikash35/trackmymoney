@@ -45,7 +45,7 @@ var userPrsnlTrxSchema = new schema({
   "Source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
-  "accountId":    { type: String},
+  "userId":    { type: String},
   "date":         { type: Date, default: Date.now }
 });
 

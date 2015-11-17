@@ -34,22 +34,28 @@ app.use(function(req, res, next) {
 app.use('/user', privRouter);
 app.use('', pubRouter);
 // app.use(express.static("./app"));
-privRouter.use(function(req,res,next){
-  var bearerToken;
+privRouter.use('/:userId',function(req,res,next){
   var bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== 'undefined') {
     var bearer = bearerHeader.split(" ");
-    bearerToken = bearer[1];
+    var bearerToken = bearer[1];
     jwt.verify(bearerToken, sConfig.serverSecret, function(err, decoded){
       if(err){
         res.status(401);
         res.setHeader("Location", "/signin");
         return res.send({"data": "Unauthorized to see this page"})
       }
+      if(req.params.userId !== decoded.userId){
+        res.status(400);
+        return res.send({"data": "Invalid Resources"})
+      }
+      req.userId = decoded.userId;
+      next();
     });
-    req.token = bearerToken;
+  }else{
+    res.status(400);
+    return res.send({"data": "supported authorization Header not found"});
   }
-  next();
 });
 
 
@@ -104,7 +110,7 @@ pubRouter.post('/signin',function(req, res){
       res.status(400);
       return res.send({"data": "Invalid Password"})
     }
-    var usr   = { "email": data.account.email };
+    var usr   = { "userId": data._id };
     var token = jwt.sign(usr, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
     var loc   = "user/"+data._id+"/trx"
     res.setHeader("Location", loc);
@@ -146,12 +152,10 @@ pubRouter.post('/signup', function(req,res){
         res.status(400);
         res.send({"msg": "Invalid signup data"});
         throw new Error(err);
-        console.log("after throwing");
       }else{
         var loc="user/"+data._id+"/info";
         res.setHeader("Location",loc);
         return res.sendStatus(201);;
-
       }
     });
   });
@@ -159,28 +163,39 @@ pubRouter.post('/signup', function(req,res){
 
 
 
-privRouter.get('/:user_id',function(req, res){
-  usrInfo.findById(req.params.user_id, function(err, data){
+privRouter.get('/:userId/info',function(req, res){
+  usrInfo.findById(req.params.userId, function(err, data){
     if(err || data === null){
       res.status(400)
-      return res.send("Invalid Resource");
+      return res.send("No Data Found");
     }
-    return res.send("data:"+data);
+    return res.send({data: data});
   })
 });
 
-privRouter.post('/:user_id/trx',function(req, res){
+privRouter.get('/:userId/report', function(req, res){
+usrPrsTrx.find({userId: req.params.userId}, function(err, data){
+  if(err || data === null){
+    res.status(400);
+    return res.send({data: 'No Data Found'});
+  }
+  res.status(200);
+  return res.send({data: data});
+});
+});
+
+privRouter.post('/:userId/trx',function(req, res){
   var userPrsnlTrx            = new usrPrsTrx();
   userPrsnlTrx.amount         = req.body.amount;
   userPrsnlTrx.type           = req.body.type;
   userPrsnlTrx.Source         = req.body.Source;
   userPrsnlTrx.destination    = req.body.destination
   userPrsnlTrx.description    = req.body.description;
-  userPrsnlTrx.accountId      = req.params.user_id;
+  userPrsnlTrx.userId      = req.params.userId;
   userPrsnlTrx.save(function(err, data){
     if(err){
       res.status(400);
-      res.send({"msg": "Invalid trnsaction data"});
+      res.send({"msg": "Invalid transaction data"});
       throw new Error(err);
     }else{
       return res.sendStatus(201);
@@ -188,14 +203,14 @@ privRouter.post('/:user_id/trx',function(req, res){
   });
 });
 
-  //
-  // //Handle any uncaught Exception, to prevent server from crashing
-  // process.on('uncaughtException', function(err) {
-  //   console.log("uncaughtException: "+err);
-  // });
+
+//Handle any uncaught Exception, to prevent server from crashing
+process.on('uncaughtException', function(err) {
+  console.log("uncaughtException: "+err);
+});
 
 
-  // Start Server
-  app.listen(port, function () {
-    console.log( "Express server listening on port " + port);
-  });
+// Start Server
+app.listen(port, function () {
+  console.log( "Express server listening on port " + port);
+});
