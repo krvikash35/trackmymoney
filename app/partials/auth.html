@@ -1,0 +1,37 @@
+<div ng-show="error" class="alert alert-danger">{{error}}</div>
+
+<div ng-show="isLoginFormVisible">
+  <h3>Login to MyApp</h3>
+  <form role="form"   class="login-form" ng-submit="submitLoginForm()">
+    <div class="form-group">
+      <input type="text" ng-model="loginUsername" name="loginUsername" placeholder="Username..." class="form-control" id="form-username" required>
+    </div>
+    <div class="form-group">
+      <input type="password" ng-model="loginPassword" name="loginPassword" placeholder="Password..." class="form-control" id="form-password" required>
+    </div>
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in!  </button>
+
+  </form>
+</div>
+<a href="" ng-click="toggleLoginAndRegView()" class="" >Register here!</a>
+
+
+<div   ng-show="isRegFormVisible">
+  <h3>Sign up now</h3>
+  <form role="form" action="" method="post" class="registration-form">
+    <div class="form-group">
+      <input type="text" name="regName" placeholder="Enter Name..." class="form-control" id="form-first-name">
+    </div>
+    <div class="form-group">
+      <input type="text" name="regEmail" placeholder="Email..." class="form-control" id="form-email">
+    </div>
+    <div class="form-group">
+      <input type="password" name="regPassword1" placeholder="Enter password..." class="form-control" id="regPassword1">
+    </div>
+    <div class="form-group">
+      <input type="password" name="regPassword2" placeholder="Re-Enter password..." class="form-control" id="regPassword2">
+    </div>
+    <button type="submit" class="btn">Sign me up!</button>
+    <a href="" ng-click="toggleLoginAndRegView()" >Signin here!</a>
+  </form>
+</div>

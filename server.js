@@ -31,9 +31,10 @@ app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
   next();
 });
+app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('', pubRouter);
-// app.use(express.static("./app"));
+
 privRouter.use('/:userId',function(req,res,next){
   var bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== 'undefined') {
@@ -89,12 +90,6 @@ mongoose.connect(mongoDBUrl, function(err){
 
 
 
-
-pubRouter.get('/', function(req, res){
-  res.json({
-    msg: "Welcome Guest"
-  })
-});
 
 pubRouter.post('/signin',function(req, res){
   usrInfo.findOne({"account.email": req.body.email}, function(err, data){
@@ -174,14 +169,14 @@ privRouter.get('/:userId/info',function(req, res){
 });
 
 privRouter.get('/:userId/report', function(req, res){
-usrPrsTrx.find({userId: req.params.userId}, function(err, data){
-  if(err || data === null){
-    res.status(400);
-    return res.send({data: 'No Data Found'});
-  }
-  res.status(200);
-  return res.send({data: data});
-});
+  usrPrsTrx.find({userId: req.params.userId}, function(err, data){
+    if(err || data === null){
+      res.status(400);
+      return res.send({data: 'No Data Found'});
+    }
+    res.status(200);
+    return res.send({data: data});
+  });
 });
 
 privRouter.post('/:userId/trx',function(req, res){
