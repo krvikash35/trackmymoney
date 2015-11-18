@@ -4,7 +4,8 @@
 var appModule = angular.module('trackMyMoney', [
   'controllerModule',
   'serviceModule',
-  'ngRoute'
+  'ngRoute',
+  'ui.bootstrap'
 ]);
 
 
@@ -14,10 +15,6 @@ var appModule = angular.module('trackMyMoney', [
 appModule.config(['$routeProvider',
 function($routeProvider){
   $routeProvider.
-  // when('/login', {
-  //   templateUrl: 'partials/auth.html',
-  //   controller: 'mainController'
-  // }).
   when('/user/info', {
     templateUrl: 'partials/prsnlinfo.html'
   }).
@@ -27,11 +24,8 @@ function($routeProvider){
   when('/user/trxn', {
     templateUrl: 'partials/trxn.html'
   }).
-  when('/afterlogin', {
-    templateUrl: 'partials/prsnlInfo.html'
-  }).
   otherwise({
-    redirectTo: '/login'
+    redirectTo: '/'
   });
 }
 ]);

@@ -12,4 +12,18 @@ controllerModule.controller('mainController',function($rootScope, $scope,$locati
     $scope.isLoginFormVisible=!$scope.isLoginFormVisible;
     $scope.isRegFormVisible=!$scope.isRegFormVisible;
   };
+
+  $scope.myInterval = 5000;
+  $scope.noWrapSlides = false;
+  var slides = $scope.slides = [];
+  $scope.addSlide = function() {
+    var newWidth = 600 + slides.length + 1;
+    slides.push({
+      image: '//placekitten.com/' + newWidth + '/300'
+
+    });
+  };
+  for (var i=0; i<5; i++) {
+    $scope.addSlide();
+  }
 });

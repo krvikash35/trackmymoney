@@ -15,8 +15,11 @@ body{
 
 /*.feed, .auth, .navigation, .content, .header, .footer, .container{
   box-shadow: 0 1px 1px black;
-  /*outline: 1px solid black;*/
+  outline: 1px solid black;
 }*/
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
 .registration-form, .login-form{
   max-width: 350px;
 }
