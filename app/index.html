@@ -21,7 +21,7 @@
         <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12"></div>
       </div>
 
-      <div class="row" ng-show="currentPath == '/login'" >
+      <div class="row" ng-show="currentPath == ''" >
         <div class="col-sm-8 col-md-8 feed">
           <div ng-include="'partials/feed.html'"></div>
         </div>
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="row content" ng-hide="currentPath == '/login'">
+    <div class="row content" ng-hide="currentPath == ''">
       <div ng-view class="col-sm-12 col-md-12">
       </div>
     </div>

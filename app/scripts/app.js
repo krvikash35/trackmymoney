@@ -25,7 +25,7 @@ function($routeProvider){
     templateUrl: 'partials/trxn.html'
   }).
   otherwise({
-    redirectTo: '/login'
+    redirectTo: ''
   });
 }
 ]);

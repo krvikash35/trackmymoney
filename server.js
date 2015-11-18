@@ -115,6 +115,17 @@ pubRouter.post('/signin',function(req, res){
 });
 
 pubRouter.post('/signup', function(req,res){
+  console.log(req.body);
+  var pwd   = req.body.password;
+  var email = req.body.email;
+  if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
+    res.status(400);
+    return res.send({"data": "Invalid Email length or pattern"});
+  }
+  if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
+    res.status(400);
+    return res.send({"data": "Invalid password length"});
+  }
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
       res.sendStatus(500);
@@ -124,18 +135,7 @@ pubRouter.post('/signup', function(req,res){
       res.status(409);
       return res.send({"data": "This user already exist in our system"});
     }
-    var pwd   = req.body.password;
-    var email = req.body.email;
-    if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
-      res.status(400);
-      return res.send({"data": "Invalid password length"});
-    }
-    console.log("email:" + email);
-    if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
-      res.status(400);
-      return res.send({"data": "Invalid Email length or pattern"});
-    }
-    var hashpwd               = bcrypt.hashSync(pwd, 10);
+    var hashpwd                   = bcrypt.hashSync(pwd, 10);
     var usrInfoDoc                = new usrInfo();
     usrInfoDoc.account.email      = req.body.email;
     usrInfoDoc.account.phone      = req.body.phone;
