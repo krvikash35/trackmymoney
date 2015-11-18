@@ -4,31 +4,34 @@
   <meta charset="utf-8"/>
   <title>Track My Money</title>
   <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.css"/>
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"/>
   <link rel="stylesheet" href="scripts/app.css" />
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="scripts/app.js"></script>
+  <script src="scripts/controller.js"></script>
+  <script src="scripts/services.js"></script>
 </head>
 <body>
   <div class="container">
-    <div class="row header">
-      <div ng-include="'partials/header.html'" class="col-sm-12">
-      </div>
-    </div>
 
-    <div class="row">
+    <div class="row" ng-show="currentPath == '/login'" ng-controller="authController">
       <div class="col-sm-8 col-md-8 feed">
         <div ng-include="'partials/feed.html'"></div>
       </div>
       <div  class="col-sm-4 col-md-4 auth">
-        <div ng-include="'partials/auth.html'"></div>
+        <div ng-include="'partials/auth.html'">
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div ng-include="'partials/navigation.html'" class="col-sm-4 col-md-4 navigation">
+    <div class="row navigation" ng-hide="currentPath == '/login'">
+      <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12">
       </div>
-      <div ng-view class="col-sm-8 col-md-8 content">
+    </div>
+
+    <div class="row content" ng-hide="currentPath == '/login'">
+      <div ng-view class="col-sm-12 col-md-12">
       </div>
     </div>
 

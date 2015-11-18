@@ -2,31 +2,33 @@
 
 // Declare app level module which depends on other module
 var appModule = angular.module('trackMyMoney', [
+  'controllerModule',
+  'serviceModule',
   'ngRoute'
 ]);
 
-appModule.controller('mainController',function($scope){
-  $scope.isLoginFormVisible=true;
-  $scope.isRegFormVisible=false;
 
-  $scope.toggleLoginAndRegView=function(){
-    console.log("inside toggleLoginAndRegView");
-    $scope.isLoginFormVisible=!$scope.isLoginFormVisible;
-    $scope.isRegFormVisible=!$scope.isRegFormVisible;
-  };
-});
 
 
 //config the module to wire controller, view template and current URL
 appModule.config(['$routeProvider',
 function($routeProvider){
   $routeProvider.
-  when('/login', {
-    templateUrl: 'partials/auth.html',
-    controller: 'mainController'
+  // when('/login', {
+  //   templateUrl: 'partials/auth.html',
+  //   controller: 'mainController'
+  // }).
+  when('/user/info', {
+    templateUrl: 'partials/prsnlinfo.html'
+  }).
+  when('/user/report', {
+    templateUrl: 'partials/report.html'
+  }).
+  when('/user/trxn', {
+    templateUrl: 'partials/trxn.html'
   }).
   when('/afterlogin', {
-    templateUrl: 'components/afterLogin/afterLogin.html'
+    templateUrl: 'partials/prsnlInfo.html'
   }).
   otherwise({
     redirectTo: '/login'
