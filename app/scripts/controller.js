@@ -17,13 +17,13 @@ controllerModule.controller('mainController',function($rootScope, $scope,$locati
   $scope.noWrapSlides = false;
   var slides = $scope.slides = [];
   $scope.addSlide = function() {
-    var newWidth = 600 + slides.length + 1;
+    var newWidth = 0 + slides.length + 1;
     slides.push({
-      image: '//placekitten.com/' + newWidth + '/300'
+      image: 'img/beauti' + newWidth + '.jpg'
 
     });
   };
-  for (var i=0; i<5; i++) {
+  for (var i=0; i<4; i++) {
     $scope.addSlide();
   }
 });
