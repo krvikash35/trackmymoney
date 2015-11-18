@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default ">
+<nav class="navbar navbar-inverse ">
 
   <div class="navbar-header pull-left">
     <a href="/" class="navbar-brand">TrackMyMoney</a>
@@ -22,7 +22,7 @@
       <span class="icon-bar"></span>
     </button>
   </div>
-  <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'">
+  <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" ng-hide="currentPath == '/login'">
     <ul class="nav navbar-nav pull-left">
       <li><a href="">Account</a></li>
       <li><a href="">Transaction</a></li>

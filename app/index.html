@@ -15,18 +15,18 @@
 <body>
   <div class="container">
 
-    <div class="row" ng-show="currentPath == '/login'" ng-controller="authController">
-      <div class="col-sm-8 col-md-8 feed">
-        <div ng-include="'partials/feed.html'"></div>
+    <div ng-controller="mainController">
+      <div class="row navigation" >
+        <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12"></div>
       </div>
-      <div  class="col-sm-4 col-md-4 auth">
-        <div ng-include="'partials/auth.html'">
-        </div>
-      </div>
-    </div>
 
-    <div class="row navigation" ng-hide="currentPath == '/login'">
-      <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12">
+      <div class="row" ng-show="currentPath == '/login'" >
+        <div class="col-sm-8 col-md-8 feed">
+          <div ng-include="'partials/feed.html'"></div>
+        </div>
+        <div  class="col-sm-4 col-md-4 auth">
+          <div ng-include="'partials/auth.html'"> </div>
+        </div>
       </div>
     </div>
 
@@ -37,8 +37,7 @@
 
 
     <div class="row footer">
-      <div ng-include="'partials/footer.html'" class="col-md-12">
-      </div>
+      <div ng-include="'partials/footer.html'" class="col-md-12"></div>
     </div>
 
 
