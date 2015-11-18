@@ -6,8 +6,8 @@
   <div class="navbar-header pull-right">
     <ul class="nav pull-left">
       <li class="navbar-text pull-left">Share</li>
-      <li class="dropdown pull-right">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#777; margin-top: 5px;" >
+      <li class="dropdown pull-right" uib-dropdown is-open="status.isopen">
+        <a href="#" class="dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" style="color:#777; margin-top: 5px;" >
         <i class="fa fa-share-alt"></i><i class="caret"></i></a>
         <ul class="dropdown-menu">
           <li><i class="fa fa-facebook">facebook</i>    </li>
@@ -22,8 +22,8 @@
       <span class="icon-bar"></span>
     </button>
   </div>
-  <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" ng-hide="currentPath == '/login'">
-    <ul class="nav navbar-nav pull-left">
+  <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" >
+    <ul class="nav navbar-nav pull-left" ng-hide="currentPath == '/login'">
       <li><a href="">Account</a></li>
       <li><a href="">Transaction</a></li>
       <li><a href="">Report</a></li>
