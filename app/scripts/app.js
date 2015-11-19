@@ -22,15 +22,15 @@ function($routeProvider){
   }).
   when('/user/:userId/report', {
     templateUrl: 'partials/userreport.html',
-    controller: ''
+    controller: 'userReportController'
   }).
-  when('/user/:userId/trxn', {
+  when('/user/:userId/trx', {
     templateUrl: 'partials/usertrxn.html',
-    controller: ''
+    controller: 'userTrxController'
   }).
-  otherwise({
-    redirectTo: ''
-  });
+  when('', {
+    templateUrl: 'index.html'
+  })
 }
 ]);
 
@@ -50,7 +50,7 @@ trackMyMoney.config(['$httpProvider', function($httpProvider){
       },
       'responseError': function(response) {
         if(response.status === 401 || response.status === 403) {
-          $location.path('/signin');
+          $window.location.href='';
         }
         return $q.reject(response);
       }

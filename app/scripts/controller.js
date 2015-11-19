@@ -12,6 +12,12 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     $scope.isRegFormVisible=!$scope.isRegFormVisible;
   };
 
+  $scope.logout = function(){
+    delete $localStorage.token;
+    $window.location.href='';
+    // $rootScope.isLandingPageVisible=true;
+  }
+
   $scope.myInterval = 5000;
   $scope.noWrapSlides = false;
   var slides = $scope.slides = [];
@@ -30,7 +36,8 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     $scope.error="";
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
-      $location.path('/#'+headers('location'));
+      $localStorage.token = data.data;
+      $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
       $scope.error=data.data;
@@ -66,3 +73,28 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
     $scope.userInfo=data;
   })
 });
+
+
+controllerModule.controller('userTrxController', function($scope, $rootScope, $location, $http,  $window){
+  $rootScope.isLandingPageVisible=false;
+  $scope.submitTrxForm=function(trxForm){
+    $http.post($location.path(), trxForm)
+    .success(function(data, status, headers, config){
+        //Todo
+    })
+    .error(function(data, status, headers, config){
+      //Todo
+    })
+  }
+})
+
+controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
+  $rootScope.isLandingPageVisible=false;
+  $http.get($location.path())
+  .success(function(data, status, headers, config){
+    $scope.userInfo=data;
+  })
+  .error(function(data, status, headers, config){
+    $scope.userInfo=data;
+  })
+})

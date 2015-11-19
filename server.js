@@ -42,7 +42,7 @@ privRouter.use('/:userId',function(req,res,next){
     jwt.verify(bearerToken, sConfig.serverSecret, function(err, decoded){
       if(err){
         res.status(401);
-        res.setHeader("Location", "/signin");
+        res.setHeader("Location", "");
         return res.send({"data": "Unauthorized to see this page"})
       }
       if(req.params.userId !== decoded.userId){
@@ -198,7 +198,7 @@ privRouter.get('/:userId/report', function(req, res){
 
 //-----------------------------------------------------------------------------------------------
 //post('/user/:userId/trx')
-//@param: {req.param.[userId]}
+//@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
 //@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
 //@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
 //----------------------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ privRouter.post('/:userId/trx',function(req, res){
   var userPrsnlTrx            = new usrPrsTrx();
   userPrsnlTrx.amount         = req.body.amount;
   userPrsnlTrx.type           = req.body.type;
-  userPrsnlTrx.Source         = req.body.Source;
+  userPrsnlTrx.Source         = req.body.source;
   userPrsnlTrx.destination    = req.body.destination
   userPrsnlTrx.description    = req.body.description;
   userPrsnlTrx.userId      = req.params.userId;
