@@ -2,7 +2,7 @@
 
 var controllerModule = angular.module('controllerModule', []);
 
-controllerModule.controller('mainController', function($route,$rootScope, $scope,$location, $http, $window){
+controllerModule.controller('mainController', function($localStorage, $route,$rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   $rootScope.isLandingPageVisible=true;
@@ -44,18 +44,21 @@ controllerModule.controller('mainController', function($route,$rootScope, $scope
     }
     $http.post('/signup', regForm)
     .success(function(data, status, headers, config){
+      console.log("DebugToken:"+data.data);
+      $localStorage.token = data.data;
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
       $scope.error=data.data;
     });
+
   };
 
 });
 
 controllerModule.controller('userInfoController', function($scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
-  $http.get($location.get)
+  $http.get($location.path())
   .success(function(data, status, headers, config){
     $scope.userInfo=data;
   })
