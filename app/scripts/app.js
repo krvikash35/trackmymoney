@@ -1,7 +1,7 @@
 'use strict'
 
 // Declare app level module which depends on other module
-var appModule = angular.module('trackMyMoney', [
+var trackMyMoney = angular.module('trackMyMoney', [
   'controllerModule',
   'serviceModule',
   'ngRoute',
@@ -12,7 +12,7 @@ var appModule = angular.module('trackMyMoney', [
 
 
 //config the module to wire controller, view template and current URL
-appModule.config(['$routeProvider',
+trackMyMoney.config(['$routeProvider',
 function($routeProvider){
   $routeProvider.
   when('/user/:userId/info', {

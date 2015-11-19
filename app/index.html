@@ -15,13 +15,12 @@
 </head>
 <body>
   <div class="container">
-
     <div ng-controller="mainController">
       <div class="row navigation" >
         <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12"></div>
       </div>
 
-      <div class="row" ng-show="currentPath == ''" >
+      <div class="row" ng-show="isLandingPageVisible == true" >
         <div class="col-sm-8 col-md-8 feed">
           <div ng-include="'partials/feed.html'"></div>
         </div>
@@ -31,8 +30,9 @@
       </div>
     </div>
 
-    <div class="row content" ng-hide="currentPath == ''">
+    <div class="row content" ng-show="!isLandingPageVisible == true">
       <div ng-view class="col-sm-12 col-md-12">
+        <p>currentPath: {{currentPath}}</p>
       </div>
     </div>
 

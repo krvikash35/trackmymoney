@@ -23,7 +23,7 @@
     </button>
   </div>
   <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" >
-    <ul class="nav navbar-nav pull-left" ng-hide="currentPath == ''">
+    <ul class="nav navbar-nav pull-left" ng-show="!isLandingPageVisible == true">
       <li><a href="">Account</a></li>
       <li><a href="">Transaction</a></li>
       <li><a href="">Report</a></li>

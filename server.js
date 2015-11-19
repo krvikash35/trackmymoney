@@ -119,7 +119,6 @@ pubRouter.post('/signin',function(req, res){
 //@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
 //------------------------------------------------------------------------------------------------
 pubRouter.post('/signup', function(req,res){
-  console.log(req.body);
   var pwd   = req.body.password;
   var email = req.body.email;
   if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
@@ -152,9 +151,12 @@ pubRouter.post('/signup', function(req,res){
         res.send({"msg": "Invalid signup data"});
         throw new Error(err);
       }else{
+        var usr   = { "userId": data._id };
+        var token = jwt.sign(usr, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
         var loc="user/"+data._id+"/info";
+        res.status(201);
         res.setHeader("Location",loc);
-        return res.sendStatus(201);;
+        return res.send({"data": token});;
       }
     });
   });

@@ -37,7 +37,7 @@ module.exports = {
       {"name": "Cash",                   "type": "CashAccount",   "subAccountBalance": 0}
     ],
   // "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
-  "emailRegex":             /^[a-zA-Z0-9]$/gi,
+  "emailRegex":             /^[a-zA-Z0-9]{2}$/gi,
   "moneyAccountNameRegex":  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/i,
   "pwdLength": {
     "min": 1,
