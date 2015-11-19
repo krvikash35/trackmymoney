@@ -2,7 +2,8 @@
 
 var controllerModule = angular.module('controllerModule', []);
 
-controllerModule.controller('mainController',function($rootScope, $scope,$location, $http){
+controllerModule.controller('mainController', ['$rootScope', '$scope', '$location', '$http', '$window',
+                                      function($rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   $rootScope.currentPath=$location.path();
@@ -27,20 +28,34 @@ controllerModule.controller('mainController',function($rootScope, $scope,$locati
     $scope.addSlide();
   };
 
+  $scope.submitLoginForm(){
+    
+  }
+
 
   $scope.submitRegForm = function(regForm){
-    $scope.error="";
-    if(regForm.password !== regForm.password1){
-      return $scope.error="both password does not match!";
-    }
-    $http.post('/signup', regForm)
-    .success(function(data, status, headers, config){
-      console.log("success:"+headers);
-    })
-    .error(function(data, status, headers, config){
-      $scope.error=data.data;
-    });
+    // $location.path('/user/1234/info');
+    // $scope.$apply();
+    $window.location.href = "#/user/123/info";
+    $scope.$apply().replace();
+
+    // $window.location = "#/user/123/info";
+    // $scope.error="";
+    // if(regForm.password !== regForm.password1){
+    //   return $scope.error="both password does not match!";
+    // }
+    // $http.post('/signup', regForm)
+    // .success(function(data, status, headers, config){
+    //   console.log(headers('location'));
+    //
+    // })
+    // .error(function(data, status, headers, config){
+    //   $scope.error=data.data;
+    // });
   };
 
+}]);
 
+controllerModule.controller('userInfoController', function($scope, $http, $location, $window){
+  $scope.name="Vikash";
 });

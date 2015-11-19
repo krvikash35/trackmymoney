@@ -15,14 +15,17 @@ var appModule = angular.module('trackMyMoney', [
 appModule.config(['$routeProvider',
 function($routeProvider){
   $routeProvider.
-  when('/user/info', {
-    templateUrl: 'partials/prsnlinfo.html'
+  when('/user/:userId/info', {
+    templateUrl: 'partials/userinfo.html',
+    controller: 'userInfoController'
   }).
-  when('/user/report', {
-    templateUrl: 'partials/report.html'
+  when('/user/:userId/report', {
+    templateUrl: 'partials/userreport.html',
+    controller: ''
   }).
-  when('/user/trxn', {
-    templateUrl: 'partials/trxn.html'
+  when('/user/:userId/trxn', {
+    templateUrl: 'partials/usertrxn.html',
+    controller: ''
   }).
   otherwise({
     redirectTo: ''

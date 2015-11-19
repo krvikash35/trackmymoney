@@ -19,8 +19,6 @@ var usrInfo    = appdb.userInfoDoc;       //this document holds user info
 var usrPrsTrx  = appdb.userPrsnlTrxDoc;   //this document holds user personal transaction
 var bcrypt     = require('bcrypt');
 
-
-
 //use middleware stack, these are executed in declared order whenever any req, res occur
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -35,6 +33,7 @@ app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('', pubRouter);
 
+//Middleware for private router to validate the token
 privRouter.use('/:userId',function(req,res,next){
   var bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== 'undefined') {
@@ -59,10 +58,6 @@ privRouter.use('/:userId',function(req,res,next){
   }
 });
 
-
-
-
-
 // use config var to run this app: Development or production
 if(sConfig.runEnv === 'dev') {
   mongoDBUrl = sConfig.devUrl.dbUrl;
@@ -77,9 +72,6 @@ if(sConfig.runEnv === 'dev') {
   }
 }
 
-
-
-
 //connect to mongo db
 mongoose.connect(mongoDBUrl, function(err){
   if(err){
@@ -87,12 +79,18 @@ mongoose.connect(mongoDBUrl, function(err){
   }
 });
 
-
-
-
-
+//-----------------------------------------------------------------------------------------------
+//post('/signin')
+//@param: {req.body.[email,password]}
+//@response-error:   {res.statusCode: [400,500], res.body.data: "appropriate error msg" }
+//@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
+//------------------------------------------------------------------------------------------------
 pubRouter.post('/signin',function(req, res){
-  usrInfo.findOne({"account.email": req.body.email}, function(err, data){
+  if(req.body.email === undefined || req.body.email === null ){
+    res.status(400);
+    return res.send({"data": "Invalid Email length or pattern"});
+  }
+  usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
       res.sendStatus(500);
       throw new Error();
@@ -110,10 +108,16 @@ pubRouter.post('/signin',function(req, res){
     var loc   = "user/"+data._id+"/trx"
     res.setHeader("Location", loc);
     res.status(200);
-    res.send({"token": token});
+    res.send({"data": token});
   });
 });
 
+//-----------------------------------------------------------------------------------------------
+//post('/signup')
+//@param: {req.body.[email,password]}
+//@response-error:   {res.statusCode: [400,500], res.body.data: "appropriate error msg" }
+//@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
+//------------------------------------------------------------------------------------------------
 pubRouter.post('/signup', function(req,res){
   console.log(req.body);
   var pwd   = req.body.password;
@@ -156,18 +160,29 @@ pubRouter.post('/signup', function(req,res){
   });
 });
 
-
-
+//-----------------------------------------------------------------------------------------------
+//get('/user/:userId/info')
+//@param: {req.param.[userId]}
+//@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
+//@response-success: {res.statusCode: 200, res.body.data: "userInfo"}
+//------------------------------------------------------------------------------------------------
 privRouter.get('/:userId/info',function(req, res){
   usrInfo.findById(req.params.userId, function(err, data){
     if(err || data === null){
       res.status(400)
       return res.send("No Data Found");
     }
+    res.status(200);
     return res.send({data: data});
   })
 });
 
+//-----------------------------------------------------------------------------------------------
+//get('/user/:userId/info')
+//@param: {req.param.[userId]}
+//@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
+//@response-success: {res.statusCode: 200, res.body.data: "userReport"}
+//----------------------------------------------------------------------------------------------
 privRouter.get('/:userId/report', function(req, res){
   usrPrsTrx.find({userId: req.params.userId}, function(err, data){
     if(err || data === null){
@@ -179,6 +194,12 @@ privRouter.get('/:userId/report', function(req, res){
   });
 });
 
+//-----------------------------------------------------------------------------------------------
+//post('/user/:userId/trx')
+//@param: {req.param.[userId]}
+//@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
+//@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
+//----------------------------------------------------------------------------------------------
 privRouter.post('/:userId/trx',function(req, res){
   var userPrsnlTrx            = new usrPrsTrx();
   userPrsnlTrx.amount         = req.body.amount;
@@ -193,7 +214,8 @@ privRouter.post('/:userId/trx',function(req, res){
       res.send({"msg": "Invalid transaction data"});
       throw new Error(err);
     }else{
-      return res.sendStatus(201);
+      res.status(201);
+      return res.send({"msg": "Transaction saved successfully"});
     }
   });
 });

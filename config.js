@@ -36,10 +36,11 @@ module.exports = {
       {"name": "DigitalWallet-Others",   "type": "DigitalWallet", "subAccountBalance": 0},
       {"name": "Cash",                   "type": "CashAccount",   "subAccountBalance": 0}
     ],
-  "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
+  // "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
+  "emailRegex":             /^[a-zA-Z0-9]$/gi,
   "moneyAccountNameRegex":  /^(CreditCard|SavingAccount|DigitalWallet|Cash)-/i,
   "pwdLength": {
-    "min": 4,
-    "max": 25
+    "min": 1,
+    "max": 1
   }
 };
