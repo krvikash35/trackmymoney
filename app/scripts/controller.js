@@ -75,17 +75,29 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
 });
 
 
-controllerModule.controller('userTrxController', function($scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userTrxController', function($scope, $routeParams, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
-  $scope.submitTrxForm=function(trxForm){
-    $http.post($location.path(), trxForm)
-    .success(function(data, status, headers, config){
-        //Todo
-    })
-    .error(function(data, status, headers, config){
-      //Todo
-    })
-  }
+  var user="";
+  $http.get("/user/"+$routeParams.userId+"/info")
+  .success(function(data, status, headers, config){
+    user=data.data;
+    $scope.trxSources=["demo","demo2"];
+    console.log("DebugUser1"+JSON.stringify(user));
+  })
+  .error(function(data, status, headers, config){
+    $scope.error=data.data;
+  });
+
+  // $rootScope.trxSources="";
+  // $scope.submitTrxForm=function(trxForm){
+  //   $http.post($location.path(), trxForm)
+  //   .success(function(data, status, headers, config){
+  //       //Todo
+  //   })
+  //   .error(function(data, status, headers, config){
+  //     //Todo
+  //   })
+  // }
 })
 
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){

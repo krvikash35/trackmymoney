@@ -24,6 +24,10 @@ body{
   max-width: 350px;
 }
 
+.trx-form .form-group{
+  max-width: 350px;
+}
+
 .container{
   border-top: 1px solid black;
   border-left: 1px solid black;

@@ -38,7 +38,7 @@ function($routeProvider){
 //interceptor for request and response to modify authorization headers
 
 trackMyMoney.config(['$httpProvider', function($httpProvider){
-  $httpProvider.interceptors.push(['$q', '$location', '$localStorage', function($q, $location, $localStorage) {
+  $httpProvider.interceptors.push(['$q', '$location', '$localStorage', '$window', function($q, $location, $localStorage, $window) {
     return {
       'request': function (config) {
         config.headers = config.headers || {};

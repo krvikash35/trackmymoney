@@ -1,7 +1,45 @@
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
-<p>This is Transaction info related</p>
+<div style="margin: 2px; padding: 0px", class="panel panel-primary">
+  <div class="panel-heading">Today's Transaction</div>
+  <div class="panel-body">
+
+    <form ng-submit="submitTrxForm(trx)" role="form" class="trx-form">
+      <div class="form-group col-xs-12 col-sm-2 col-md-2">
+        <label >Amount</label>
+        <input ng-model="trx.amount" type="text" class="form-control">
+      </div>
+
+      <div class="form-group col-xs-12 col-sm-5 col-md-2">
+        <label>Type</label>
+        <select ng-model="trx.type" class="form-control">
+          <option>Expense</option>
+          <option>Income</option>
+          <option>Transfer</option>
+        </select>
+      </div>
+<i>degug:{{trxSources}}</i>
+      <div class="form-group col-sm-5 col-md-3">
+        <label>Source</label>
+        <select ng-model="trx.source" ng-init="trx.source=trxSources[0]" ng-options="source as source for source in trxSources" class="form-control">
+
+        </select>
+      </div>
+
+      <div class="form-group col-sm-6 col-md-3">
+        <label>destination</label>
+        <select class="form-control">
+          <option>Mobile Bill Prepaid For Bihardjkjdfjf;</option>
+          <option>Income</option>
+          <option>Transfer</option>
+        </select>
+      </div>
+
+      <div class="form-group col-sm-6 col-md-2">
+        <label >description</label>
+        <input type="text" class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-primary col-xs-4 col-sm-2 col-md-3 col-lg-3">Submit</button>
+    </form>
+  </div>
+
+</div>
