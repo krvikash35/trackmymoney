@@ -1,7 +1,6 @@
 <div ng-show="error" class="alert alert-danger">{{error}}</div>
 
 <div ng-show="isLoginFormVisible">
-  <h3>Login</h3>
   <form role="form"   class="login-form" ng-submit="submitLoginForm(login)">
     <div class="form-group">
       <input id="userEmail" type="text" ng-model="login.email"  placeholder="Username..." class="form-control">
@@ -17,7 +16,6 @@
 
 
 <div   ng-show="isRegFormVisible">
-  <h3>Register</h3>
   <form role="form" class="registration-form" ng-submit="submitRegForm(reg)">
     <div class="form-group">
       <input type="text" ng-model="reg.fullname" required placeholder="Enter Name..." class="form-control" >
