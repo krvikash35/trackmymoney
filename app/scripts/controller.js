@@ -130,16 +130,21 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
     $scope.error=data.data;
   });
 
-  // $rootScope.trxSources="";
-  // $scope.submitTrxForm=function(trxForm){
-  //   $http.post($location.path(), trxForm)
-  //   .success(function(data, status, headers, config){
-  //       //Todo
-  //   })
-  //   .error(function(data, status, headers, config){
-  //     //Todo
-  //   })
-  // }
+
+  $scope.submitTrxForm=function(trxForm){
+    $http.post($location.path(), trxForm)
+    .success(function(data, status, headers, config){
+        $scope.msg=data.data;
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+  }
+
+  $scope.trxTypeChanged = function(trxType){
+    trxUiHandler(trxType);
+  }
+  
 })
 
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){

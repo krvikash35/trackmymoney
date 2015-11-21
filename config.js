@@ -18,7 +18,7 @@ module.exports = {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
   },
-  "trxType":            ["Income, Expense, Transfer"],
+  "trxType":            ["Income", "Expense", "Transfer"],
   "accountLoginMethod": ["email","phone"],
   "moneyAccountType":   ["SavingAccount", "CreditCard","DigitalWallet","CashAccount"],
   "initIncomeSource":   ["Salary","Dividend","Interest-Principal","Borrwo","Gift","Refund"],

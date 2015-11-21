@@ -1,23 +1,23 @@
 <div style="margin: 2px; padding: 0px", class="panel panel-primary">
   <div class="panel-heading">Today's Transaction</div>
   <div class="panel-body">
-
+    <div ng-show="msg" class="alert alert-danger">{{msg}}</div>
     <form ng-submit="submitTrxForm(trx)" role="form" class="trx-form">
       <div class="form-group col-xs-12 col-sm-2 col-md-2">
         <label >Amount</label>
-        <input ng-model="trx.amount" type="text" class="form-control">
+        <input ng-model="trx.amount" type="text" class="form-control" autofocus>
       </div>
 
       <div class="form-group col-xs-12 col-sm-5 col-md-2">
         <label>Type</label>
-        <select ng-model="trx.type" ng-init="trx.type='Expense'" ng-change="trxUiHandler(trx.type)" class="form-control">
+        <select ng-model="trx.type" ng-init="trx.type='Expense'" ng-change="trxTypeChanged(trx.type)" class="form-control">
           <option>Expense</option>
           <option>Income</option>
           <option>Transfer</option>
         </select>
       </div>
 
-      
+
       <div class="form-group col-sm-5 col-md-3">
         <label>Source</label>
         <select ng-model="trx.source" ng-options="source as source for source in trxSource" class="form-control">
@@ -34,7 +34,7 @@
 
       <div class="form-group col-sm-6 col-md-2">
         <label >description</label>
-        <input type="text" class="form-control">
+        <input ng-model="trx.description" type="text" class="form-control" id="trxDesc">
       </div>
 
       <button type="submit" class="btn btn-primary col-xs-4 col-sm-2 col-md-3 col-lg-3">Submit</button>

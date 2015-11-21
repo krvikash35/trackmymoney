@@ -213,11 +213,11 @@ privRouter.post('/:userId/trx',function(req, res){
   userPrsnlTrx.save(function(err, data){
     if(err){
       res.status(400);
-      res.send({"msg": "Invalid transaction data"});
+      res.send({"data": "Invalid transaction data"});
       throw new Error(err);
     }else{
       res.status(201);
-      return res.send({"msg": "Transaction saved successfully"});
+      return res.send({"data": "Transaction saved successfully"});
     }
   });
 });

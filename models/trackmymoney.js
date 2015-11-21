@@ -41,7 +41,7 @@ var userInfoSchema = new schema({
 // user personal transaction schema, will map to user_prsnl_trx collection
 var userPrsnlTrxSchema = new schema({
   "amount":       { type: Number, required: true},
-  "type":         { type: String, enum:sConfig.trxType},
+  "type":         { type: String, enum: sConfig.trxType},
   "Source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
