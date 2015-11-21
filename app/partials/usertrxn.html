@@ -10,26 +10,25 @@
 
       <div class="form-group col-xs-12 col-sm-5 col-md-2">
         <label>Type</label>
-        <select ng-model="trx.type" class="form-control">
+        <select ng-model="trx.type" ng-init="trx.type='Expense'" ng-change="trxTypeChanged(trx.type)" class="form-control">
           <option>Expense</option>
           <option>Income</option>
           <option>Transfer</option>
         </select>
       </div>
-<i>degug:{{trxSources}}</i>
+
+      <i>trxSource{{trx.source}}</i>
       <div class="form-group col-sm-5 col-md-3">
         <label>Source</label>
-        <select ng-model="trx.source" ng-init="trx.source=trxSources[0]" ng-options="source as source for source in trxSources" class="form-control">
-
+        <select ng-model="trx.source" ng-options="source as source for source in trxSource" class="form-control">
+          <option>choose source</option>
         </select>
       </div>
 
       <div class="form-group col-sm-6 col-md-3">
         <label>destination</label>
-        <select class="form-control">
-          <option>Mobile Bill Prepaid For Bihardjkjdfjf;</option>
-          <option>Income</option>
-          <option>Transfer</option>
+        <select ng-model="trx.destination" ng-options="dest as dest for dest in trxDestination" class="form-control">
+          <option>Choose dest</option>
         </select>
       </div>
 
