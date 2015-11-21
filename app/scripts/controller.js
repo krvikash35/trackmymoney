@@ -79,60 +79,56 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
 
 controllerModule.controller('userTrxController', function($scope, $routeParams, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
-  var user="";
-  $scope.trxSource=[];
-  var trxDestination=[];
+
+  var usrIncomeSrc=[];
+  var usrExpenseSrc=[];
+  var usrMoneyAcct=[];
+
+  var trxUiInit=function(user){
+    usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
+    usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
+    user.moneyAccount.forEach(function(ma){
+      usrMoneyAcct.push(ma.name);
+    });
+    trxUiHandler();
+  }
 
   var trxUiHandler=function(trxType){
     if(trxType === undefined || trxType === null){
       trxType = 'Expense';
     }
-
+    switch (trxType) {
+      case 'Income':
+      $scope.trxSource=usrIncomeSrc;
+      $scope.trxDestination=usrMoneyAcct;
+      $scope.trx.source=usrIncomeSrc[0];
+      $scope.trx.destination=usrMoneyAcct[0];
+      break;
+      case 'Transfer':
+      $scope.trxSource=usrMoneyAcct;
+      $scope.trxDestination=usrMoneyAcct;
+      $scope.trx.source=usrMoneyAcct[0];
+      $scope.trx.destination=usrMoneyAcct[0];
+      break;
+      default: //Expense
+      $scope.trxSource=usrMoneyAcct;
+      $scope.trxDestination=usrExpenseSrc;
+      $scope.trx.source=usrMoneyAcct[0];
+      $scope.trx.destination=usrExpenseSrc[0];
+    }
   }
 
 
   $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
-    user=data.data;
-    user.moneyAccount.forEach(function(ma){
-      $scope.trxSource.push(ma.name);
-    });
-    // console.log("scopeTrxSource:"+$scope.trxSource);
-    // console.log("varTrxSource:"+trxSource);
-    // $scope.trxSource=trxSource;
-    $scope.trxDestination=user.sourceOfMoneyTrx.expenseSource;
-    $scope.trx.source=user.moneyAccount[0].name;
-    $scope.trx.destination=user.sourceOfMoneyTrx.expenseSource[0];
-    // console.log(trx.source);
+    trxUiInit(data.data);
+    console.log("succss while connecting to db"+status);
     // console.log("DebugUser1"+JSON.stringify(user));
   })
   .error(function(data, status, headers, config){
+    console.log("error while connecting to db"+status+data);
     $scope.error=data.data;
   });
-
-  $scope.trxTypeChanged = function(trxType){
-    console.log("debugChange: item changed");
-    switch (trxType) {
-      case 'Income':
-        $scope.trxSource=user.sourceOfMoneyTrx.incomeSource;
-        $scope.trxDestination=user.moneyAccount;
-        $scope.trx.source=user.sourceOfMoneyTrx.incomeSource[0];
-        $scope.trx.destination=user.moneyAccount[0];
-        console.log("debug:"+$scope.trx.source);
-        break;
-      case 'Transfer':
-        $scope.trxSource=user.moneyAccount;
-        $scope.trxDestination=user.moneyAccount;
-        $scope.trx.source=user.moneyAccount[0];
-        $scope.trx.destination=user.moneyAccount[0];
-        break;
-      default: //Expense
-        $scope.trxSource=user.moneyAccount;
-        $scope.trxDestination=user.sourceOfMoneyTrx.expenseSource;
-        $scope.trx.source=user.moneyAccount[0].name;
-        $scope.trx.destination=user.sourceOfMoneyTrx.expenseSource[0];
-    }
-  }
 
   // $rootScope.trxSources="";
   // $scope.submitTrxForm=function(trxForm){
