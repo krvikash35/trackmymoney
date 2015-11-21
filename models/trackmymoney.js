@@ -13,7 +13,7 @@ var userInfoSchema = new schema({
           "method":           { type: String, enum: sConfig.accountLoginMethod },
           "isVerified":       { type: Boolean }
       }],
-      "creatDate":            { type: Date, default: Date.now },
+      "creatDate":            { type: Date },
       "updateDate":           { type: Date, default: Date.now }
   },
   "sourceOfMoneyTrx": {

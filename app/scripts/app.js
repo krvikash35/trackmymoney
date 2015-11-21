@@ -6,7 +6,8 @@ var trackMyMoney = angular.module('trackMyMoney', [
   'serviceModule',
   'ngRoute',
   'ui.bootstrap',
-  'ngStorage'
+  'ngStorage',
+  'xeditable'
 ]);
 
 
@@ -56,5 +57,9 @@ trackMyMoney.config(['$httpProvider', function($httpProvider){
       }
     };
   }]);
-
 }]);
+
+
+trackMyMoney.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});

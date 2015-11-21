@@ -69,13 +69,30 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
 
 controllerModule.controller('userInfoController', function($scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
+
+  var userMoneyAccount=[];
+  var userBasicInfo="";
+  var userSourceOfTrx="";
+
+  var userInfoInit = function(userInfo){
+    userMoneyAccount=userInfo.moneyAccount;
+    userBasicInfo=userInfo.account;
+    userSourceOfTrx=userInfo.sourceOfMoneyTrx;
+
+    $scope.userMoneyAccount=userMoneyAccount;
+
+  }
+
   $http.get($location.path())
   .success(function(data, status, headers, config){
-    $scope.userInfo=data;
+    userInfoInit(data.data);
   })
   .error(function(data, status, headers, config){
-    $scope.userInfo=data;
+    $scope.msg=data.data;
   })
+;
+$scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
+
 });
 
 
