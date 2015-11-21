@@ -18,7 +18,7 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     // $rootScope.isLandingPageVisible=true;
   }
 
-  $scope.myInterval = 5000;
+  $scope.myInterval = 3000;
   $scope.noWrapSlides = false;
   var slides = $scope.slides = [];
   $scope.addSlide = function() {
@@ -67,19 +67,16 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
 
 });
 
+
 controllerModule.controller('userInfoController', function($scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
 
-  var userMoneyAccount=[];
-  var userBasicInfo="";
-  var userSourceOfTrx="";
-
   var userInfoInit = function(userInfo){
-    userMoneyAccount=userInfo.moneyAccount;
-    userBasicInfo=userInfo.account;
-    userSourceOfTrx=userInfo.sourceOfMoneyTrx;
-
-    $scope.userMoneyAccount=userMoneyAccount;
+    $scope.userMoneyAccount=userInfo.moneyAccount;
+    $scope.userBasicInfo=userInfo.account;
+    $scope.userSourceOfTrx=userInfo.sourceOfMoneyTrx;
+    $scope.userBasicInfo.creatDate=userInfo.account.creatDate.split("T")[0];
+    $scope.userBasicInfo.updateDate=userInfo.account.updateDate.split("T")[0];
 
   }
 
@@ -90,8 +87,11 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
   .error(function(data, status, headers, config){
     $scope.msg=data.data;
   })
-;
+
 $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
+
+
+
 
 });
 
