@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse ">
+<nav class="navbar navbar-default ">
 
   <div class="navbar-header pull-left">
     <a class="navbar-brand">TrackMyMoney</a>
@@ -22,11 +22,12 @@
         <span class="icon-bar"></span>
       </button>
     </div>
+<i>userId:{{userId}}</i>
     <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" >
       <ul class="nav navbar-nav pull-left" ng-show="!isLandingPageVisible == true">
-        <li><a href="">Account</a></li>
-        <li><a href="">Transaction</a></li>
-        <li><a href="">Report</a></li>
+        <li><a href="#/user/{{userId}}/info">Account</a></li>
+        <li><a href="#/user/{{userId}}/trx">Transaction</a></li>
+        <li><a href="#/user/{{userId}}/report">Report</a></li>
         <li><a href="">Blog</a></li>
         <li><a href=""ng-click="logout()">Logout</a></li>
       </ul>

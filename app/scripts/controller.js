@@ -37,6 +37,8 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data.data;
+      $scope.userId=(headers('location').split("/"))[1];
+      console.log("userId"+$scope.userId);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -53,6 +55,8 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     .success(function(data, status, headers, config){
       console.log("DebugToken:"+data.data);
       $localStorage.token = data.data;
+      $scope.userId=(headers('location').split("/"))[1];
+      console.log("userId"+$scope.userId);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -144,7 +148,7 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
   $scope.trxTypeChanged = function(trxType){
     trxUiHandler(trxType);
   }
-  
+
 })
 
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
