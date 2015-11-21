@@ -77,6 +77,7 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
     $scope.userSourceOfTrx=userInfo.sourceOfMoneyTrx;
     $scope.userBasicInfo.creatDate=userInfo.account.creatDate.split("T")[0];
     $scope.userBasicInfo.updateDate=userInfo.account.updateDate.split("T")[0];
+    console.log($scope.userSourceOfTrx);
 
   }
 
