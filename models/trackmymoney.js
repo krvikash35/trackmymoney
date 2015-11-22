@@ -20,17 +20,9 @@ var userInfoSchema = new schema({
       "incomeSource":         { type: [String], maxlength: 25, minlength: 3, default: sConfig.initIncomeSource},
       "expenseSource":        { type: [String], maxlength: 25, minlength: 3, default: sConfig.initExpenseSource }
   },
-  "accountBalance":  {
-      "allAccountBalance":    { type: Number, default: 0 },
-      "savingAccountBalance": { type: Number, default: 0 },
-      "creditAccountBalance": { type: Number, default: 0 },
-      "walletAccountBalance": { type: Number, default: 0 },
-      "cashAccountBalance":   { type: Number, default: 0 },
-  },
   "moneyAccount": [{
-      "name":                 { type: String, maxlength: 25},
+      "name":                 { type: String, maxlength: 15},
       "type":                 { type: String, enum: sConfig.moneyAccountType},
-      "subAccountBalance":    { type: Number, default: 0 }
   }]
 });
 

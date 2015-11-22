@@ -1,35 +1,5 @@
 
 
-<!-- User Basic Info -->
-<div style="", class="panel panel-primary col-md-12">
-  <div class="panel-heading">Basic Info</div>
-  <div class="panel-body">
-    <div>
-      <span class="title">Full name: </span>
-      <a href="" editable-text="userBasicInfo.fullname">{{userBasicInfo.fullname || empty}}</a>
-    </div>
-    <div>
-      <span class="title">Email: </span>
-      <label>{{userBasicInfo.email}}
-      </div>
-      <div>
-        <span class="title">Phone: </span>
-        <label>{{userBasicInfo.phone}}</label>
-      </div>
-      <div>
-        <span class="title">Change Password: </span>
-        <a href="#" e-name="password" e-type="password" editable-text="userBasicInfo.password">***********</a>
-      </div>
-      <div>
-        <span class="title">Joined Date: </span>
-        <label>{{userBasicInfo.creatDate | date}}</label>
-      </div>
-      <div>
-        <span class="title">Last Updated: </span>
-        <label>{{userBasicInfo.updateDate | date}}</label>
-      </div>
-    </div>
-  </div>
 
 
 
@@ -38,12 +8,11 @@
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
       <div ng-show="msg" class="alert alert-danger">{{msg}}</div>
-      <form editable-form name="maform" onaftersave="saveTable()" oncancel="cancel()">
+      <form editable-form name="maform" onaftersave="saveMoneyAccountForm()" oncancel="cancel()">
         <table class="table  table-bordered table-hover table-condensed">
           <tr style="font-weight: bold">
             <td >AccountType</td>
             <td >AccountName</td>
-            <td >AccountBalance</td>
             <td ><span ng-show="maform.$visible">Action</span></td>
           </tr>
           <tr ng-repeat="ma in userMoneyAccount ">
@@ -57,12 +26,7 @@
                 {{ma.name}}
               </span>
             </td>
-            <td>
-              <span editable-text="ma.subAccountBalance" e-form="maform" >
-                {{ma.subAccountBalance}}
-              </span>
-            </td>
-            <td><button type="button" ng-show="maform.$visible" ng-click="deleteUser(user.id)" class="btn btn-danger pull-right">Del</button></td>
+            <td><button type="button" ng-show="maform.$visible" ng-click="deleteMoneyAccount(ma.id)" class="btn btn-danger pull-right">Del</button></td>
           </tr>
         </table>
         <div class="btn-edit">
@@ -153,3 +117,35 @@
       </form>
     </div>
   </div>
+
+
+  <!-- User Basic Info -->
+  <div style="", class="panel panel-primary col-md-12">
+    <div class="panel-heading">Basic Info</div>
+    <div class="panel-body">
+      <div>
+        <span class="title">Full name: </span>
+        <a href="" editable-text="userBasicInfo.fullname">{{userBasicInfo.fullname || empty}}</a>
+      </div>
+      <div>
+        <span class="title">Email: </span>
+        <label>{{userBasicInfo.email}}
+        </div>
+        <div>
+          <span class="title">Phone: </span>
+          <label>{{userBasicInfo.phone}}</label>
+        </div>
+        <div>
+          <span class="title">Change Password: </span>
+          <a href="#" e-name="password" e-type="password" editable-text="userBasicInfo.password">***********</a>
+        </div>
+        <div>
+          <span class="title">Joined Date: </span>
+          <label>{{userBasicInfo.creatDate | date}}</label>
+        </div>
+        <div>
+          <span class="title">Last Updated: </span>
+          <label>{{userBasicInfo.updateDate | date}}</label>
+        </div>
+      </div>
+    </div>

@@ -27,14 +27,14 @@ module.exports = {
                           "BillPayment Water-Electricity","paid  EMI","Rent Office-Room",
                           "wages", "paid Tax"],
   "initMoneyAccount":   [
-      {"name": "ICICI Salary",    "type": "SavingAccount", "subAccountBalance": 0},
-      {"name": "Others",   "type": "SavingAccount", "subAccountBalance": 0},
-      {"name": "ICICI Coral",       "type": "CreditCard",    "subAccountBalance": 0},
-      {"name": "Others",      "type": "CreditCard",    "subAccountBalance": 0},
-      {"name": "Paytm",    "type": "DigitalWallet", "subAccountBalance": 0},
-      {"name": "Mobikwik", "type": "DigitalWallet", "subAccountBalance": 0},
-      {"name": "Others",   "type": "DigitalWallet", "subAccountBalance": 0},
-      {"name": "Cash",                   "type": "CashAccount",   "subAccountBalance": 0}
+      {"name": "ICICI",    "type": "SavingAccount",  "subAccountBalance": 0},
+      {"name": "Others",   "type": "SavingAccount",  "subAccountBalance": 0},
+      {"name": "ICICI",    "type": "CreditCard",     "subAccountBalance": 0},
+      {"name": "Others",   "type": "CreditCard",     "subAccountBalance": 0},
+      {"name": "Paytm",    "type": "DigitalWallet",  "subAccountBalance": 0},
+      {"name": "Mobikwik", "type": "DigitalWallet",  "subAccountBalance": 0},
+      {"name": "Others",   "type": "DigitalWallet",  "subAccountBalance": 0},
+      {"name": "Cash",     "type": "CashAccount",    "subAccountBalance": 0}
     ],
    "emailRegex":             /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/gi,
   // "emailRegex":             /^[a-zA-Z0-9]{1,5}$/gi,

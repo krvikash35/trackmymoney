@@ -33,34 +33,31 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
   };
 
   $scope.submitLoginForm = function(loginForm){
-    $scope.error="";
+    $scope.msg="";
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data.data;
       $scope.userId=(headers('location').split("/"))[1];
-      console.log("userId"+$scope.userId);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.error=data.data;
+      $scope.msg=data.data;
     })
   }
 
   $scope.submitRegForm = function(regForm){
-    $scope.error="";
+    $scope.msg="";
     if(regForm.password !== regForm.password1){
       return $scope.error="both password does not match!";
     }
     $http.post('/signup', regForm)
     .success(function(data, status, headers, config){
-      console.log("DebugToken:"+data.data);
       $localStorage.token = data.data;
       $scope.userId=(headers('location').split("/"))[1];
-      console.log("userId"+$scope.userId);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.error=data.data;
+      $scope.msg=data.data;
     });
 
   };
@@ -68,7 +65,7 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
 });
 
 
-controllerModule.controller('userInfoController', function($scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userInfoController', function($filter, $q, $scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
 
   var userInfoInit = function(userInfo){
@@ -85,8 +82,43 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
     $scope.msg=data.data;
   })
 
-$scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
+  $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
 
+  $scope.addMoneyAccount = function(){
+    $scope.userMoneyAccount.push({
+
+      type: "",
+      name: $scope.userMoneyAccount.length+1
+    });
+  };
+
+
+  $scope.deleteMoneyAccount = function(id){
+    var filtered = $filter('filter')($scope.userMoneyAccount, {id: id});
+console.log("id"+id);
+    if (filtered.length) {
+      filtered[0].isDeleted = true;
+      console.log("delete");
+    }
+  }
+
+  $scope.saveMoneyAccountForm = function(){
+    console.log("save called");
+    var result = [];
+    for(var i = $scope.userMoneyAccount.length; i--;){
+      var ma = $scope.userMoneyAccount[i];
+      if(ma.isDeleted){
+        $scope.userMoneyAccount.splice(i,1);
+      }
+      if(ma.isNew){
+        ma.isNew = false;
+      }
+      console.log(ma.id);
+      result.push(ma);
+    // console.log(result[i]);
+    }
+
+  }
 
 
 
@@ -106,7 +138,7 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
     usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
     usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
     user.moneyAccount.forEach(function(ma){
-      usrMoneyAcct.push(ma.type+"-"+ma.name);
+      usrMoneyAcct.push(ma.type+ma.name);
     });
     trxUiHandler();
   }
@@ -152,7 +184,7 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
   $scope.submitTrxForm=function(trxForm){
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
-        $scope.msg=data.data;
+      $scope.msg=data.data;
     })
     .error(function(data, status, headers, config){
       $scope.msg=data.data;

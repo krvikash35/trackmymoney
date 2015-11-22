@@ -3,6 +3,7 @@
 // get:   /user/:id/report  200(ok, json), 401(Unauthorized, lh:/sigin)
 // get:   /user/:id/info    200(ok, json), 401(Unauthorized, lh:/sigin)
 // post:  /user/:id/trx     200(ok, json), 401(Unauthorized, lh:/sigin)
+// put:   /user/:id/info    200(ok),       200(ok)
 
 //load all the required module
 var express    = require("express");      //main web framework module for node
@@ -27,6 +28,10 @@ app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  if(mongoose.connection.readyState==0){
+    res.status(500);
+    return  res.send({"data": "We are having problem with connecting to DB..Dont worry, will be back soon!"});
+  }
   next();
 });
 app.use(express.static("app"));
@@ -35,6 +40,8 @@ app.use('', pubRouter);
 
 //Middleware for private router to validate the token
 privRouter.use('/:userId',function(req,res,next){
+
+
   var bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== 'undefined') {
     var bearer = bearerHeader.split(" ");
@@ -87,11 +94,14 @@ mongoose.connect(mongoDBUrl, function(err){
 //------------------------------------------------------------------------------------------------
 pubRouter.post('/signin',function(req, res){
   if(req.body.email === undefined || req.body.email === null ){
+
     res.status(400);
     return res.send({"data": "Invalid Email length or pattern"});
   }
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
+      console.log("err");
+
       res.sendStatus(500);
       throw new Error();
     }
@@ -180,6 +190,61 @@ privRouter.get('/:userId/info',function(req, res){
   })
 });
 
+//--------------------------------------------------------------------------------------------
+//put('/user:userId/info')
+//@param: {req.param.[userId], req.body.updatecode and [1/2/3/4/5/6/7]}
+//@response-error:   {res.statusCode: 400, res.body.data: "User not found" }
+//@response-success: {res.statusCode: 200, res.body.data: "Account Info Updated successfully"}
+//1:expenseSource 2:incomeSource 3:moneyAccount 4:password 5:email  6:phone 7:fullname
+//------------------------------------------------------------------------------------------
+privRouter.put('/:userId/report', function(req, res){
+  userInfo.findById('req.params.userId', function(err, user){
+
+    if(err || user === null){
+      res.status(400);
+      return res.send({data: 'User not found'});
+    }
+
+    switch (req.body.updatecode) {
+      case 1:
+
+      break;
+      case 2:
+
+      break;
+      case 3:
+      user.moneyAccount=req.body.moneyAccount;
+      user.save(function(err){
+        if(err){
+          res.status(400);
+          return res.send(err);
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }
+      })
+
+      break;
+      case 4:
+
+      break;
+      case 5:
+
+      break;
+      case 6:
+
+      break;
+      case 7:
+
+      break;
+      default:
+
+    }
+
+  })
+});
+
+
 //-----------------------------------------------------------------------------------------------
 //get('/user/:userId/info')
 //@param: {req.param.[userId]}
@@ -210,7 +275,8 @@ privRouter.post('/:userId/trx',function(req, res){
   userPrsnlTrx.source         = req.body.source;
   userPrsnlTrx.destination    = req.body.destination
   userPrsnlTrx.description    = req.body.description;
-  userPrsnlTrx.userId      = req.params.userId;
+  userPrsnlTrx.userId         = req.params.userId;
+
   userPrsnlTrx.save(function(err, data){
     if(err){
       res.status(400);
