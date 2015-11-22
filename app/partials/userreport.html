@@ -1,34 +1,48 @@
-<div class="form-inline col-sm-12 col-md-12 ">
-  <div class="form-group">
-    <label>Search:</label>
-    <input  class="form-control" ng-model="searchProp" id="query">
-  </div>
-</div>
+<div style="margin: 4px; padding: 0px", class="panel panel-primary">
+  <div class="panel-heading">Individual Transaction</div>
+  <div class="panel-body">
 
+    <div class="form-inline col-sm-12 col-md-12 ">
+      <div class="form-group">
+        <label>Search In:</label>
+        <select ng-init="prop='$'" ng-model="prop" class="form-control">
+          <option value="$">All</option>
+          <option value="date">date</option>
+          <option value="amount">amount</option>
+          <option value="type">type</option>
+          <option value="source">source</option>
+          <option value="destination">destination</option>
+          <option value="description">description</option>
+        </select>
+        <input  class="form-control" ng-model="trxSearch[prop]" id="query">
+      </div>
+    </div>
 
+    <div class="table-responsive col-md-12">
+      <table class="table table-bordered table-striped table-condensed ">
+        <thead>
+          <tr>
+            <th ng-click="asc=!asc; orderProp=date">Date</th>
+            <th ng-click="asc=!asc; orderProp=amount">Amount</th>
+            <th ng-click="asc=!asc; orderProp=type">Trx Type</th>
+            <th ng-click="asc=!asc; orderProp=source">Trx Source</th>
+            <th ng-click="asc=!asc; orderProp=destination">Trx Destination</th>
+            <th ng-click="asc=!asc; orderProp=description">Description</th>
+          </tr>
+        </thead>
+        <tbody>
 
-<div class="table-responsive col-md-12">
-  <table class="table table-bordered table-striped table-condensed ">
-    <thead>
-      <tr>
-        <th ng-click="asc=!asc; orderProp=date">Date</th>
-        <th ng-click="asc=!asc; orderProp=amount">Amount</th>
-        <th ng-click="asc=!asc; orderProp=type">Trx Type</th>
-        <th ng-click="asc=!asc; orderProp=source">Trx Source</th>
-        <th ng-click="asc=!asc; orderProp=destination">Trx Destination</th>
-        <th ng-click="asc=!asc; orderProp=description">Description</th>
-      </tr>
-    </thead>
-    <tbody>
+          <tr  ng-repeat="a in userTrxReport | filter:trxSearch | orderBy:orderProp:asc">
+            <td>{{a.date | date}}</td>
+            <td>{{a.amount}}</td>
+            <td>{{a.type}}</td>
+            <td>{{a.source}}</td>
+            <td>{{a.destination}}</td>
+            <td>{{a.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
 
-      <tr  ng-repeat="a in userTrxReport | filter:searchProp | orderBy:orderProp:asc">
-        <td>{{a.date | date}}</td>
-        <td>{{a.amount}}</td>
-        <td>{{a.type}}</td>
-        <td>{{a.source}}</td>
-        <td>{{a.destination}}</td>
-        <td>{{a.description}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div>
+      </div>
+    </div>
