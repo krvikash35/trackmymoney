@@ -192,28 +192,21 @@ privRouter.get('/:userId/info',function(req, res){
 
 //--------------------------------------------------------------------------------------------
 //put('/user:userId/info')
-//@param: {req.param.[userId], req.body.updatecode and [1/2/3/4/5/6/7]}
+//@param: {req.param.[userId], req.body.updatecode and [1/2/3/4/5/6/7], req.body.updateitem}
 //@response-error:   {res.statusCode: 400, res.body.data: "User not found" }
 //@response-success: {res.statusCode: 200, res.body.data: "Account Info Updated successfully"}
 //1:expenseSource 2:incomeSource 3:moneyAccount 4:password 5:email  6:phone 7:fullname
 //------------------------------------------------------------------------------------------
-privRouter.put('/:userId/report', function(req, res){
-  userInfo.findById('req.params.userId', function(err, user){
+privRouter.put('/:userId/info', function(req, res){
 
+  usrInfo.findById(req.params.userId, function(err, user){
     if(err || user === null){
       res.status(400);
       return res.send({data: 'User not found'});
     }
-
     switch (req.body.updatecode) {
       case 1:
-
-      break;
-      case 2:
-
-      break;
-      case 3:
-      user.moneyAccount=req.body.moneyAccount;
+      user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
       user.save(function(err){
         if(err){
           res.status(400);
@@ -223,80 +216,145 @@ privRouter.put('/:userId/report', function(req, res){
           return res.json({"data": "Updated successfully"});
         }
       })
-
       break;
-      case 4:
 
+      case 2:
+      user.sourceOfMoneyTrx.incomeSource=req.body.updateitem;
+      user.save(function(err){
+        if(err){
+          res.status(400);
+          return res.send(err);
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }
+      })
       break;
-      case 5:
 
-      break;
-      case 6:
+      case 3:
+      user.moneyAccount=req.body.updateitem;
+      user.save(function(err){
+        if(err){
+          res.status(400);
+          return res.send(err);
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }})
+        break;
 
-      break;
-      case 7:
+        case 4:
+        user.account.password=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send(err);
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
 
-      break;
-      default:
+        case 5:
+        user.account.email=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send(err);
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
 
-    }
+        case 6:
+        user.account.phone=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send(err);
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
 
-  })
-});
+        case 7:
+        user.account.fullname=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send(err);
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
 
-
-//-----------------------------------------------------------------------------------------------
-//get('/user/:userId/info')
-//@param: {req.param.[userId]}
-//@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
-//@response-success: {res.statusCode: 200, res.body.data: "userReport"}
-//----------------------------------------------------------------------------------------------
-privRouter.get('/:userId/report', function(req, res){
-  usrPrsTrx.find({userId: req.params.userId}, function(err, data){
-    if(err || data === null){
-      res.status(400);
-      return res.send({data: 'No Data Found'});
-    }
-    res.status(200);
-    return res.send({data: data});
+        default:
+        res.status(400);
+        return res.json({"data": "Invalid update Option"});
+      }
+    })
   });
-});
 
-//-----------------------------------------------------------------------------------------------
-//post('/user/:userId/trx')
-//@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
-//@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
-//@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
-//----------------------------------------------------------------------------------------------
-privRouter.post('/:userId/trx',function(req, res){
-  var userPrsnlTrx            = new usrPrsTrx();
-  userPrsnlTrx.amount         = req.body.amount;
-  userPrsnlTrx.type           = req.body.type;
-  userPrsnlTrx.source         = req.body.source;
-  userPrsnlTrx.destination    = req.body.destination
-  userPrsnlTrx.description    = req.body.description;
-  userPrsnlTrx.userId         = req.params.userId;
 
-  userPrsnlTrx.save(function(err, data){
-    if(err){
-      res.status(400);
-      res.send({"data": "Invalid transaction data"});
-      throw new Error(err);
-    }else{
-      res.status(201);
-      return res.send({"data": "Transaction saved successfully"});
-    }
+  //-----------------------------------------------------------------------------------------------
+  //get('/user/:userId/info')
+  //@param: {req.param.[userId]}
+  //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
+  //@response-success: {res.statusCode: 200, res.body.data: "userReport"}
+  //----------------------------------------------------------------------------------------------
+  privRouter.get('/:userId/report', function(req, res){
+    usrPrsTrx.find({userId: req.params.userId}, function(err, data){
+      if(err || data === null){
+        res.status(400);
+        return res.send({data: 'No Data Found'});
+      }
+      res.status(200);
+      return res.send({data: data});
+    });
   });
-});
+
+  //-----------------------------------------------------------------------------------------------
+  //post('/user/:userId/trx')
+  //@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
+  //@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
+  //@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
+  //----------------------------------------------------------------------------------------------
+  privRouter.post('/:userId/trx',function(req, res){
+    var userPrsnlTrx            = new usrPrsTrx();
+    userPrsnlTrx.amount         = req.body.amount;
+    userPrsnlTrx.type           = req.body.type;
+    userPrsnlTrx.source         = req.body.source;
+    userPrsnlTrx.destination    = req.body.destination
+    userPrsnlTrx.description    = req.body.description;
+    userPrsnlTrx.userId         = req.params.userId;
+
+    userPrsnlTrx.save(function(err, data){
+      if(err){
+        res.status(400);
+        res.send({"data": "Invalid transaction data"});
+        throw new Error(err);
+      }else{
+        res.status(201);
+        return res.send({"data": "Transaction saved successfully"});
+      }
+    });
+  });
 
 
-//Handle any uncaught Exception, to prevent server from crashing
-process.on('uncaughtException', function(err) {
-  console.log("uncaughtException: "+err);
-});
+  //Handle any uncaught Exception, to prevent server from crashing
+  process.on('uncaughtException', function(err) {
+    console.log("uncaughtException: "+err);
+  });
 
 
-// Start Server
-app.listen(port, function () {
-  console.log( "Express server listening on port " + port);
-});
+  // Start Server
+  app.listen(port, function () {
+    console.log( "Express server listening on port " + port);
+  });

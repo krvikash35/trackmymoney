@@ -86,24 +86,26 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
 
   $scope.addMoneyAccount = function(){
     $scope.userMoneyAccount.push({
-
-      type: "",
-      name: $scope.userMoneyAccount.length+1
+      id: $scope.userMoneyAccount.length+1,
+      type: "SavingAccount",
+      name: "",
+      isNew: true
     });
   };
 
+  $scope.filterMoneyAccount = function(ma){
+    return ma.isDeleted != true;
+  }
 
   $scope.deleteMoneyAccount = function(id){
     var filtered = $filter('filter')($scope.userMoneyAccount, {id: id});
-console.log("id"+id);
     if (filtered.length) {
       filtered[0].isDeleted = true;
-      console.log("delete");
     }
   }
 
   $scope.saveMoneyAccountForm = function(){
-    console.log("save called");
+
     var result = [];
     for(var i = $scope.userMoneyAccount.length; i--;){
       var ma = $scope.userMoneyAccount[i];
@@ -113,13 +115,37 @@ console.log("id"+id);
       if(ma.isNew){
         ma.isNew = false;
       }
-      console.log(ma.id);
       result.push(ma);
-    // console.log(result[i]);
-    }
+        }
+    // console.log("scope:"+$scope.userMoneyAccount.length);
+    $http.put($location.path(), {updatecode: 3, updateitem: $scope.userMoneyAccount})
+    .success(function(data, status, headers, config){
+      console.log(data.data);
+    })
+    .error(function(data, status, headers, config){
+      console.log(data.data);
+    })
 
+    // for(var i=$scope.userMoneyAccount.length; i--;){
+    //   console.log($scope.userMoneyAccount[i]);
+    // }
+    // console.log("result"+result);
+    // return $q.all(result);
   }
 
+$scope.cancelMoneyAccountForm = function(){
+    for (var i = $scope.userMoneyAccount.length; i--;) {
+      var ma = $scope.userMoneyAccount[i];
+      // undelete
+      if (ma.isDeleted) {
+        delete ma.isDeleted;
+      }
+      // remove new
+      if (ma.isNew) {
+        $scope.userMoneyAccount.splice(i, 1);
+      }
+    };
+  };
 
 
 });

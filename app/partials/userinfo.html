@@ -8,25 +8,26 @@
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
       <div ng-show="msg" class="alert alert-danger">{{msg}}</div>
-      <form editable-form name="maform" onaftersave="saveMoneyAccountForm()" oncancel="cancel()">
+      <form editable-form name="maform" onaftersave="saveMoneyAccountForm()" oncancel="cancelMoneyAccountForm()">
         <table class="table  table-bordered table-hover table-condensed">
           <tr style="font-weight: bold">
             <td >AccountType</td>
             <td >AccountName</td>
             <td ><span ng-show="maform.$visible">Action</span></td>
           </tr>
-          <tr ng-repeat="ma in userMoneyAccount ">
+          <tr ng-repeat="ma in userMoneyAccount | filter: filterMoneyAccount ">
             <td>
-              <span editable-select="ma.type" e-form="maform" e-ng-options="a as a for a in moneyAccountType">
+              <span editable-select="ma.type"  e-form="maform" e-ng-options="a as a for a in moneyAccountType">
                 {{ma.type}}
               </span>
             </td>
             <td>
-              <span editable-text="ma.name" e-form="maform" >
+              <span editable-text="ma.name" e-form="maform" e-required>
                 {{ma.name}}
               </span>
             </td>
-            <td><button type="button" ng-show="maform.$visible" ng-click="deleteMoneyAccount(ma.id)" class="btn btn-danger pull-right">Del</button></td>
+            <td><button type="button" ng-show="maform.$visible" ng-click="deleteMoneyAccount(ma.id)" class="btn btn-danger pull-right">
+            Del</button></td>
           </tr>
         </table>
         <div class="btn-edit">
