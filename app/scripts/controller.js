@@ -75,10 +75,6 @@ controllerModule.controller('userInfoController', function($scope, $rootScope, $
     $scope.userMoneyAccount=userInfo.moneyAccount;
     $scope.userBasicInfo=userInfo.account;
     $scope.userSourceOfTrx=userInfo.sourceOfMoneyTrx;
-    $scope.userBasicInfo.creatDate=userInfo.account.creatDate.split("T")[0];
-    $scope.userBasicInfo.updateDate=userInfo.account.updateDate.split("T")[0];
-    console.log($scope.userSourceOfTrx);
-
   }
 
   $http.get($location.path())
@@ -110,7 +106,7 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
     usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
     usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
     user.moneyAccount.forEach(function(ma){
-      usrMoneyAcct.push(ma.name);
+      usrMoneyAcct.push(ma.type+"-"+ma.name);
     });
     trxUiHandler();
   }
@@ -133,10 +129,10 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
       $scope.trx.destination=usrMoneyAcct[0];
       break;
       default: //Expense
-      $scope.trxSource=usrMoneyAcct;
-      $scope.trxDestination=usrExpenseSrc;
-      $scope.trx.source=usrMoneyAcct[0];
-      $scope.trx.destination=usrExpenseSrc[0];
+      $scope.trxSource=usrExpenseSrc;
+      $scope.trxDestination=usrMoneyAcct;
+      $scope.trx.source=usrExpenseSrc[0];
+      $scope.trx.destination=usrMoneyAcct[0];
     }
   }
 
@@ -173,9 +169,9 @@ controllerModule.controller('userReportController', function($scope, $rootScope,
   $rootScope.isLandingPageVisible=false;
   $http.get($location.path())
   .success(function(data, status, headers, config){
-    $scope.userInfo=data;
+    $scope.userTrxReport=data.data;
   })
   .error(function(data, status, headers, config){
-    $scope.userInfo=data;
+    $scope.userInfo=data.data;
   })
 })

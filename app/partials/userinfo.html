@@ -5,7 +5,7 @@
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
     <div>
-      <span class="title">User name: </span>
+      <span class="title">Full name: </span>
       <a href="" editable-text="userBasicInfo.fullname">{{userBasicInfo.fullname || empty}}</a>
     </div>
     <div>
@@ -22,11 +22,11 @@
       </div>
       <div>
         <span class="title">Joined Date: </span>
-        <label>{{userBasicInfo.creatDate}}</label>
+        <label>{{userBasicInfo.creatDate | date}}</label>
       </div>
       <div>
         <span class="title">Last Updated: </span>
-        <label>{{userBasicInfo.updateDate}}</label>
+        <label>{{userBasicInfo.updateDate | date}}</label>
       </div>
     </div>
   </div>

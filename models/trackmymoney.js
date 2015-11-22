@@ -42,7 +42,7 @@ var userInfoSchema = new schema({
 var userPrsnlTrxSchema = new schema({
   "amount":       { type: Number, required: true},
   "type":         { type: String, enum: sConfig.trxType},
-  "Source":       { type: String },
+  "source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
   "userId":    { type: String},

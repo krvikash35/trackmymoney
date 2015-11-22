@@ -144,6 +144,7 @@ pubRouter.post('/signup', function(req,res){
     usrInfoDoc.account.phone      = req.body.phone;
     usrInfoDoc.account.fullname   = req.body.fullname;
     usrInfoDoc.account.password   = hashpwd;
+    usrInfoDoc.account.creatDate  = new Date().toISOString();
     usrInfoDoc.moneyAccount       = sConfig.initMoneyAccount;
     usrInfoDoc.save(function(err, data){
       if(err){
@@ -206,7 +207,7 @@ privRouter.post('/:userId/trx',function(req, res){
   var userPrsnlTrx            = new usrPrsTrx();
   userPrsnlTrx.amount         = req.body.amount;
   userPrsnlTrx.type           = req.body.type;
-  userPrsnlTrx.Source         = req.body.source;
+  userPrsnlTrx.source         = req.body.source;
   userPrsnlTrx.destination    = req.body.destination
   userPrsnlTrx.description    = req.body.description;
   userPrsnlTrx.userId      = req.params.userId;
