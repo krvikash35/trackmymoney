@@ -1,23 +1,30 @@
 'use strict'
 
 var controllerModule = angular.module('controllerModule', []);
-
+//****************************************************************************
+// Main controller for handling landing page and controlling navigation item
+//**************************************************************************
 controllerModule.controller('mainController', function($localStorage, $route,$rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   $rootScope.isLandingPageVisible=true;
-
+  //***************************************
+  //toggling Login and Registration View
+  //**************************************
   $scope.toggleLoginAndRegView=function(){
     $scope.isLoginFormVisible=!$scope.isLoginFormVisible;
     $scope.isRegFormVisible=!$scope.isRegFormVisible;
   };
-
+  //***************************************
+  //Logout function redirecteding to home
+  //**************************************
   $scope.logout = function(){
     delete $localStorage.token;
     $window.location.href='';
-    // $rootScope.isLandingPageVisible=true;
   }
-
+  //***************************************
+  //Controlling Slideshow on feed view
+  //**************************************
   $scope.myInterval = 3000;
   $scope.noWrapSlides = false;
   var slides = $scope.slides = [];
@@ -25,13 +32,14 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
     var newWidth = 0 + slides.length + 1;
     slides.push({
       image: 'img/beauti' + newWidth + '.jpg'
-
     });
   };
   for (var i=0; i<4; i++) {
     $scope.addSlide();
   };
-
+  //**************************************
+  //Processing user loginForm
+  //**************************************
   $scope.submitLoginForm = function(loginForm){
     $scope.msg="";
     $http.post('/signin', loginForm)
@@ -44,7 +52,9 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
       $scope.msg=data.data;
     })
   }
-
+  //***************************************
+  //Processing user regestration form
+  //***************************************
   $scope.submitRegForm = function(regForm){
     $scope.msg="";
     if(regForm.password !== regForm.password1){
@@ -65,15 +75,45 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//*******************************************************************************
+//Controller for handing updating and viewing user related info including templete
+//********************************************************************************
 controllerModule.controller('userInfoController', function($filter, $q, $scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
-
+  //******************************************
+  //Intializing and populating user Info view
+  //******************************************
   var userInfoInit = function(userInfo){
-    $scope.userMoneyAccount=userInfo.moneyAccount;
     $scope.userBasicInfo=userInfo.account;
-    $scope.userSourceOfTrx=userInfo.sourceOfMoneyTrx;
+    $scope.expenseSource=userInfo.sourceOfMoneyTrx.expenseSource;
+    $scope.incomeSource=userInfo.sourceOfMoneyTrx.incomeSource;
+    $scope.userMoneyAccount=userInfo.moneyAccount;
+    for(var i=$scope.userMoneyAccount.length; i--;){
+      $scope.userMoneyAccount.id=i;
+    }
+    for(var i=$scope.expenseSource.length; i--;){
+      $scope.expenseSource.id=i;
+    }
+    for(var i=$scope.incomeSource.length; i--;){
+      $scope.incomeSource.id=i;
+    }
   }
-
   $http.get($location.path())
   .success(function(data, status, headers, config){
     userInfoInit(data.data);
@@ -81,31 +121,35 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
   .error(function(data, status, headers, config){
     $scope.msg=data.data;
   })
-
   $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
-
-  $scope.addMoneyAccount = function(){
-    $scope.userMoneyAccount.push({
-      id: $scope.userMoneyAccount.length+1,
-      type: "SavingAccount",
-      name: "",
-      isNew: true
-    });
-  };
-
-  $scope.filterMoneyAccount = function(ma){
-    return ma.isDeleted != true;
+  //***************************************
+  //updating Full Name
+  //**************************************
+  $scope.updateFullName = function(){
+    $http.put($location.path(), {updatecode: 7, updateitem: $scope.userBasicInfo.password})
+    .success(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
   }
-
-  $scope.deleteMoneyAccount = function(id){
-    var filtered = $filter('filter')($scope.userMoneyAccount, {id: id});
-    if (filtered.length) {
-      filtered[0].isDeleted = true;
-    }
+  //***************************************
+  //Updating Password
+  //**************************************
+  $scope.updatePassword = function(){
+    $http.put($location.path(), {updatecode: 4, updateitem: $scope.userBasicInfo.password})
+    .success(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
   }
-
-  $scope.saveMoneyAccountForm = function(){
-
+  //***********************************************************
+  // Updating User Money Account
+  //***********************************************************
+  $scope.updateMoneyAccount = function(){
     var result = [];
     for(var i = $scope.userMoneyAccount.length; i--;){
       var ma = $scope.userMoneyAccount[i];
@@ -116,8 +160,7 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
         ma.isNew = false;
       }
       result.push(ma);
-        }
-    // console.log("scope:"+$scope.userMoneyAccount.length);
+    }
     $http.put($location.path(), {updatecode: 3, updateitem: $scope.userMoneyAccount})
     .success(function(data, status, headers, config){
       console.log(data.data);
@@ -125,41 +168,63 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
     .error(function(data, status, headers, config){
       console.log(data.data);
     })
-
-    // for(var i=$scope.userMoneyAccount.length; i--;){
-    //   console.log($scope.userMoneyAccount[i]);
-    // }
-    // console.log("result"+result);
-    // return $q.all(result);
   }
-
-$scope.cancelMoneyAccountForm = function(){
+  $scope.addMoneyAccountRow = function(){
+    $scope.userMoneyAccount.push({
+      id: $scope.userMoneyAccount.length+1,
+      type: "SavingAccount",
+      name: "",
+      isNew: true
+    });
+  };
+  $scope.filterMoneyAccountRow = function(ma){
+    return ma.isDeleted != true;
+  }
+  $scope.deleteMoneyAccountRow = function(id){
+    var filtered = $filter('filter')($scope.userMoneyAccount, {id: id});
+    if (filtered.length) {
+      filtered[0].isDeleted = true;
+    }
+  }
+  $scope.cancelMoneyAccountUpdate = function(){
     for (var i = $scope.userMoneyAccount.length; i--;) {
       var ma = $scope.userMoneyAccount[i];
-      // undelete
       if (ma.isDeleted) {
         delete ma.isDeleted;
       }
-      // remove new
       if (ma.isNew) {
         $scope.userMoneyAccount.splice(i, 1);
       }
     };
   };
-
-
 });
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//**************************************************************************************
+// Controller for handling user transaction
+//**************************************************************************************
 controllerModule.controller('userTrxController', function($scope, $routeParams, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
-
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
-
   var trxUiInit=function(user){
     usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
     usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
@@ -168,7 +233,6 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
     });
     trxUiHandler();
   }
-
   var trxUiHandler=function(trxType){
     if(trxType === undefined || trxType === null){
       trxType = 'Expense';
@@ -193,20 +257,13 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
       $scope.trx.destination=usrMoneyAcct[0];
     }
   }
-
-
   $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
     trxUiInit(data.data);
-    console.log("succss while connecting to db"+status);
-    // console.log("DebugUser1"+JSON.stringify(user));
   })
   .error(function(data, status, headers, config){
-    console.log("error while connecting to db"+status+data);
     $scope.error=data.data;
   });
-
-
   $scope.submitTrxForm=function(trxForm){
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
@@ -216,13 +273,21 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
       $scope.msg=data.data;
     })
   }
-
   $scope.trxTypeChanged = function(trxType){
     trxUiHandler(trxType);
   }
-
 })
 
+
+
+
+
+
+
+
+//************************************************************************************
+//Controller for handling user transaction report
+//***********************************************************************************
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
   $rootScope.isLandingPageVisible=false;
   $http.get($location.path())
