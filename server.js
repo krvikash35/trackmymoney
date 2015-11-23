@@ -14,11 +14,12 @@ var mongoose   = require("mongoose");     // mongo database driver or module
 var jwt        = require("jsonwebtoken"); // this module used for token based authentication
 var appdb      = require('./models/trackmymoney');  //js var holding the all the collection of this app db
 var sConfig    = require('./config');     // holds all the important config var mainly server related
+var bcrypt     = require('bcrypt');
+var nodemailer = require('nodemailer');
 var pubRouter  = express.Router();        //this is public router used for public resources
 var privRouter = express.Router();        //this is private router used for private resources
 var usrInfo    = appdb.userInfoDoc;       //this document holds user info
 var usrPrsTrx  = appdb.userPrsnlTrxDoc;   //this document holds user personal transaction
-var bcrypt     = require('bcrypt');
 
 //use middleware stack, these are executed in declared order whenever any req, res occur
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,6 +38,31 @@ app.use(function(req, res, next) {
 app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('', pubRouter);
+
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'tmm.trackmymoney@gmail.com',
+        pass: 'Sur3536#'
+    }
+});
+
+var mailOptions = {
+    from: 'tmm.trackmymoney@gmail.com', // sender address
+    to: 'krvikash35@gmail.com', // list of receivers
+    subject: 'Intro to gmail', // Subject line
+    text: 'Hi Vikash, How are you', // plaintext body
+    html: '<b>Hello world ✔</b>' // html body
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      console.log(error);
+        return console.log(error);
+    }
+    console.log('Message sent: ' + info.response);
+
+});
 
 //Middleware for private router to validate the token
 privRouter.use('/:userId',function(req,res,next){
