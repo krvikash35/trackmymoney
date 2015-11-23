@@ -54,15 +54,15 @@ var mailOptions = {
     text: 'Hi Vikash, How are you', // plaintext body
     html: '<b>Hello world ✔</b>' // html body
 };
-
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-      console.log(error);
-        return console.log(error);
-    }
-    console.log('Message sent: ' + info.response);
-
-});
+//
+// transporter.sendMail(mailOptions, function(error, info){
+//     if(error){
+//       console.log(error);
+//         return console.log(error);
+//     }
+//     console.log('Message sent: ' + info.response);
+//
+// });
 
 //Middleware for private router to validate the token
 privRouter.use('/:userId',function(req,res,next){
