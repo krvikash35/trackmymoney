@@ -17,16 +17,14 @@ var userInfoSchema = new schema({
       "updateDate":           { type: Date, default: Date.now }
   },
   "sourceOfMoneyTrx": {
-      "incomeSource":         { type: [String], maxlength: 25, minlength: 3, default: sConfig.initIncomeSource},
-      "expenseSource":        { type: [String], maxlength: 25, minlength: 3, default: sConfig.initExpenseSource }
+      "incomeSource":         [{"name": {type: String, maxlength: 25, minlength: 3}}],
+      "expenseSource":        [{"name": {type: String, maxlength: 25, minlength: 3}}]
   },
   "moneyAccount": [{
       "name":                 { type: String, maxlength: 15},
-      "type":                 { type: String, enum: sConfig.moneyAccountType},
+      "type":                 { type: String, enum: sConfig.moneyAccountType}
   }]
 });
-
-
 
 
 

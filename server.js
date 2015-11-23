@@ -100,10 +100,8 @@ pubRouter.post('/signin',function(req, res){
   }
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
-      console.log("err");
-
-      res.sendStatus(500);
-      throw new Error();
+      res.status(500);
+      return res.send({"data": err.message});
     }
     if(!data){
       res.status(400);
@@ -142,7 +140,7 @@ pubRouter.post('/signup', function(req,res){
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
       res.sendStatus(500);
-      throw new Error(err);
+      return res.send({"data": err.message});
     }
     if(data){
       res.status(409);
@@ -156,6 +154,8 @@ pubRouter.post('/signup', function(req,res){
     usrInfoDoc.account.password   = hashpwd;
     usrInfoDoc.account.creatDate  = new Date().toISOString();
     usrInfoDoc.moneyAccount       = sConfig.initMoneyAccount;
+    usrInfoDoc.sourceOfMoneyTrx.incomeSource =sConfig.initIncomeSource;
+    usrInfoDoc.sourceOfMoneyTrx.expenseSource =sConfig.initExpenseSource;
     usrInfoDoc.save(function(err, data){
       if(err){
         res.status(400);
@@ -200,7 +200,10 @@ privRouter.get('/:userId/info',function(req, res){
 privRouter.put('/:userId/info', function(req, res){
 
   usrInfo.findById(req.params.userId, function(err, user){
-    if(err || user === null){
+    if(err){
+      res.send({"data": err.message});
+    }
+    if(user === null){
       res.status(400);
       return res.send({data: 'User not found'});
     }
@@ -210,7 +213,7 @@ privRouter.put('/:userId/info', function(req, res){
       user.save(function(err){
         if(err){
           res.status(400);
-          return res.send(err);
+          return res.send({"data": err.message});
         }else{
           res.status(200);
           return res.json({"data": "Updated successfully"});
@@ -223,7 +226,7 @@ privRouter.put('/:userId/info', function(req, res){
       user.save(function(err){
         if(err){
           res.status(400);
-          return res.send(err);
+          return res.send({"data": err.message});
         }else{
           res.status(200);
           return res.json({"data": "Updated successfully"});
@@ -236,7 +239,7 @@ privRouter.put('/:userId/info', function(req, res){
       user.save(function(err){
         if(err){
           res.status(400);
-          return res.send(err);
+          return res.send({"data": err.message});
         }else{
           res.status(200);
           return res.json({"data": "Updated successfully"});
@@ -244,11 +247,17 @@ privRouter.put('/:userId/info', function(req, res){
         break;
 
         case 4:
-        user.account.password=req.body.updateitem;
+        pwd = req.body.updateitem
+        if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
+          res.status(400);
+          return res.send({"data": "Invalid password length"});
+        }
+        var hashpwd = bcrypt.hashSync(pwd, 10);
+        user.account.password = hashpwd;
         user.save(function(err){
           if(err){
             res.status(400);
-            return res.send(err);
+            return res.send({"data": "Invalid length for password"});
           }else{
             res.status(200);
             return res.json({"data": "Updated successfully"});
@@ -257,11 +266,16 @@ privRouter.put('/:userId/info', function(req, res){
         break;
 
         case 5:
-        user.account.email=req.body.updateitem;
+        var email=req.body.updateitem;
+        if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
+          res.status(400);
+          return res.send({"data": "Invalid Email length or pattern"});
+        }
+        user.account.email=email;
         user.save(function(err){
           if(err){
             res.status(400);
-            return res.send(err);
+            return res.send({"data": "Invalid length or pattern for email"});
           }else{
             res.status(200);
             return res.json({"data": "Updated successfully"});
@@ -274,7 +288,7 @@ privRouter.put('/:userId/info', function(req, res){
         user.save(function(err){
           if(err){
             res.status(400);
-            return res.send(err);
+            return res.send({"data": "Invalid length for phone"});
           }else{
             res.status(200);
             return res.json({"data": "Updated successfully"});
@@ -287,7 +301,7 @@ privRouter.put('/:userId/info', function(req, res){
         user.save(function(err){
           if(err){
             res.status(400);
-            return res.send(err);
+            return res.send({"data": "Invalid length for fullname"});
           }else{
             res.status(200);
             return res.json({"data": "Updated successfully"});

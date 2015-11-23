@@ -21,11 +21,13 @@ module.exports = {
   "trxType":            ["Income", "Expense", "Transfer"],
   "accountLoginMethod": ["email","phone"],
   "moneyAccountType":   ["SavingAccount", "CreditCard","DigitalWallet","CashAccount"],
-  "initIncomeSource":   ["Salary","Dividend","Interest-Principal","Borrwo","Gift","Refund"],
-  "initExpenseSource":  ["Fooding","DailyUsageItem","On Family","Travel","Entertainment",
-                          "Health","Recharge prepaid-postpaid-DTH",
-                          "BillPayment Water-Electricity","paid  EMI","Rent Office-Room",
-                          "wages", "paid Tax"],
+  "initIncomeSource":   [{"name": "Salary"}, {"name": "Dividend"},{"name": "Interest-Principal"}
+                        ,{"name": "Borrow"}, {"name": "Gift"},{"name": "Refund"}],
+  "initExpenseSource":  [{"name": "Fooding"}, {"name": "DailyUsageItem"},{"name": "On Family"}
+                        ,{"name": "Travel"}, {"name": "Entertainment"}, {"name": "Health"}
+                        ,{"name": "prepaid-postpaid-DTH"},{"name": "Bil-Water-Electric"}
+                        ,{"name": "paid-EMI"} ,{"name": "Rent-Office-PG"},{"name": "wages"}
+                        ,{"name": "paid-Tax"}],
   "initMoneyAccount":   [
       {"name": "ICICI",    "type": "SavingAccount" },
       {"name": "Others",   "type": "SavingAccount" },

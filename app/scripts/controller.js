@@ -105,13 +105,13 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
     $scope.incomeSource=userInfo.sourceOfMoneyTrx.incomeSource;
     $scope.userMoneyAccount=userInfo.moneyAccount;
     for(var i=$scope.userMoneyAccount.length; i--;){
-      $scope.userMoneyAccount.id=i;
+      $scope.userMoneyAccount[i].id=i;
     }
     for(var i=$scope.expenseSource.length; i--;){
-      $scope.expenseSource.id=i;
+      $scope.expenseSource[i].id=i;
     }
     for(var i=$scope.incomeSource.length; i--;){
-      $scope.incomeSource.id=i;
+      $scope.incomeSource[i].id=i;
     }
   }
   $http.get($location.path())
@@ -126,7 +126,7 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
   //updating Full Name
   //**************************************
   $scope.updateFullName = function(){
-    $http.put($location.path(), {updatecode: 7, updateitem: $scope.userBasicInfo.password})
+    $http.put($location.path(), {updatecode: 7, updateitem: $scope.userBasicInfo.fullname})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -163,11 +163,12 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
     }
     $http.put($location.path(), {updatecode: 3, updateitem: $scope.userMoneyAccount})
     .success(function(data, status, headers, config){
-      console.log(data.data);
+      $scope.msg=data.data;
     })
     .error(function(data, status, headers, config){
-      console.log(data.data);
+      $scope.msg=data.data;
     })
+    return $q.all(result);
   }
   $scope.addMoneyAccountRow = function(){
     $scope.userMoneyAccount.push({
@@ -197,7 +198,170 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
       }
     };
   };
+  //***********************************************************
+  // Updating User Expense Source
+  //***********************************************************
+  $scope.updateExpenseSource = function(){
+    var result = [];
+    for(var i = $scope.expenseSource.length; i--;){
+      var es = $scope.expenseSource[i];
+      if(es.isDeleted){
+        $scope.expenseSource.splice(i,1);
+      }
+      if(es.isNew){
+        es.isNew = false;
+      }
+      result.push(es);
+    }
+    $http.put($location.path(), {updatecode: 1, updateitem: $scope.expenseSource})
+    .success(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+    return $q.all(result);
+  }
+  $scope.addExpenseSourceRow = function(){
+    $scope.expenseSource.push({
+      id: $scope.expenseSource.length+1,
+      name: "",
+      isNew: true
+    });
+  };
+  $scope.filterExpenseAccountRow = function(es){
+    return es.isDeleted != true;
+  }
+  $scope.deleteExpenseSourceRow = function(id){
+    var filtered = $filter('filter')($scope.expenseSource, {id: id});
+    if (filtered.length) {
+      filtered[0].isDeleted = true;
+    }
+  }
+  $scope.cancelExpenseSourceUpdate = function(){
+    for (var i = $scope.expenseSource.length; i--;) {
+      var es = $scope.expenseSource[i];
+      if (es.isDeleted) {
+        delete es.isDeleted;
+      }
+      if (es.isNew) {
+        $scope.expenseSource.splice(i, 1);
+      }
+    };
+  };
+  //***********************************************************
+  // Updating User Income Source
+  //***********************************************************
+  $scope.updateIncomeSource = function(){
+    var result = [];
+    for(var i = $scope.incomeSource.length; i--;){
+      var is = $scope.incomeSource[i];
+      if(is.isDeleted){
+        $scope.incomeSource.splice(i,1);
+      }
+      if(is.isNew){
+        is.isNew = false;
+      }
+      result.push(is);
+    }
+    $http.put($location.path(), {updatecode: 2, updateitem: $scope.incomeSource})
+    .success(function(data, status, headers, config){
+      $scope.msg=data.data;
+    })
+    .error(function(data, status, headers, config){
+      console.log(data.data);
+      $scope.msg=data.data;
+    })
+    return $q.all(result);
+  }
+  $scope.addIncomeSourceRow = function abc(){
+    $scope.incomeSource.push({
+      id: $scope.incomeSource.length+1,
+      name: "",
+      isNew: true
+    });
+  };
+  $scope.filterIncomeSourceRow = function(is){
+    return is.isDeleted != true;
+  }
+  $scope.deleteIncomeSourceRow = function(id){
+    var filtered = $filter('filter')($scope.incomeSource, {id: id});
+    if (filtered.length) {
+      filtered[0].isDeleted = true;
+    }
+  }
+  $scope.cancelIncomeSourceUpdate = function(){
+    for (var i = $scope.incomeSource.length; i--;) {
+      var is = $scope.incomeSource[i];
+      if (is.isDeleted) {
+        delete is.isDeleted;
+      }
+      if (is.isNew) {
+        $scope.incomeSource.splice(i, 1);
+      }
+    };
+  };
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -226,10 +390,16 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
   var trxUiInit=function(user){
-    usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
-    usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
+    // usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
+    // usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
+    user.sourceOfMoneyTrx.incomeSource.forEach(function(is){
+      usrIncomeSrc.push(is.name);
+    });
+    user.sourceOfMoneyTrx.expenseSource.forEach(function(es){
+      usrExpenseSrc.push(es.name);
+    })
     user.moneyAccount.forEach(function(ma){
-      usrMoneyAcct.push(ma.type+ma.name);
+      usrMoneyAcct.push(ma.type+"-"+ma.name);
     });
     trxUiHandler();
   }
@@ -243,12 +413,14 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
       $scope.trxDestination=usrMoneyAcct;
       $scope.trx.source=usrIncomeSrc[0];
       $scope.trx.destination=usrMoneyAcct[0];
+      console.log(usrIncomeSrc[0]);
       break;
       case 'Transfer':
       $scope.trxSource=usrMoneyAcct;
       $scope.trxDestination=usrMoneyAcct;
       $scope.trx.source=usrMoneyAcct[0];
       $scope.trx.destination=usrMoneyAcct[0];
+      console.log(usrMoneyAcct[0]);
       break;
       default: //Expense
       $scope.trxSource=usrExpenseSrc;
