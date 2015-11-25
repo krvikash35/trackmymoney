@@ -119,11 +119,11 @@ mongoose.connect(mongoDBUrl, function(err){
 //@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
 //------------------------------------------------------------------------------------------------
 pubRouter.post('/signin',function(req, res){
-  if(req.body.email === undefined || req.body.email === null ){
-
-    res.status(400);
-    return res.send({"data": "Invalid Email length or pattern"});
-  }
+  // if(req.body.email === undefined || req.body.email === null ){
+  //
+  //   res.status(400);
+  //   return res.send({"data": "Invalid Email length or pattern"});
+  // }
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
       res.status(500);
@@ -155,14 +155,26 @@ pubRouter.post('/signin',function(req, res){
 pubRouter.post('/signup', function(req,res){
   var pwd   = req.body.password;
   var email = req.body.email;
-  if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
-    res.status(400);
-    return res.send({"data": "Invalid Email length or pattern"});
+  if(email===undefined){
+    console.log("undefined");
   }
-  if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
-    res.status(400);
-    return res.send({"data": "Invalid password length"});
+  if(email === null){
+    console.log("null");
   }
+  if(email){
+    console.log("exist");
+  }
+  console.log(email.lowercase+"jjj");
+  // console.log(email);
+  // return res.send(email);
+  // if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
+  //   res.status(400);
+  //   return res.send({"data": "Invalid Email length or pattern"});
+  // }
+  // if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
+  //   res.status(400);
+  //   return res.send({"data": "Invalid password length"});
+  // }
   usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
     if(err){
       res.sendStatus(500);
@@ -174,10 +186,16 @@ pubRouter.post('/signup', function(req,res){
     }
     var hashpwd                   = bcrypt.hashSync(pwd, 10);
     var usrInfoDoc                = new usrInfo();
-    usrInfoDoc.account.email      = req.body.email;
-    usrInfoDoc.account.phone      = req.body.phone;
+    // usrInfoDoc.account.email      = req.body.email;
+    // usrInfoDoc.account.phone      = req.body.phone;
+    // usrInfoDoc.account.fullname   = req.body.fullname;
+    var a={"email": "abc2+.com", "phone": "9980662980"};
     usrInfoDoc.account.fullname   = req.body.fullname;
+    console.log(req.body.fullname);
+    usrInfoDoc.account=a;
+
     usrInfoDoc.account.password   = hashpwd;
+    console.log("userInfo"+usrInfoDoc.account);
     usrInfoDoc.account.creatDate  = new Date().toISOString();
     usrInfoDoc.moneyAccount       = sConfig.initMoneyAccount;
     usrInfoDoc.sourceOfMoneyTrx.incomeSource =sConfig.initIncomeSource;
@@ -389,9 +407,9 @@ privRouter.put('/:userId/info', function(req, res){
 
 
   //Handle any uncaught Exception, to prevent server from crashing
-  process.on('uncaughtException', function(err) {
-    console.log("uncaughtException: "+err);
-  });
+  // process.on('uncaughtException', function(err) {
+  //   console.log("uncaughtException: "+err);
+  // });
 
 
   // Start Server

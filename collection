@@ -1,0 +1,22 @@
+char(.) - any Char
+char(*) - zero or more
+char(+) - once or more ? {a,b}-range \-escapeChar (a|b)
+char(())- char-Class/char-set matches only one out of several character put inside  square bracket([])
+user hyphen(-) to specify range, caret char(^) negate char class, means anyone except that
+e.g []. [abc98], [a-zA-Z]
+char({}) - specify range that each char class should repeat
+
+
+exact char
+/^[a-zA-Z]{7}$/
+
+minimum char
+/^[a-zA-Z]{3,}$/
+
+length range
+/^[a-zA-Z]{3,7}$/
+
+regular email regex
+/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+
+/^(CreditCard|SavingAccount|DigitalWallet|Cash)-/

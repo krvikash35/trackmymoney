@@ -1,51 +1,52 @@
 var mongoose     = require('mongoose');
 var schema       = mongoose.Schema;
-var sConfig      = require('../config');
+var sConfig      = require('../config/config');
 
-// user schema, will map to user_info collection
-var userInfoSchema = new schema({
+// User Account Schema
+var usrAcct = new schema({
   "account":  {
-      "email":                { type: String, maxlength: 25, required: true, lowercase: true, unique: true, index: true },
-      "phone":                { type: Number, maxlength: 12, minlength: 12},
-      "fullname":             { type: String, maxlength: 25},
-      "password":             { type: String, required: true},
-      "accountVerified": [{
-          "method":           { type: String, enum: sConfig.accountLoginMethod },
-          "isVerified":       { type: Boolean }
-      }],
+      "email":                { type: String,index: true },
+      "phone":                { type: Number},
+      "fullName":             { type: String},
+      "password":             { type: String},
       "creatDate":            { type: Date },
       "updateDate":           { type: Date, default: Date.now }
   },
   "sourceOfMoneyTrx": {
-      "incomeSource":         [{"name": {type: String, maxlength: 25, minlength: 3}}],
-      "expenseSource":        [{"name": {type: String, maxlength: 25, minlength: 3}}]
+      "incomeSource":         [{type: String}],
+      "expenseSource":        [{type: String}]
   },
   "moneyAccount": [{
-      "name":                 { type: String, maxlength: 15},
-      "type":                 { type: String, enum: sConfig.moneyAccountType}
+      "name":                 { type: String},
+      "type":                 { type: String}
   }]
 });
 
+// User Temporary model where user account verification details stored
+var usrVerTemp = new schema({
+  "email":    {type: String},
+  "verCode":  {type: Number}
+})
 
-
-// user personal transaction schema, will map to user_prsnl_trx collection
-var userPrsnlTrxSchema = new schema({
+// User individual transaction schema
+var usrPrsTrx = new schema({
   "amount":       { type: Number, required: true},
   "type":         { type: String, enum: sConfig.trxType},
   "source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
-  "userId":    { type: String},
+  "usrId":       { type: String},
   "date":         { type: Date, default: Date.now }
 });
 
 
 //database containing all the schema
-var trackmymoneydb = {
-  "userInfoDoc":      mongoose.model("userInfo",userInfoSchema),
-  "userPrsnlTrxDoc":  mongoose.model("userPrsnlTrx",userPrsnlTrxSchema)
+var tmcdb = {
+  "usrAcct":    mongoose.model("usrAcct",usrAcct),
+  "usrPrsTrx":  mongoose.model("usrPrsTrx",usrPrsTrx),
+  "usrVerTemp": mongoose.model("usrVerTemp",usrVerTemp)
 }
 
 
 //export this module so that other pages can use
-module.exports=trackmymoneydb;
+module.exports=tmcdb;
