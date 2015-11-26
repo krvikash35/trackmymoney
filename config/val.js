@@ -7,7 +7,7 @@ module.exports = {
   maMaxLen: 15,
   iSrcRegex: /^[a-zA-Z][a-zA-Z0-9@-_]{3,20}$/,
   eSrcRegex: /^[a-zA-Z][a-zA-Z0-9@-_]{3,20}$/,
-  amountRegex: /^[0-9]{2,10}$/,
+  amountRegex: /^[0-9]{1,10}$/,
   maTypeRegex: /^(CreditCard|SavingAccount|DigitalWallet|Cash)$/,
   maNameRegex: /^[a-zA-Z][a-zA-Z0-9- _]{3,15}$/,
   trxTypeRegex: /^(Income|Saving|Transfer)$/,

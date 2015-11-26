@@ -6,20 +6,21 @@ module.exports = {
 
 valEmail : function(email){
   var err;
-  if(pwd === undefined || pwd == null || typeof(pwd) !== 'string' ||  email.length > valConfig.emailMaxLen || (!email.match(valConfig.emailRegex)) )
+  if(!email || !valConfig.emailRegex.test(email) )
   return err=errConfig.E100;
 },
 
 
+
 valPwd : function(pwd){
   var err;
-  if( pwd === undefined || pwd === null || (!valConfig.pwdRegex.test(pwd)) )
+  if( !pwd || !valConfig.pwdRegex.test(pwd) )
   return err=errConfig.E101;
 },
 
 valName : function(name){
   var err;
-  if(name === undefined || name === null || (!valConfig.nameRegex.test(name)))
+  if( !name || !valConfig.nameRegex.test(name))
   return err=errConfig.E102;
 },
 
@@ -28,9 +29,9 @@ valMAcct : function(ma){
   if( !(ma instanceof Array) || ma.length > valConfig.maMaxLen || ma.length < valConfig.maMinLen )
   return err=errConfig.E103;
   for(var i=ma.length; i--;){
-    if( ma[i].type === undefined || !valConfig.maTypeRegex.test(ma[i].type) )
+    if( !ma[i].type|| !valConfig.maTypeRegex.test(ma[i].type) )
     return err=errConfig.E104;
-    if( ma[i].name === undefined || !valConfig.maNameRegex.test(ma[i].name) )
+    if( !ma[i].name || !valConfig.maNameRegex.test(ma[i].name) )
     return err=errConfig.E105;
   }
 },
@@ -40,7 +41,7 @@ valIncSrc : function(iSrc){
   if( !(iSrc instanceof Array) || iSrc.length > valConfig.iSrcMaxLen ||  iSrc.length < valConfig.iSrcMinLen )
   return err=errConfig.E106;
   for(var i=iSrc.length; i--;){
-    if( iSrc[i] === undefined || !valConfig.iSrcRegex.test(iSrc[i]) )
+    if( !iSrc[i] || !valConfig.iSrcRegex.test(iSrc[i]) )
     return err=errConfig.E107;
   }
 },
@@ -51,14 +52,14 @@ valExpSrc : function(eSrc){
   eSrc.length < valConfig.eSrcMinLen )
   return err=errConfig.E108;
   for(var i=eSrc.length; i--;){
-    if( eSrc[i] === undefined || !valConfig.eSrcRegex.test(eSrc[i]) )
+    if( !eSrc[i] || !valConfig.eSrcRegex.test(eSrc[i]) )
     return err=errConfig.E109;
   }
 },
 
 valAmount : function(amount){
   var err;
-  if( amount === undefined || amount === null || !valConfig.amountRegex.test(amount) )
+  if( !amount || !valConfig.amountRegex.test(amount) )
   return errConfig.E110;
 },
 
@@ -72,3 +73,11 @@ valTrxDesc : function(desc){
 
 
 }
+
+// console.log(module.exports.valMAcct());
+
+// var a='kk 9'
+// // var c = a.split(' ')[1].length();
+// console.log(valEmail(77));
+
+console.log(Math.floor(1000 + Math.random() * 9000));

@@ -20,76 +20,17 @@ var pubRouter  = express.Router();        //this is public router used for publi
 var privRouter = express.Router();        //this is private router used for private resources
 var usrInfo    = appdb.userInfoDoc;       //this document holds user info
 var usrPrsTrx  = appdb.userPrsnlTrxDoc;   //this document holds user personal transaction
+var utilMeth   = require('./method/util');
 
 //use middleware stack, these are executed in declared order whenever any req, res occur
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-  if(mongoose.connection.readyState==0){
-    res.status(500);
-    return  res.send({"data": "We are having problem with connecting to DB..Dont worry, will be back soon!"});
-  }
-  next();
-});
+app.use(utilMeth.setPreReq);
 app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('', pubRouter);
-
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'tmm.trackmymoney@gmail.com',
-        pass: 'Sur3536#'
-    }
-});
-
-var mailOptions = {
-    from: 'tmm.trackmymoney@gmail.com', // sender address
-    to: 'krvikash35@gmail.com', // list of receivers
-    subject: 'Intro to gmail', // Subject line
-    text: 'Hi Vikash, How are you', // plaintext body
-    html: '<b>Hello world ✔</b>' // html body
-};
-//
-// transporter.sendMail(mailOptions, function(error, info){
-//     if(error){
-//       console.log(error);
-//         return console.log(error);
-//     }
-//     console.log('Message sent: ' + info.response);
-//
-// });
-
-//Middleware for private router to validate the token
-privRouter.use('/:userId',function(req,res,next){
-
-
-  var bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== 'undefined') {
-    var bearer = bearerHeader.split(" ");
-    var bearerToken = bearer[1];
-    jwt.verify(bearerToken, sConfig.serverSecret, function(err, decoded){
-      if(err){
-        res.status(401);
-        res.setHeader("Location", "");
-        return res.send({"data": "Unauthorized to see this page"})
-      }
-      if(req.params.userId !== decoded.userId){
-        res.status(400);
-        return res.send({"data": "Invalid Resources"})
-      }
-      req.userId = decoded.userId;
-      next();
-    });
-  }else{
-    res.status(400);
-    return res.send({"data": "supported authorization Header not found"});
-  }
-});
+privRouter.use('/:userId',); //Middleware for private router to validate the token
 
 // use config var to run this app: Development or production
 if(sConfig.runEnv === 'dev') {
@@ -108,7 +49,7 @@ if(sConfig.runEnv === 'dev') {
 //connect to mongo db
 mongoose.connect(mongoDBUrl, function(err){
   if(err){
-    console.log("Could not connect to "+mongoDBUrl);
+    return console.log("Could not connect to "+mongoDBUrl);
   }
 });
 
@@ -118,33 +59,7 @@ mongoose.connect(mongoDBUrl, function(err){
 //@response-error:   {res.statusCode: [400,500], res.body.data: "appropriate error msg" }
 //@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
 //------------------------------------------------------------------------------------------------
-pubRouter.post('/signin',function(req, res){
-  // if(req.body.email === undefined || req.body.email === null ){
-  //
-  //   res.status(400);
-  //   return res.send({"data": "Invalid Email length or pattern"});
-  // }
-  usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
-    if(err){
-      res.status(500);
-      return res.send({"data": err.message});
-    }
-    if(!data){
-      res.status(400);
-      return res.send({"data": "This user not found on our system!"});
-    }
-    if(!bcrypt.compareSync(req.body.password, data.account.password)){
-      res.status(400);
-      return res.send({"data": "Invalid Password"})
-    }
-    var usr   = { "userId": data._id };
-    var token = jwt.sign(usr, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
-    var loc   = "user/"+data._id+"/trx"
-    res.setHeader("Location", loc);
-    res.status(200);
-    res.send({"data": token});
-  });
-});
+pubRouter.post('/signin', utilMeth.processSigninReq);
 
 //-----------------------------------------------------------------------------------------------
 //post('/signup')
@@ -152,70 +67,8 @@ pubRouter.post('/signin',function(req, res){
 //@response-error:   {res.statusCode: [400,500], res.body.data: "appropriate error msg" }
 //@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
 //------------------------------------------------------------------------------------------------
-pubRouter.post('/signup', function(req,res){
-  var pwd   = req.body.password;
-  var email = req.body.email;
-  if(email===undefined){
-    console.log("undefined");
-  }
-  if(email === null){
-    console.log("null");
-  }
-  if(email){
-    console.log("exist");
-  }
-  console.log(email.lowercase+"jjj");
-  // console.log(email);
-  // return res.send(email);
-  // if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
-  //   res.status(400);
-  //   return res.send({"data": "Invalid Email length or pattern"});
-  // }
-  // if(pwd === undefined || pwd.length<sConfig.pwdLength.min || pwd.length>sConfig.pwdLength.max || pwd ===null){
-  //   res.status(400);
-  //   return res.send({"data": "Invalid password length"});
-  // }
-  usrInfo.findOne({"account.email": req.body.email.toLowerCase()}, function(err, data){
-    if(err){
-      res.sendStatus(500);
-      return res.send({"data": err.message});
-    }
-    if(data){
-      res.status(409);
-      return res.send({"data": "This user already exist in our system"});
-    }
-    var hashpwd                   = bcrypt.hashSync(pwd, 10);
-    var usrInfoDoc                = new usrInfo();
-    // usrInfoDoc.account.email      = req.body.email;
-    // usrInfoDoc.account.phone      = req.body.phone;
-    // usrInfoDoc.account.fullname   = req.body.fullname;
-    var a={"email": "abc2+.com", "phone": "9980662980"};
-    usrInfoDoc.account.fullname   = req.body.fullname;
-    console.log(req.body.fullname);
-    usrInfoDoc.account=a;
+pubRouter.post('/signup', utilMeth.processSignupReq);
 
-    usrInfoDoc.account.password   = hashpwd;
-    console.log("userInfo"+usrInfoDoc.account);
-    usrInfoDoc.account.creatDate  = new Date().toISOString();
-    usrInfoDoc.moneyAccount       = sConfig.initMoneyAccount;
-    usrInfoDoc.sourceOfMoneyTrx.incomeSource =sConfig.initIncomeSource;
-    usrInfoDoc.sourceOfMoneyTrx.expenseSource =sConfig.initExpenseSource;
-    usrInfoDoc.save(function(err, data){
-      if(err){
-        res.status(400);
-        res.send({"msg": "Invalid signup data"});
-        throw new Error(err);
-      }else{
-        var usr   = { "userId": data._id };
-        var token = jwt.sign(usr, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
-        var loc="user/"+data._id+"/info";
-        res.status(201);
-        res.setHeader("Location",loc);
-        return res.send({"data": token});;
-      }
-    });
-  });
-});
 
 //-----------------------------------------------------------------------------------------------
 //get('/user/:userId/info')

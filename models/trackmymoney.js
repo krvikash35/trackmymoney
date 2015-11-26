@@ -1,6 +1,5 @@
 var mongoose     = require('mongoose');
 var schema       = mongoose.Schema;
-var sConfig      = require('../config/config');
 
 // User Account Schema
 var usrAcct = new schema({
@@ -25,13 +24,14 @@ var usrAcct = new schema({
 // User Temporary model where user account verification details stored
 var usrVerTemp = new schema({
   "email":    {type: String},
-  "verCode":  {type: Number}
+  "verCode":  {type: Number},
+  "verStatus": {type: Number, default: 0}
 })
 
 // User individual transaction schema
 var usrPrsTrx = new schema({
   "amount":       { type: Number, required: true},
-  "type":         { type: String, enum: sConfig.trxType},
+  "type":         { type: String },
   "source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
