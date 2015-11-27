@@ -4,10 +4,9 @@ var controllerModule = angular.module('controllerModule', []);
 //****************************************************************************
 // Main controller for handling landing page and controlling navigation item
 //**************************************************************************
-controllerModule.controller('mainController', function($localStorage, $route,$rootScope, $scope,$location, $http, $window){
+controllerModule.controller('mainController', function(utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
-  $rootScope.isLandingPageVisible=true;
   //***************************************
   //toggling Login and Registration View
   //**************************************
@@ -25,18 +24,8 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
   //***************************************
   //Controlling Slideshow on feed view
   //**************************************
-  $scope.myInterval = 3000;
-  $scope.noWrapSlides = false;
-  var slides = $scope.slides = [];
-  $scope.addSlide = function() {
-    var newWidth = 0 + slides.length + 1;
-    slides.push({
-      image: 'img/beauti' + newWidth + '.jpg'
-    });
-  };
-  for (var i=0; i<4; i++) {
-    $scope.addSlide();
-  };
+utilSer.initSlide($scope);
+
   //**************************************
   //Processing user loginForm
   //**************************************
@@ -55,6 +44,24 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
   //***************************************
   //Processing user regestration form
   //***************************************
+$scope.verifyEmail = function verifyEmail(regForm) {
+  var err;
+  if(!regForm)
+  return $scope.msg = "Email is required"
+  if ( err=valSer.valEmail(regForm.email) )
+  return $scope.msg = err;
+  $http.post('/signup', {signupCode: 1, email: regForm.email})
+  .success(function(data, status, headers, config){
+    $localStorage.token = data.data;
+    $scope.userId=(headers('location').split("/"))[1];
+    $location.path(headers('location'));
+  })
+  .error(function(data, status, headers, config){
+    $scope.msg=data.data;
+  });
+
+}
+
   $scope.submitRegForm = function(regForm){
     $scope.msg="";
     if(regForm.password !== regForm.password1){
@@ -95,7 +102,7 @@ controllerModule.controller('mainController', function($localStorage, $route,$ro
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
 controllerModule.controller('userInfoController', function($filter, $q, $scope, $rootScope, $location, $http,  $window){
-  $rootScope.isLandingPageVisible=false;
+
   //******************************************
   //Intializing and populating user Info view
   //******************************************
@@ -385,7 +392,6 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
 // Controller for handling user transaction
 //**************************************************************************************
 controllerModule.controller('userTrxController', function($scope, $routeParams, $rootScope, $location, $http,  $window){
-  $rootScope.isLandingPageVisible=false;
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -461,7 +467,6 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
 //Controller for handling user transaction report
 //***********************************************************************************
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
-  $rootScope.isLandingPageVisible=false;
   $http.get($location.path())
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data.data;

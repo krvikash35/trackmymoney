@@ -3,7 +3,7 @@
 // Declare app level module which depends on other module
 var trackMyMoney = angular.module('trackMyMoney', [
   'controllerModule',
-  'serviceModule',
+  'tmmSer',
   'ngRoute',
   'ui.bootstrap',
   'ngStorage',
@@ -29,15 +29,18 @@ function($routeProvider){
     templateUrl: 'partials/usertrxn.html',
     controller: 'userTrxController'
   }).
-  when('', {
-    templateUrl: 'index.html'
+  when('/main', {
+    templateUrl: 'partials/auth.html',
+    controller: 'mainController'
+  }).
+  otherwise({
+    redirectTo: '/main'
   })
 }
 ]);
 
 
 //interceptor for request and response to modify authorization headers
-
 trackMyMoney.config(['$httpProvider', function($httpProvider){
   $httpProvider.interceptors.push(['$q', '$location', '$localStorage', '$window', function($q, $location, $localStorage, $window) {
     return {
@@ -46,14 +49,7 @@ trackMyMoney.config(['$httpProvider', function($httpProvider){
         if ($localStorage.token) {
           config.headers.Authorization = 'Bearer ' + $localStorage.token;
         }
-        console.log("debugHeaders:"+config);
         return config;
-      },
-      'responseError': function(response) {
-        if(response.status === 401 || response.status === 403) {
-          $window.location.href='';
-        }
-        return $q.reject(response);
       }
     };
   }]);

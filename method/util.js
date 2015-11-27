@@ -77,10 +77,10 @@ module.exports ={
     res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-    if(mongoose.connection.readyState==0){
-      res.status(500);
-      return  res.send(errConfig.E117);
-    }
+    // if(mongoose.connection.readyState==0){
+    //   res.status(500);
+    //   return  res.send(errConfig.E117);
+    // }
     next();
   },
 
@@ -114,7 +114,7 @@ module.exports ={
   processSignupReq : function(req, res){
     switch (req.body.signupCode) {
       case 1:
-      checkEmailForSignup(req, res);
+      module.exports.checkEmailForSignup(req, res);
       tmcdb.usrVerTemp.find({email: 'req.body.email'}, function(err, usr){
         if (err){
           res.status(500)
@@ -215,7 +215,7 @@ module.exports ={
       })
       break;
       default:
-      res.send(400);
+      res.status(400);
       return res.send(errConfig.E126);
     }
   }

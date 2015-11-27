@@ -1,7 +1,7 @@
 var valConfig = require('../config/val')
 var errConfig = require('../config/error')
 
-module.exports = {
+var valMeth = (function()){
 
 
 valEmail : function(email){
@@ -72,12 +72,4 @@ valTrxDesc : function(desc){
 }
 
 
-}
-
-// console.log(module.exports.valMAcct());
-
-// var a='kk 9'
-// // var c = a.split(' ')[1].length();
-// console.log(valEmail(77));
-
-console.log();
+})();

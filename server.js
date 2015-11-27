@@ -13,7 +13,7 @@ var morgan     = require("morgan");       // used for logging
 var mongoose   = require("mongoose");     // mongo database driver or module
 var jwt        = require("jsonwebtoken"); // this module used for token based authentication
 var appdb      = require('./models/trackmymoney');  //js var holding the all the collection of this app db
-var sConfig    = require('./config');     // holds all the important config var mainly server related
+var sConfig    = require('./config/server');     // holds all the important config var mainly server related
 var bcrypt     = require('bcrypt');
 var nodemailer = require('nodemailer');
 var pubRouter  = express.Router();        //this is public router used for public resources
@@ -30,7 +30,7 @@ app.use(utilMeth.setPreReq);
 app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('', pubRouter);
-privRouter.use('/:userId',); //Middleware for private router to validate the token
+privRouter.use('/:userId', utilMeth.processAuthAccessReq); //Middleware for private router to validate the token
 
 // use config var to run this app: Development or production
 if(sConfig.runEnv === 'dev') {
