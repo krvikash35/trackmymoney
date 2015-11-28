@@ -7,8 +7,8 @@
 
 module.exports = {
   S100: 'verification code sent to your email',
-  S101: 'Email should be between 5 and 50 char!',
-  S102: 'Invalid email pattern!',
+  S101: 'New verification code sent to your email',
+  S102: 'Email Verified Successfully',
   S103: 'Password shoudl be string!',
   S104: 'Password should be between 5 and 50 char!',
   S105: 'Name should be string!',
@@ -57,9 +57,9 @@ module.exports = {
   E125: 'Wrong Verification Code',
   E126: 'Invalid Signup Options!',
   E127: 'Please verify your email before signup!',
-  E128: '!',
-  E129: 'Invalid Income Source Name!',
-  E130: 'Inavlid Expnese Source',
+  E128: 'Please generate the verif code first!',
+  E129: 'User not found on our system!',
+  E130: '',
   E131: 'Invalid Expnese Source Name!',
   E131: 'Invalid Amount!',
   E132: 'Invalid Transaction Description!',

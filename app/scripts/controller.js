@@ -33,12 +33,12 @@ utilSer.initSlide($scope);
     $scope.msg="";
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
-      $localStorage.token = data.data;
-      $scope.userId=(headers('location').split("/"))[1];
+      $localStorage.token = data;
+      $rootScope.userId=(headers('location').split("/"))[1];
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
   }
   //***************************************
@@ -50,16 +50,27 @@ $scope.verifyEmail = function verifyEmail(regForm) {
   return $scope.msg = "Email is required"
   if ( err=valSer.valEmail(regForm.email) )
   return $scope.msg = err;
-  $http.post('/signup', {signupCode: 1, email: regForm.email})
-  .success(function(data, status, headers, config){
-    $localStorage.token = data.data;
-    $scope.userId=(headers('location').split("/"))[1];
-    $location.path(headers('location'));
-  })
-  .error(function(data, status, headers, config){
-    $scope.msg=data.data;
-  });
-
+  if($scope.isVerCodeSent){
+    $http.post('/signup', {signupCode: 2, email: regForm.email, verCode: regForm.verCode})
+    .success(function(data, status, headers, config){
+      $scope.msg = data;
+      $scope.isEmailVerified = true;
+      $scope.emailVerButton = "Verified"
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data;
+    });
+  }else {
+    $http.post('/signup', {signupCode: 1, email: regForm.email})
+    .success(function(data, status, headers, config){
+      $scope.msg = data;
+      $scope.isVerCodeSent = true;
+      $scope.emailVerButton = "Verify Code"
+    })
+    .error(function(data, status, headers, config){
+      $scope.msg=data;
+    });
+  }
 }
 
   $scope.submitRegForm = function(regForm){
@@ -67,14 +78,16 @@ $scope.verifyEmail = function verifyEmail(regForm) {
     if(regForm.password !== regForm.password1){
       return $scope.error="both password does not match!";
     }
+    regForm.signupCode=3;
+    console.log(regForm);
     $http.post('/signup', regForm)
     .success(function(data, status, headers, config){
-      $localStorage.token = data.data;
-      $scope.userId=(headers('location').split("/"))[1];
+      $localStorage.token = data;
+      $rootScope.userId=(headers('location').split("/"))[1];
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     });
 
   };
@@ -102,32 +115,36 @@ $scope.verifyEmail = function verifyEmail(regForm) {
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
 controllerModule.controller('userInfoController', function($filter, $q, $scope, $rootScope, $location, $http,  $window){
-
   //******************************************
   //Intializing and populating user Info view
   //******************************************
+  $http.get($location.path())
+  .success(function(data, status, headers, config){
+    userInfoInit(data);
+  })
+  .error(function(data, status, headers, config){
+    $scope.msg=data;
+  })
+
   var userInfoInit = function(userInfo){
     $scope.userBasicInfo=userInfo.account;
-    $scope.expenseSource=userInfo.sourceOfMoneyTrx.expenseSource;
-    $scope.incomeSource=userInfo.sourceOfMoneyTrx.incomeSource;
+    var eSrc=userInfo.sourceOfMoneyTrx.expenseSource;
+    var iSrc=userInfo.sourceOfMoneyTrx.incomeSource;
+    $scope.expenseSource=[];
+    $scope.incomeSource=[];
+    console.log($scope.expenseSource);
     $scope.userMoneyAccount=userInfo.moneyAccount;
     for(var i=$scope.userMoneyAccount.length; i--;){
       $scope.userMoneyAccount[i].id=i;
     }
-    for(var i=$scope.expenseSource.length; i--;){
-      $scope.expenseSource[i].id=i;
+    for(var i=userInfo.sourceOfMoneyTrx.expenseSource.length; i--;){
+      $scope.expenseSource.push({id:i, name:eSrc[i]})
     }
-    for(var i=$scope.incomeSource.length; i--;){
-      $scope.incomeSource[i].id=i;
+    for(var i=userInfo.sourceOfMoneyTrx.incomeSource.length; i--;){
+      $scope.incomeSource.push({id:i, name:iSrc[i]})
     }
   }
-  $http.get($location.path())
-  .success(function(data, status, headers, config){
-    userInfoInit(data.data);
-  })
-  .error(function(data, status, headers, config){
-    $scope.msg=data.data;
-  })
+
   $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
   //***************************************
   //updating Full Name

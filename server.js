@@ -76,16 +76,7 @@ pubRouter.post('/signup', utilMeth.processSignupReq);
 //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
 //@response-success: {res.statusCode: 200, res.body.data: "userInfo"}
 //------------------------------------------------------------------------------------------------
-privRouter.get('/:userId/info',function(req, res){
-  usrInfo.findById(req.params.userId, function(err, data){
-    if(err || data === null){
-      res.status(400)
-      return res.send("No Data Found");
-    }
-    res.status(200);
-    return res.send({data: data});
-  })
-});
+privRouter.get('/:userId/info',utilMeth.getUserInfo);
 
 //--------------------------------------------------------------------------------------------
 //put('/user:userId/info')
