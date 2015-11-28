@@ -29,6 +29,7 @@ controllerModule.controller('mainController', function(utilSer, valSer, $localSt
     .success(function(data, status, headers, config){
       $localStorage.token = data;
       $localStorage.userId= (headers('location').split("/"))[1];
+      $scope.$emit('eventLoggedIn', true);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -78,6 +79,7 @@ controllerModule.controller('mainController', function(utilSer, valSer, $localSt
     .success(function(data, status, headers, config){
       $localStorage.token = data;
       $localStorage.userId= (headers('location').split("/"))[1];
+      $scope.$emit('eventLoggedIn', true);
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -404,9 +406,6 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
 // Controller for handling user transaction
 //**************************************************************************************
 controllerModule.controller('userTrxController', function($localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
-  if($localStorage.token){
-    $rootScope.isLogged=true;
-  }
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -499,22 +498,19 @@ controllerModule.controller('naviCtrl', function($scope, $rootScope, $location, 
   //Logout function redirecteding to home
   //**************************************
   if($localStorage.token){
-    console.log("loggedin show logout");
     $scope.isLogged=true;
-  }else {
-    console.log("not logged dont show logout");
-    $scope.isLogged=false;
+    $scope.userId=$localStorage.userId;
   }
+
+  $scope.$on('eventLoggedIn', function (event, args) {
+    $scope.isLogged=args;
+    $scope.userId=$localStorage.userId;
+  })
 
   $scope.logout = function(){
     delete $localStorage.token;
     delete $localStorage.userId;
     $scope.isLogged = false;
     $location.path('/main');
-  }
-
-
-
-  console.log($localStorage.token);
-  $scope.userId=$localStorage.userId;
+  };
 })

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <title>Track My Money</title>
+  <link rel="shortcut icon"  href="favicon.ico"/>
   <link href="bower_components/angular-xeditable/css/xeditable.css" rel="stylesheet"/>
   <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.css"/>
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css"/>
@@ -18,9 +19,9 @@
   <script src="scripts/services.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div class="container" ng-controller="naviCtrl">
     <div class="row navigation" >
-      <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12" ng-controller="naviCtrl"></div>
+      <div ng-include="'partials/navigation.html'" class="col-sm-12 col-md-12" ></div>
     </div>
 
     <div class="row content" >

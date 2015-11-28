@@ -168,6 +168,8 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
 
 
 tmmSer.factory("utilSer", function utilSerFactory(valSer){
+  var isLoggedIn=false;
+
   return{
 
     initSlide : function($scope){
@@ -183,7 +185,16 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer){
       for (var i=0; i<4; i++) {
         $scope.addSlide();
       };
+    },
+
+    getIsLoggedIn : function(){
+      return isLoggedIn;
+    },
+
+    setIsLoggedIn : function(value){
+      isLoggedIn=value;
     }
-    
+
+
   }
 });
