@@ -29,7 +29,7 @@
         <li><a href="#/user/{{userId}}/trx">Transaction</a></li>
         <li><a href="#/user/{{userId}}/report">Report</a></li>
         <li><a href="">Blog</a></li>
-        <li><a href=""ng-click="logout()">Logout</a></li>
+        <li><a ng-show="isLogged" href=""ng-click="logout()">Logout</a></li>
       </ul>
     </div>
 

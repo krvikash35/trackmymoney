@@ -6,7 +6,7 @@ var usrAcct = new schema({
   "account":  {
       "email":                { type: String,index: true },
       "phone":                { type: Number},
-      "fullName":             { type: String},
+      "fullname":             { type: String},
       "password":             { type: String},
       "creatDate":            { type: Date },
       "updateDate":           { type: Date, default: Date.now }

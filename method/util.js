@@ -9,6 +9,132 @@ var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 
+
+
+var usrInfoUpdate = function(req, res){
+
+  usrAccts.findById(req.params.userId, function(err, user){
+    if(err){
+      res.send({"data": err.message});
+    }
+    if(user === null){
+      res.status(400);
+      return res.send({data: 'User not found'});
+    }
+    switch (req.body.updatecode) {
+      case 1:
+      user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
+      user.save(function(err){
+        if(err){
+          res.status(400);
+          return res.send({"data": err.message});
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }
+      })
+      break;
+
+      case 2:
+      console.log(req.body);
+      user.sourceOfMoneyTrx.incomeSource=req.body.updateitem;
+      user.save(function(err){
+        if(err){
+          console.log(err);
+          res.status(400);
+          return res.send({"data": err.message});
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }
+      })
+      break;
+
+      case 3:
+      user.moneyAccount=req.body.updateitem;
+      user.save(function(err){
+        if(err){
+          res.status(400);
+          return res.send({"data": err.message});
+        }else{
+          res.status(200);
+          return res.json({"data": "Updated successfully"});
+        }})
+        break;
+
+        case 4:
+        pwd = req.body.updateitem
+        var hashpwd = bcrypt.hashSync(pwd, 10);
+        user.account.password = hashpwd;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send({"data": "Invalid length for password"});
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
+
+        case 5:
+        var email=req.body.updateitem;
+        if(email === undefined || email === null || !email.match(sConfig.emailRegex) ){
+          res.status(400);
+          return res.send({"data": "Invalid Email length or pattern"});
+        }
+        user.account.email=email;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send({"data": "Invalid length or pattern for email"});
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
+
+        case 6:
+        user.account.phone=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send({"data": "Invalid length for phone"});
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
+
+        case 7:
+        user.account.fullname=req.body.updateitem;
+        user.save(function(err){
+          if(err){
+            res.status(400);
+            return res.send({"data": "Invalid length for fullname"});
+          }else{
+            res.status(200);
+            return res.json({"data": "Updated successfully"});
+          }
+        })
+        break;
+
+        default:
+        res.status(400);
+        return res.json({"data": "Invalid update Option"});
+      }
+    })
+
+}
+
+
+
+
+
+
+
 var processUserPrsTrx = function(req, res){
   console.log(req.body);
   var userPrsnlTrx            = new usrPrsTrxs();
@@ -239,6 +365,7 @@ var processSignupReq = function(req, res){
 
   case 3:
   checkEmailForSignup(req, res);
+  console.log(req.body);
   usrVerTemps.findOne({email: req.body.email}, function(err, usrTemp){
     if(err){
       res.status(500);
@@ -297,7 +424,8 @@ module.exports ={
   processSignupReq :       processSignupReq,
   getUserInfo:             getUserInfo,
   getUserPrsTrx:           getUserPrsTrx,
-  processUserPrsTrx:       processUserPrsTrx
+  processUserPrsTrx:       processUserPrsTrx,
+  usrInfoUpdate:           usrInfoUpdate
 }
 
 

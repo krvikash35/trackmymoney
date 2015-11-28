@@ -14,17 +14,11 @@ controllerModule.controller('mainController', function(utilSer, valSer, $localSt
     $scope.isLoginFormVisible=!$scope.isLoginFormVisible;
     $scope.isRegFormVisible=!$scope.isRegFormVisible;
   };
-  //***************************************
-  //Logout function redirecteding to home
-  //**************************************
-  $scope.logout = function(){
-    delete $localStorage.token;
-    $window.location.href='';
-  }
+
   //***************************************
   //Controlling Slideshow on feed view
   //**************************************
-utilSer.initSlide($scope);
+  utilSer.initSlide($scope);
 
   //**************************************
   //Processing user loginForm
@@ -34,7 +28,7 @@ utilSer.initSlide($scope);
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data;
-      $rootScope.userId=(headers('location').split("/"))[1];
+      $localStorage.userId= (headers('location').split("/"))[1];
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -44,34 +38,34 @@ utilSer.initSlide($scope);
   //***************************************
   //Processing user regestration form
   //***************************************
-$scope.verifyEmail = function verifyEmail(regForm) {
-  var err;
-  if(!regForm)
-  return $scope.msg = "Email is required"
-  if ( err=valSer.valEmail(regForm.email) )
-  return $scope.msg = err;
-  if($scope.isVerCodeSent){
-    $http.post('/signup', {signupCode: 2, email: regForm.email, verCode: regForm.verCode})
-    .success(function(data, status, headers, config){
-      $scope.msg = data;
-      $scope.isEmailVerified = true;
-      $scope.emailVerButton = "Verified"
-    })
-    .error(function(data, status, headers, config){
-      $scope.msg=data;
-    });
-  }else {
-    $http.post('/signup', {signupCode: 1, email: regForm.email})
-    .success(function(data, status, headers, config){
-      $scope.msg = data;
-      $scope.isVerCodeSent = true;
-      $scope.emailVerButton = "Verify Code"
-    })
-    .error(function(data, status, headers, config){
-      $scope.msg=data;
-    });
+  $scope.verifyEmail = function verifyEmail(regForm) {
+    var err;
+    if(!regForm)
+    return $scope.msg = "Email is required"
+    if ( err=valSer.valEmail(regForm.email) )
+    return $scope.msg = err;
+    if($scope.isVerCodeSent){
+      $http.post('/signup', {signupCode: 2, email: regForm.email, verCode: regForm.verCode})
+      .success(function(data, status, headers, config){
+        $scope.msg = data;
+        $scope.isEmailVerified = true;
+        $scope.emailVerButton = "Verified"
+      })
+      .error(function(data, status, headers, config){
+        $scope.msg=data;
+      });
+    }else {
+      $http.post('/signup', {signupCode: 1, email: regForm.email})
+      .success(function(data, status, headers, config){
+        $scope.msg = data;
+        $scope.isVerCodeSent = true;
+        $scope.emailVerButton = "Verify Code"
+      })
+      .error(function(data, status, headers, config){
+        $scope.msg=data;
+      });
+    }
   }
-}
 
   $scope.submitRegForm = function(regForm){
     $scope.msg="";
@@ -83,7 +77,7 @@ $scope.verifyEmail = function verifyEmail(regForm) {
     $http.post('/signup', regForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data;
-      $rootScope.userId=(headers('location').split("/"))[1];
+      $localStorage.userId= (headers('location').split("/"))[1];
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
@@ -114,7 +108,7 @@ $scope.verifyEmail = function verifyEmail(regForm) {
 //*******************************************************************************
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
-controllerModule.controller('userInfoController', function($filter, $q, $scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userInfoController', function($localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
   //******************************************
   //Intializing and populating user Info view
   //******************************************
@@ -132,7 +126,6 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
     var iSrc=userInfo.sourceOfMoneyTrx.incomeSource;
     $scope.expenseSource=[];
     $scope.incomeSource=[];
-    console.log($scope.expenseSource);
     $scope.userMoneyAccount=userInfo.moneyAccount;
     for(var i=$scope.userMoneyAccount.length; i--;){
       $scope.userMoneyAccount[i].id=i;
@@ -235,16 +228,17 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
       if(es.isNew){
         es.isNew = false;
       }
-      result.push(es);
     }
-    $http.put($location.path(), {updatecode: 1, updateitem: $scope.expenseSource})
+    for(var i=$scope.expenseSource.length; i--;){
+      result[i]=$scope.expenseSource[i].name;
+    }
+    $http.put($location.path(), {updatecode: 1, updateitem: result})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
     .error(function(data, status, headers, config){
       $scope.msg=data.data;
     })
-    return $q.all(result);
   }
   $scope.addExpenseSourceRow = function(){
     $scope.expenseSource.push({
@@ -286,9 +280,11 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
       if(is.isNew){
         is.isNew = false;
       }
-      result.push(is);
     }
-    $http.put($location.path(), {updatecode: 2, updateitem: $scope.incomeSource})
+    for(var i=$scope.incomeSource.length; i--;){
+      result[i]=$scope.incomeSource[i].name;
+    }
+    $http.put($location.path(), {updatecode: 2, updateitem: result})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -296,7 +292,6 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
       console.log(data.data);
       $scope.msg=data.data;
     })
-    return $q.all(result);
   }
   $scope.addIncomeSourceRow = function abc(){
     $scope.incomeSource.push({
@@ -408,7 +403,10 @@ controllerModule.controller('userInfoController', function($filter, $q, $scope, 
 //**************************************************************************************
 // Controller for handling user transaction
 //**************************************************************************************
-controllerModule.controller('userTrxController', function($scope, $routeParams, $rootScope, $location, $http,  $window){
+controllerModule.controller('userTrxController', function($localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+  if($localStorage.token){
+    $rootScope.isLogged=true;
+  }
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -483,7 +481,7 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userReportController', function($localStorage, $scope, $rootScope, $location, $http,  $window){
   $http.get($location.path())
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data;
@@ -491,4 +489,32 @@ controllerModule.controller('userReportController', function($scope, $rootScope,
   .error(function(data, status, headers, config){
     $scope.msg=data;
   })
+})
+
+//************************************************************************************
+//Navigation controller
+//************************************************************************************
+controllerModule.controller('naviCtrl', function($scope, $rootScope, $location, $localStorage){
+  //***************************************
+  //Logout function redirecteding to home
+  //**************************************
+  if($localStorage.token){
+    console.log("loggedin show logout");
+    $scope.isLogged=true;
+  }else {
+    console.log("not logged dont show logout");
+    $scope.isLogged=false;
+  }
+
+  $scope.logout = function(){
+    delete $localStorage.token;
+    delete $localStorage.userId;
+    $scope.isLogged = false;
+    $location.path('/main');
+  }
+
+
+
+  console.log($localStorage.token);
+  $scope.userId=$localStorage.userId;
 })
