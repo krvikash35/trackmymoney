@@ -211,16 +211,7 @@ privRouter.put('/:userId/info', function(req, res){
   //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
   //@response-success: {res.statusCode: 200, res.body.data: "userReport"}
   //----------------------------------------------------------------------------------------------
-  privRouter.get('/:userId/report', function(req, res){
-    usrPrsTrx.find({userId: req.params.userId}, function(err, data){
-      if(err || data === null){
-        res.status(400);
-        return res.send({data: 'No Data Found'});
-      }
-      res.status(200);
-      return res.send({data: data});
-    });
-  });
+  privRouter.get('/:userId/report', utilMeth.getUserPrsTrx);
 
   //-----------------------------------------------------------------------------------------------
   //post('/user/:userId/trx')
@@ -228,26 +219,7 @@ privRouter.put('/:userId/info', function(req, res){
   //@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
   //@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
   //----------------------------------------------------------------------------------------------
-  privRouter.post('/:userId/trx',function(req, res){
-    var userPrsnlTrx            = new usrPrsTrx();
-    userPrsnlTrx.amount         = req.body.amount;
-    userPrsnlTrx.type           = req.body.type;
-    userPrsnlTrx.source         = req.body.source;
-    userPrsnlTrx.destination    = req.body.destination
-    userPrsnlTrx.description    = req.body.description;
-    userPrsnlTrx.userId         = req.params.userId;
-
-    userPrsnlTrx.save(function(err, data){
-      if(err){
-        res.status(400);
-        res.send({"data": "Invalid transaction data"});
-        throw new Error(err);
-      }else{
-        res.status(201);
-        return res.send({"data": "Transaction saved successfully"});
-      }
-    });
-  });
+  privRouter.post('/:userId/trx',utilMeth.processUserPrsTrx);
 
 
   //Handle any uncaught Exception, to prevent server from crashing

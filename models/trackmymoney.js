@@ -35,7 +35,7 @@ var usrPrsTrx = new schema({
   "source":       { type: String },
   "destination":  { type: String},
   "description":  { type: String},
-  "usrId":       { type: String},
+  "userId":       { type: String},
   "date":         { type: Date, default: Date.now }
 });
 

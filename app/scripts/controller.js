@@ -413,14 +413,14 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
   var trxUiInit=function(user){
-    // usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
-    // usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
-    user.sourceOfMoneyTrx.incomeSource.forEach(function(is){
-      usrIncomeSrc.push(is.name);
-    });
-    user.sourceOfMoneyTrx.expenseSource.forEach(function(es){
-      usrExpenseSrc.push(es.name);
-    })
+    usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
+    usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
+    // user.sourceOfMoneyTrx.incomeSource.forEach(function(is){
+    //   usrIncomeSrc.push(is.name);
+    // });
+    // user.sourceOfMoneyTrx.expenseSource.forEach(function(es){
+    //   usrExpenseSrc.push(es.name);
+    // })
     user.moneyAccount.forEach(function(ma){
       usrMoneyAcct.push(ma.type+"-"+ma.name);
     });
@@ -454,18 +454,18 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
   }
   $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
-    trxUiInit(data.data);
+    trxUiInit(data);
   })
   .error(function(data, status, headers, config){
-    $scope.error=data.data;
+    $scope.msg=data;
   });
   $scope.submitTrxForm=function(trxForm){
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
   }
   $scope.trxTypeChanged = function(trxType){
@@ -486,9 +486,9 @@ controllerModule.controller('userTrxController', function($scope, $routeParams, 
 controllerModule.controller('userReportController', function($scope, $rootScope, $location, $http,  $window){
   $http.get($location.path())
   .success(function(data, status, headers, config){
-    $scope.userTrxReport=data.data;
+    $scope.userTrxReport=data;
   })
   .error(function(data, status, headers, config){
-    $scope.userInfo=data.data;
+    $scope.msg=data;
   })
 })

@@ -3,10 +3,32 @@ var sConfig     = require('../config/server')
 var valMeth     = require('./val')
 var tmcdb       = require('../models/trackmymoney')
 var nodemailer  = require('nodemailer');
-var usrAccts     = tmcdb.usrAccts;
-var usrVerTemps  = tmcdb.usrVerTemps;
-var bcrypt     = require('bcrypt');
-var jwt        = require("jsonwebtoken")
+var bcrypt      = require('bcrypt');
+var jwt         = require("jsonwebtoken")
+var usrAccts    = tmcdb.usrAccts;
+var usrVerTemps = tmcdb.usrVerTemps;
+var usrPrsTrxs  = tmcdb.usrPrsTrxs;
+
+var processUserPrsTrx = function(req, res){
+  console.log(req.body);
+  var userPrsnlTrx            = new usrPrsTrxs();
+  userPrsnlTrx.amount         = req.body.amount;
+  userPrsnlTrx.type           = req.body.type;
+  userPrsnlTrx.source         = req.body.source;
+  userPrsnlTrx.destination    = req.body.destination
+  userPrsnlTrx.description    = req.body.description;
+  console.log(req.params.userId);
+  userPrsnlTrx.userId         = req.params.userId;
+  userPrsnlTrx.save(function(err, data){
+    if(err){
+      res.status(500)
+      return res.send(errConfig.E120);
+    }
+    res.status(201);
+    return res.send(errConfig.S103);
+
+  });
+}
 
 var getUserInfo = function(req, res){
   usrAccts.findById(req.params.userId, function(err, user){
@@ -23,6 +45,20 @@ var getUserInfo = function(req, res){
   })
 }
 
+var getUserPrsTrx = function(req, res){
+  usrPrsTrxs.find({userId: req.params.userId}, function(err, userPrsTrx){
+    if(err){
+      res.status(500)
+      return res.send(errConfig.E120);
+    }
+    if(userPrsTrx.length==0){
+      res.status(400);
+      return res.send(errConfig.E130)
+    }
+    res.status(200);
+    return res.send(userPrsTrx);
+  });
+}
 
 var mailTrns = nodemailer.createTransport({
   service: 'Gmail',
@@ -259,7 +295,9 @@ module.exports ={
   setPreReq :              setPreReq,
   processSigninReq :       processSigninReq,
   processSignupReq :       processSignupReq,
-  getUserInfo:             getUserInfo
+  getUserInfo:             getUserInfo,
+  getUserPrsTrx:           getUserPrsTrx,
+  processUserPrsTrx:       processUserPrsTrx
 }
 
 
