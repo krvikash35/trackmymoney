@@ -297,7 +297,7 @@ var processSignupReq = function(req, res){
     console.log(req.body);
     switch (req.body.signupCode) {
       case 1:
-      checkEmailForSignup(req, res);
+      return checkEmailForSignup(req, res);
       usrVerTemps.findOne({email: req.body.email}, function(err, usr){
         if (err){
           res.status(500)
@@ -333,7 +333,7 @@ var processSignupReq = function(req, res){
       break;
 
       case 2:
-      checkEmailForSignup(req, res);
+      return checkEmailForSignup(req, res);
       var email = req.body.email;
       usrVerTemps.findOne({email: email}, function(err, usr){
         if (err){
@@ -362,7 +362,7 @@ var processSignupReq = function(req, res){
     break;
 
     case 3:
-    checkEmailForSignup(req, res);
+    return checkEmailForSignup(req, res);
     console.log(req.body);
     usrVerTemps.findOne({email: req.body.email}, function(err, usrTemp){
       if(err){

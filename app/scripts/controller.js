@@ -4,7 +4,7 @@ var controllerModule = angular.module('controllerModule', []);
 //****************************************************************************
 // Main controller for handling landing page and controlling navigation item
 //**************************************************************************
-controllerModule.controller('mainController', function(utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
+controllerModule.controller('mainController', function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   //***************************************
@@ -39,6 +39,20 @@ controllerModule.controller('mainController', function(utilSer, valSer, $localSt
   //***************************************
   //Processing user regestration form
   //***************************************
+  var promisEmailVerProg=null;
+  var startEmailVerProg = function(initVal, max, noOfTime, interInMilli){
+    $scope.currentVal=initVal;
+    $scope.max=max;
+    promisEmailVerProg=$interval(function(){
+      $scope.currentVal=$scope.currentVal+max/noOfTime;
+      if($scope.currentVal == max){
+        console.log("timed out");
+        $location.path("/main/dlel");
+      }
+    }, interInMilli, noOfTime)
+  }
+
+
   $scope.verifyEmail = function verifyEmail(regForm) {
     var err;
     if(!regForm)
@@ -56,15 +70,27 @@ controllerModule.controller('mainController', function(utilSer, valSer, $localSt
         $scope.msg=data;
       });
     }else {
-      $http.post('/signup', {signupCode: 1, email: regForm.email})
-      .success(function(data, status, headers, config){
-        $scope.msg = data;
-        $scope.isVerCodeSent = true;
-        $scope.emailVerButton = "Verify Code"
-      })
-      .error(function(data, status, headers, config){
-        $scope.msg=data;
-      });
+      $scope.showEmailVerProgress=true;
+      $scope.verCodeSentInProgress=true;
+      startEmailVerProg(0, 100, 10, 500 );
+
+      $timeout(function(){
+        $scope.msg="code sent";
+        $scope.isVerCodeSent=true;
+        $scope.emailVerButton="Verify Code";
+        $scope.verCodeSentInProgress=false;
+        $scope.showEmailVerProgress=false;
+        $interval.cancel(promisEmailVerProg);
+      }, 8000);
+      // $http.post('/signup', {signupCode: 1, email: regForm.email})
+      // .success(function(data, status, headers, config){
+      //   $scope.msg = data;
+      //   $scope.isVerCodeSent = true;
+      //   $scope.emailVerButton = "Verify Code"
+      // })
+      // .error(function(data, status, headers, config){
+      //   $scope.msg=data;
+      // });
     }
   }
 
@@ -493,10 +519,11 @@ controllerModule.controller('userReportController', function($localStorage, $sco
 //************************************************************************************
 //Navigation controller
 //************************************************************************************
-controllerModule.controller('naviCtrl', function($scope, $rootScope, $location, $localStorage){
+controllerModule.controller('naviCtrl', function($interval, $scope, $rootScope, $location, $localStorage){
   //***************************************
   //Logout function redirecteding to home
   //**************************************
+
   if($localStorage.token){
     $scope.isLogged=true;
     $scope.userId=$localStorage.userId;
@@ -510,6 +537,7 @@ controllerModule.controller('naviCtrl', function($scope, $rootScope, $location, 
   $scope.logout = function(){
     delete $localStorage.token;
     delete $localStorage.userId;
+    $scope.userId=null;
     $scope.isLogged = false;
     $location.path('/main');
   };

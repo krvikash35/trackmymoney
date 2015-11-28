@@ -22,12 +22,12 @@
     <div   ng-show="isRegFormVisible">
 
 
-
+    <uib-progressbar ng-show="showEmailVerProgress" max="max" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
       <form role="form" class="registration-form" ng-submit="verifyEmail(reg)">
         <div class="form-group" ng-init="isEmailVerified=false; isVerCodeSent=false; emailVerButton='send verification code to email' ">
           <input  ng-disabled='isEmailVerified' ng-model="reg.email" type="text" id="email" required placeholder="Enter Email to verify..." class="form-control" >
           <input  ng-disabled='isEmailVerified || !isVerCodeSent'  type="password" ng-model="reg.verCode" required placeholder="Enter verification code..." class="form-control" >
-          <button ng-disabled='isEmailVerified' class="btn btn-primary btn-block"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>
+          <button ng-disabled='isEmailVerified || verCodeSentInProgress' class="btn btn-primary btn-block"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>
         </div>
       </form>
 
