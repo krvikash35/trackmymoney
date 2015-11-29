@@ -41,10 +41,10 @@ function($routeProvider){
 
 
 //interceptor for request and response to modify authorization headers
-trackMyMoney.config(['$httpProvider', function($httpProvider){
-  $httpProvider.interceptors.push(['$q', '$location', '$localStorage', '$window', function($q, $location, $localStorage, $window) {
+trackMyMoney.config(function interceptReqRes($httpProvider){
+  $httpProvider.interceptors.push(function($q, $location, $localStorage, $window) {
     return {
-      'request': function (config) {
+      'request': function configReqHeader(config) {
         config.headers = config.headers || {};
         if ($localStorage.token) {
           config.headers.Authorization = 'Bearer ' + $localStorage.token;
@@ -52,8 +52,10 @@ trackMyMoney.config(['$httpProvider', function($httpProvider){
         return config;
       }
     };
-  }]);
-}]);
+  });
+});
+
+
 
 
 trackMyMoney.run(function(editableOptions) {

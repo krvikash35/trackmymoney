@@ -9,13 +9,6 @@ var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 
-
-
-
-
-
-
-
 var processUserPrsTrx = function(req, res){
   console.log(req.body);
   var userPrsnlTrx            = new usrPrsTrxs();
@@ -82,13 +75,14 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
     subject: subject, // Subject line
     html: htmltext // plaintext body    html: '<b>Hello world ✔</b>' // html body
   };
-  transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-      res.send(errConfig.E118)
-    }else {
-      res.send(errConfig.S100)
-    }
-  });
+  return res.send(htmltext);
+  // transporter.sendMail(mailOptions, function(error, info){
+  //   if(error){
+  //     return res.send(errConfig.E118)
+  //   }else {
+  //    return res.send(errConfig.S100)
+  //   }
+  // });
 }
 
 var processAuthAccessReq = function processAuthAccessReq(req, res, next){
@@ -120,18 +114,15 @@ var processAuthAccessReq = function processAuthAccessReq(req, res, next){
   }
 }
 
-var checkEmailForSignup = function checkEmailForSignup(req, res){
-  console.log(req.body);
-  usrAccts.count({'account.email': req.body.email}, function(err, count){
+var isEmailAlreadyVerReg = function isEmailAlreadyVerReg(usrAcctModel, email, callback){
+  usrAcctModel.count({'account.email': email}, function(err, count){
     if (err){
-      console.log(err);
-      res.status(500);
-      return res.send(errConfig.E120);
+      return callback(err)
     }
     if( count > 0 ){
-      console.log("inside checkEmailForSignup");
-      res.status(400);
-      return res.send(errConfig.E124);
+      return callback(null, true);
+    }else {
+      return callback(null, false);
     }
   });
 }
@@ -149,7 +140,6 @@ var setPreReq = function setPreReq(req, res, next){
 }
 
 var processSigninReq = function processSigninReq(req, res){
-  console.log(req.body);
   if( !req.body.email || !req.body.password){
     res.status(400);
     return res.send(errConfig.E119);
@@ -293,86 +283,68 @@ var usrInfoUpdate = function(req, res){
   }
 
 
-var processSignupReq = function(req, res){
-    console.log(req.body);
+  var processSignupReq = function(req, res){
     switch (req.body.signupCode) {
-      case 1:
-      return checkEmailForSignup(req, res);
-      usrVerTemps.findOne({email: req.body.email}, function(err, usr){
-        if (err){
-          res.status(500)
-          return res.send(errConfig.E120);
-        }
-        var usrEmail = req.body.email;
-        if(!usr){
-          usrVerRec = new usrVerTemps();
-          usrVerRec.email = usrEmail;
-          usrVerRec.verCode = Math.floor(1000 + Math.random() * 9000);
-          usrVerRec.save(function(err, data){
-            if (err){
-              res.status(500);
-              return res.send(errConfig.E121);
-            }else{
+      case "1":
+      var usrEmail=req.body.email;
+      isEmailAlreadyVerReg(usrAccts, usrEmail, function(err, isEmailReg){
+        if (err)
+        return res.status(500).send(errConfig.E120);
+        if (isEmailReg)
+        return res.status(400).send(errConfig.E124)
+        usrVerTemps.findOne({email: usrEmail}, function(err, usr){
+          if (err)
+          return res.status(500).send(errConfig.E120);
+          if(!usr){
+            usrVerRec = new usrVerTemps();
+            usrVerRec.email = usrEmail;
+            usrVerRec.verCode = Math.floor(1000 + Math.random() * 9000);
+            usrVerRec.save(function(err, data){
+              if (err)
+              return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
               sendEmail(mailTrns, sConfig.mailSerUser, usrEmail, sConfig.emailVerSubject, emilVerCodeText, res);
-            }
-          })
-        }else {
-          usr.verCode = Math.floor(1000 + Math.random() * 9000);
-          usr.save(function(err, data){
-            if (err){
-              res.status(500);
-              return res.send(errConfig.E121);
-            }else {
+            })
+          }else {
+            usr.verCode = Math.floor(1000 + Math.random() * 9000);
+            usr.save(function(err, data){
+              if (err)
+              return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+usr.verCode;
               sendEmail(mailTrns, sConfig.mailSerUser, usrEmail, sConfig.emailVerSubject, emilVerCodeText, res);
-            }
-          });
-        }
-      });
+            })
+          }
+        })
+      })
       break;
 
-      case 2:
-      return checkEmailForSignup(req, res);
+      case "2":
       var email = req.body.email;
       usrVerTemps.findOne({email: email}, function(err, usr){
-        if (err){
-          res.status(500);
-          return res.send(errConfig.E121);
-        }
-        if(!usr){
-          res.status(400);
-          return res.send(errConfig.E128);
-        }
-        if(usr.verCode != req.body.verCode){
-          res.status(400);
-          return res.send(errConfig.E125)
-        }
+        if (err)
+        return res.status(500).send(errConfig.E121);
+        if(!usr)
+        return res.status(400).send(errConfig.E128);
+        if(usr.verCode != req.body.verCode)
+        return res.status(400).send(errConfig.E125)
         usr.verStatus = 1;
         usr.save(function(err, data){
-          if (err){
-            res.status(500);
-            return res.send(errConfig.E121);
-          }
-          res.status(200);
-          return res.send(errConfig.S102);
+          if (err)
+          return res.status(500).send(errConfig.E121);
+          return res.status(200).send(errConfig.S102);
         }
       );
     });
     break;
 
-    case 3:
-    return checkEmailForSignup(req, res);
-    console.log(req.body);
+    case "3":
+    if(!req.body.email || !req.body.password)
+    return res.status(400).send(errConfig.E119);
     usrVerTemps.findOne({email: req.body.email}, function(err, usrTemp){
-      if(err){
-        res.status(500);
-        return res.send(errConfig.E121);
-      }
-      if(!usrTemp || usrTemp.verStatus != 1){
-        res.status(400);
-        return res.send(errConfig.E127);
-      }
+      if(err)
+      return res.status(500).send(errConfig.E121);
+      if(!usrTemp || usrTemp.verStatus != 1)
+      return res.status(400).send(errConfig.E127);
       var hashpwd  = bcrypt.hashSync(req.body.password, 10);
       var usrAcctRec  = new usrAccts();
       usrAcctRec.account.email      = req.body.email;
@@ -384,17 +356,13 @@ var processSignupReq = function(req, res){
       usrAcctRec.sourceOfMoneyTrx.incomeSource =sConfig.initIncomeSource;
       usrAcctRec.sourceOfMoneyTrx.expenseSource =sConfig.initExpenseSource;
       usrAcctRec.save(function(err, user){
-        if(err){
-          res.status(500);
-          return res.send(errConfig.E121);
-        }
+        if(err)
+        return res.status(500).send(errConfig.E121);
+        usrTemp.remove(function(err){console.log("error occured while deleting temp record");});
         var token = jwt.sign({ "userId": user._id }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
-        res.status(201);
-        res.setHeader("Location","user/"+user._id+"/info");
-        return res.send(token);
+        return res.location("user/"+user._id+"/info").status(201).send(token);
       });
     });
-
     break;
 
     default:

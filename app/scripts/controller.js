@@ -74,23 +74,23 @@ controllerModule.controller('mainController', function($timeout, $interval, util
       $scope.verCodeSentInProgress=true;
       startEmailVerProg(0, 100, 10, 500 );
 
-      $timeout(function(){
-        $scope.msg="code sent";
-        $scope.isVerCodeSent=true;
-        $scope.emailVerButton="Verify Code";
-        $scope.verCodeSentInProgress=false;
-        $scope.showEmailVerProgress=false;
-        $interval.cancel(promisEmailVerProg);
-      }, 8000);
-      // $http.post('/signup', {signupCode: 1, email: regForm.email})
-      // .success(function(data, status, headers, config){
-      //   $scope.msg = data;
-      //   $scope.isVerCodeSent = true;
-      //   $scope.emailVerButton = "Verify Code"
-      // })
-      // .error(function(data, status, headers, config){
-      //   $scope.msg=data;
-      // });
+      // $timeout(function(){
+      //   $scope.msg="code sent";
+      //   $scope.isVerCodeSent=true;
+      //   $scope.emailVerButton="Verify Code";
+      //   $scope.verCodeSentInProgress=false;
+      //   $scope.showEmailVerProgress=false;
+      //   $interval.cancel(promisEmailVerProg);
+      // }, 8000);
+      $http.post('/signup', {signupCode: 1, email: regForm.email})
+      .success(function(data, status, headers, config){
+        $scope.msg = data;
+        $scope.isVerCodeSent = true;
+        $scope.emailVerButton = "Verify Code"
+      })
+      .error(function(data, status, headers, config){
+        $scope.msg=data;
+      });
     }
   }
 
