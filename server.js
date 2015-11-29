@@ -11,15 +11,9 @@ var app        = express();
 var bodyParser = require("body-parser");  // help in parsing the request,response header
 var morgan     = require("morgan");       // used for logging
 var mongoose   = require("mongoose");     // mongo database driver or module
-// var jwt        = require("jsonwebtoken"); // this module used for token based authentication
-// var appdb      = require('./models/trackmymoney');  //js var holding the all the collection of this app db
 var sConfig    = require('./config/server');     // holds all the important config var mainly server related
-// var bcrypt     = require('bcrypt');
-// var nodemailer = require('nodemailer');
 var pubRouter  = express.Router();        //this is public router used for public resources
 var privRouter = express.Router();        //this is private router used for private resources
-// var usrInfo    = appdb.userInfoDoc;       //this document holds user info
-// var usrPrsTrx  = appdb.userPrsnlTrxDoc;   //this document holds user personal transaction
 var utilMeth   = require('./method/util');
 
 //use middleware stack, these are executed in declared order whenever any req, res occur

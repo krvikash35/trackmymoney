@@ -1,7 +1,7 @@
 module.exports = {
   emailRegex: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
   emailMaxLen: 50,
-  pwdRegex: /^[a-zA-Z.*#@]{4,30}$/,
+  pwdRegex: /^[a-zA-Z0-9.*#@]{4,30}$/,
   nameRegex: /^[a-zA-Z][a-zA-Z0-9 ]{3,30}$/,
   maMinLen: 1,
   maMaxLen: 15,

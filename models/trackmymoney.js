@@ -4,7 +4,7 @@ var schema       = mongoose.Schema;
 // User Account Schema
 var usrAcct = new schema({
   "account":  {
-      "email":                { type: String,index: true },
+      "email":                { type: String, index: true, unique: true },
       "phone":                { type: Number},
       "fullname":             { type: String},
       "password":             { type: String},
