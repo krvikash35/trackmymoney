@@ -172,10 +172,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   $scope.updateFullName = function(){
     $http.put($location.path(), {updatecode: "7", updateitem: $scope.userBasicInfo.fullname})
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
   }
   //***************************************
@@ -184,10 +184,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   $scope.updatePassword = function(){
     $http.put($location.path(), {updatecode: "4", updateitem: $scope.userBasicInfo.password})
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
   }
   //***********************************************************
@@ -207,10 +207,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "3", updateitem: $scope.userMoneyAccount})
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     return $q.all(result);
   }
@@ -261,10 +261,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "1", updateitem: result})
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
   }
   $scope.addExpenseSourceRow = function(){
@@ -313,11 +313,11 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "2", updateitem: result})
     .success(function(data, status, headers, config){
-      $scope.msg=data.data;
+      $scope.msg=data;
     })
     .error(function(data, status, headers, config){
-      console.log(data.data);
-      $scope.msg=data.data;
+      console.log(data);
+      $scope.msg=data;
     })
   }
   $scope.addIncomeSourceRow = function abc(){

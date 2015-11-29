@@ -134,12 +134,11 @@ var usrInfoUpdate = function(req, res){
     var err;
     switch (req.body.updatecode) {
       case "1":
-
       user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -148,7 +147,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -157,7 +156,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -169,7 +168,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -180,7 +179,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -189,7 +188,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
@@ -200,7 +199,7 @@ var usrInfoUpdate = function(req, res){
       user.save(function(err){
         if(err)
         return res.status(500).send(errConfig.E120);
-        return res.status(500).send(errConfig.E138);
+        return res.status(200).send(errConfig.E138);
       })
       break;
 
