@@ -284,6 +284,9 @@ var usrInfoUpdate = function(req, res){
 
 
   var processSignupReq = function(req, res){
+    var err;
+    if( err=valMeth.valEmail(req.body.email) )
+    return res.status(400).send(err);
     switch (req.body.signupCode) {
       case "1":
       var usrEmail=req.body.email;
@@ -338,8 +341,8 @@ var usrInfoUpdate = function(req, res){
     break;
 
     case "3":
-    if(!req.body.email || !req.body.password)
-    return res.status(400).send(errConfig.E119);
+    if ( err=valMeth.valPwd(req.body.password) )
+    return res.status(400).send(errConfig.E101);
     usrVerTemps.findOne({email: req.body.email}, function(err, usrTemp){
       if(err)
       return res.status(500).send(errConfig.E121);
