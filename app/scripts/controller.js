@@ -60,7 +60,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
     if ( err=valSer.valEmail(regForm.email) )
     return $scope.msg = err;
     if($scope.isVerCodeSent){
-      $http.post('/signup', {signupCode: 2, email: regForm.email, verCode: regForm.verCode})
+      $http.post('/signup', {signupCode: "2", email: regForm.email, verCode: regForm.verCode})
       .success(function(data, status, headers, config){
         $scope.msg = data;
         $scope.isEmailVerified = true;
@@ -82,7 +82,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
       //   $scope.showEmailVerProgress=false;
       //   $interval.cancel(promisEmailVerProg);
       // }, 8000);
-      $http.post('/signup', {signupCode: 1, email: regForm.email})
+      $http.post('/signup', {signupCode: "1", email: regForm.email})
       .success(function(data, status, headers, config){
         $scope.msg = data;
         $scope.isVerCodeSent = true;
@@ -99,8 +99,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
     if(regForm.password !== regForm.password1){
       return $scope.error="both password does not match!";
     }
-    regForm.signupCode=3;
-    console.log(regForm);
+    regForm.signupCode="3";
     $http.post('/signup', regForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data;
@@ -171,7 +170,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   //updating Full Name
   //**************************************
   $scope.updateFullName = function(){
-    $http.put($location.path(), {updatecode: 7, updateitem: $scope.userBasicInfo.fullname})
+    $http.put($location.path(), {updatecode: "7", updateitem: $scope.userBasicInfo.fullname})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -183,7 +182,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   //Updating Password
   //**************************************
   $scope.updatePassword = function(){
-    $http.put($location.path(), {updatecode: 4, updateitem: $scope.userBasicInfo.password})
+    $http.put($location.path(), {updatecode: "4", updateitem: $scope.userBasicInfo.password})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -206,7 +205,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
       }
       result.push(ma);
     }
-    $http.put($location.path(), {updatecode: 3, updateitem: $scope.userMoneyAccount})
+    $http.put($location.path(), {updatecode: "3", updateitem: $scope.userMoneyAccount})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -260,7 +259,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     for(var i=$scope.expenseSource.length; i--;){
       result[i]=$scope.expenseSource[i].name;
     }
-    $http.put($location.path(), {updatecode: 1, updateitem: result})
+    $http.put($location.path(), {updatecode: "1", updateitem: result})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
@@ -312,7 +311,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     for(var i=$scope.incomeSource.length; i--;){
       result[i]=$scope.incomeSource[i].name;
     }
-    $http.put($location.path(), {updatecode: 2, updateitem: result})
+    $http.put($location.path(), {updatecode: "2", updateitem: result})
     .success(function(data, status, headers, config){
       $scope.msg=data.data;
     })
