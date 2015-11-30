@@ -24,16 +24,15 @@ controllerModule.controller('mainController', function($timeout, $interval, util
   //Processing user loginForm
   //**************************************
   $scope.submitLoginForm = function(loginForm){
-    $scope.msg="";
     $http.post('/signin', loginForm)
     .success(function(data, status, headers, config){
       $localStorage.token = data;
       $localStorage.userId= (headers('location').split("/"))[1];
       $scope.$emit('eventLoggedIn', true);
-      $location.path(headers('location'));
+      // $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
     })
   }
   //***************************************
@@ -55,49 +54,41 @@ controllerModule.controller('mainController', function($timeout, $interval, util
 
   $scope.verifyEmail = function verifyEmail(regForm) {
     var err;
-    if(!regForm)
-    return $scope.msg = "Email is required"
     if ( err=valSer.valEmail(regForm.email) )
-    return $scope.msg = err;
+    return utilSer.showFlashMsg($scope, "error", 'authResMsg', err, true);
     if($scope.isVerCodeSent){
       $http.post('/signup', {signupCode: "2", email: regForm.email, verCode: regForm.verCode})
       .success(function(data, status, headers, config){
-        $scope.msg = data;
+        utilSer.showFlashMsg($scope, "success", 'authResMsg', data, true);
         $scope.isEmailVerified = true;
         $scope.emailVerButton = "Verified"
       })
       .error(function(data, status, headers, config){
-        $scope.msg=data;
+        utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
       });
     }else {
-      $scope.showEmailVerProgress=true;
       $scope.verCodeSentInProgress=true;
-      startEmailVerProg(0, 100, 10, 500 );
-
-      // $timeout(function(){
-      //   $scope.msg="code sent";
-      //   $scope.isVerCodeSent=true;
-      //   $scope.emailVerButton="Verify Code";
-      //   $scope.verCodeSentInProgress=false;
-      //   $scope.showEmailVerProgress=false;
-      //   $interval.cancel(promisEmailVerProg);
-      // }, 8000);
+      startEmailVerProg(0, 100, 20, 500 );
       $http.post('/signup', {signupCode: "1", email: regForm.email})
       .success(function(data, status, headers, config){
-        $scope.msg = data;
+        utilSer.showFlashMsg($scope, "success", 'authResMsg', data, true);
         $scope.isVerCodeSent = true;
         $scope.emailVerButton = "Verify Code"
+        $scope.verCodeSentInProgress=false;
+        $interval.cancel(promisEmailVerProg)
       })
       .error(function(data, status, headers, config){
-        $scope.msg=data;
+        utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+        $scope.isVerCodeSent = false;
+        $scope.verCodeSentInProgress=false;
+        $interval.cancel(promisEmailVerProg)
       });
     }
   }
 
   $scope.submitRegForm = function(regForm){
-    $scope.msg="";
-    if(regForm.password !== regForm.password1){
-      return $scope.error="both password does not match!";
+      if(regForm.password !== regForm.password1){
+      return utilSer.showFlashMsg($scope, "error", 'authResMsg', "password did not match", true);
     }
     regForm.signupCode="3";
     $http.post('/signup', regForm)
@@ -108,7 +99,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
     });
 
   };
@@ -144,7 +135,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     userInfoInit(data);
   })
   .error(function(data, status, headers, config){
-    $scope.msg=data;
+    utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
   })
 
   var userInfoInit = function(userInfo){
@@ -172,10 +163,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   $scope.updateFullName = function(){
     $http.put($location.path(), {updatecode: "7", updateitem: $scope.userBasicInfo.fullname})
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'usrBasicInfoUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
     })
   }
   //***************************************
@@ -184,10 +175,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
   $scope.updatePassword = function(){
     $http.put($location.path(), {updatecode: "4", updateitem: $scope.userBasicInfo.password})
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'usrBasicInfoUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
     })
   }
   //***********************************************************
@@ -207,10 +198,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "3", updateitem: $scope.userMoneyAccount})
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'usrMoneyAcctUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'usrMoneyAcctUpdateResp', data, true);
     })
     return $q.all(result);
   }
@@ -261,10 +252,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "1", updateitem: result})
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'usrExpSrcUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'usrExpSrcUpdateResp', data, true);
     })
   }
   $scope.addExpenseSourceRow = function(){
@@ -313,11 +304,10 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
     }
     $http.put($location.path(), {updatecode: "2", updateitem: result})
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'usrIncSrcUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
-      console.log(data);
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'usrIncSrcUpdateResp', data, true);
     })
   }
   $scope.addIncomeSourceRow = function abc(){
@@ -479,15 +469,15 @@ controllerModule.controller('userTrxController', function($localStorage, $scope,
     trxUiInit(data);
   })
   .error(function(data, status, headers, config){
-    $scope.msg=data;
+    utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
   });
   $scope.submitTrxForm=function(trxForm){
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
     })
     .error(function(data, status, headers, config){
-      $scope.msg=data;
+      utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
   }
   $scope.trxTypeChanged = function(trxType){
@@ -511,7 +501,7 @@ controllerModule.controller('userReportController', function($localStorage, $sco
     $scope.userTrxReport=data;
   })
   .error(function(data, status, headers, config){
-    $scope.msg=data;
+  utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
   })
 })
 

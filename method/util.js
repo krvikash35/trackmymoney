@@ -57,7 +57,8 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
     subject: subject, // Subject line
     html: htmltext // plaintext body    html: '<b>Hello world ✔</b>' // html body
   };
-  return res.send(htmltext);
+  // return res.status(200).send(htmltext);
+  return setTimeout(function(){ res.status(200).send(htmltext); }, 2000);
   // transporter.sendMail(mailOptions, function(error, info){
   //   if(error){
   //     return res.send(errConfig.E118)

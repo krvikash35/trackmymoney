@@ -1,7 +1,7 @@
-<div ng-show="msg" class="alert alert-danger">{{msg}}</div>
 
 <!-- User Basic Info -->
 <div style="", class="panel panel-primary col-md-12">
+<div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
     <div>
@@ -37,6 +37,7 @@
 
   <!-- Money Account Related Info -->
   <div style="", class="panel panel-primary col-md-12">
+<div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
       <form editable-form name="maform" onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
@@ -80,6 +81,7 @@
 
   <!-- user source of transaction -->
   <div style="", class="panel panel-primary col-sm-6 col-md-6">
+<div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
     <div class="panel-heading">Expense Source</div>
     <div class="panel-body ">
       <form editable-form name="expenseSrcForm" onaftersave="updateExpenseSource()" oncancel="cancelExpenseSourceUpdate()">
@@ -117,6 +119,7 @@
 
   <!-- user income soruce -->
   <div style="", class="panel panel-primary col-sm-6 col-md-6">
+<div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
     <div class="panel-heading">Income Source</div>
     <div class="panel-body ">
       <form editable-form name="incomeSrcForm" onaftersave="updateIncomeSource()" oncancel="cancelIncomeSourceUpdate()">

@@ -3,8 +3,7 @@
     <div ng-include="'partials/feed.html'"></div>
   </div>
   <div style="padding-top:15px" class="col-sm-4 col-md-4 auth">
-
-    <div ng-show="msg" class="alert alert-danger">{{msg}}</div>
+    <div ng-show="authResMsg" class={{msgType}} >{{authResMsg}}</div>
     <div ng-show="isLoginFormVisible">
       <form role="form"   class="login-form" ng-submit="submitLoginForm(login)">
         <div class="form-group">
@@ -22,9 +21,9 @@
     <div   ng-show="isRegFormVisible">
 
 
-    <uib-progressbar ng-show="showEmailVerProgress" max="max" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
+    <uib-progressbar ng-show="verCodeSentInProgress" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
       <form role="form" class="registration-form" ng-submit="verifyEmail(reg)">
-        <div class="form-group" ng-init="isEmailVerified=false; isVerCodeSent=false; emailVerButton='send verification code to email' ">
+        <div class="form-group" ng-init=" emailVerButton='send verification code to email' ">
           <input  ng-disabled='isEmailVerified' ng-model="reg.email" type="text" id="email" required placeholder="Enter Email to verify..." class="form-control" >
           <input  ng-disabled='isEmailVerified || !isVerCodeSent'  type="password" ng-model="reg.verCode" required placeholder="Enter verification code..." class="form-control" >
           <button ng-disabled='isEmailVerified || verCodeSentInProgress' class="btn btn-primary btn-block"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>

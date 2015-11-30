@@ -169,9 +169,7 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
 
 tmmSer.factory("utilSer", function utilSerFactory(valSer){
   var isLoggedIn=false;
-
   return{
-
     initSlide : function($scope){
       $scope.myInterval = 3000;
       $scope.noWrapSlides = false;
@@ -187,14 +185,20 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer){
       };
     },
 
-    getIsLoggedIn : function(){
-      return isLoggedIn;
-    },
-
-    setIsLoggedIn : function(value){
-      isLoggedIn=value;
+    showFlashMsg: function(scope, msgType,  MsgVar, MsgData, isItFlash,  timeInSec){
+      if(msgType == "success"){
+        scope.msgType="alert alert-success"
+      }else {
+        scope.msgType="alert alert-danger"
+      }
+      scope[MsgVar]=MsgData;
+      if(isItFlash){
+        if(!timeInSec){
+          timeInSec=2;
+        }
+        setTimeout(function(){scope[MsgVar]=false},timeInSec*1000);
+      }
     }
-
-
   }
+
 });
