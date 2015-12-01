@@ -5,7 +5,7 @@ module.exports = {
   "prodUrl":{
     "dbUrl" : "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
     "appUrl": "track-my-money.herokuapp.com",
-    "appPort": "8080"
+    "appPort": process.env.PORT || "8080"
   },
   "devUrl":{
     "dbUrl" : "mongodb://localhost/trackmymoney",
