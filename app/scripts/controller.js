@@ -129,7 +129,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
 //*******************************************************************************
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
-controllerModule.controller('userInfoController', function($localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userInfoController', function(utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
   //******************************************
   //Intializing and populating user Info view
   //******************************************
@@ -423,7 +423,7 @@ controllerModule.controller('userInfoController', function($localStorage, $filte
 //**************************************************************************************
 // Controller for handling user transaction
 //**************************************************************************************
-controllerModule.controller('userTrxController', function($localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+controllerModule.controller('userTrxController', function(utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -498,7 +498,7 @@ controllerModule.controller('userTrxController', function($localStorage, $scope,
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-controllerModule.controller('userReportController', function($localStorage, $scope, $rootScope, $location, $http,  $window){
+controllerModule.controller('userReportController', function(utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   $http.get($location.path())
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data;
@@ -511,7 +511,7 @@ controllerModule.controller('userReportController', function($localStorage, $sco
 //************************************************************************************
 //Navigation controller
 //************************************************************************************
-controllerModule.controller('naviCtrl', function($interval, $scope, $rootScope, $location, $localStorage){
+controllerModule.controller('naviCtrl', function(utilSer, $interval, $scope, $rootScope, $location, $localStorage){
   //***************************************
   //Logout function redirecteding to home
   //**************************************
