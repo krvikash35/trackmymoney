@@ -29,7 +29,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
       $localStorage.token = data;
       $localStorage.userId= (headers('location').split("/"))[1];
       $scope.$emit('eventLoggedIn', true);
-      // $location.path(headers('location'));
+      $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
@@ -45,8 +45,11 @@ controllerModule.controller('mainController', function($timeout, $interval, util
     promisEmailVerProg=$interval(function(){
       $scope.currentVal=$scope.currentVal+max/noOfTime;
       if($scope.currentVal == max){
-        console.log("timed out");
-        $location.path("/main/dlel");
+        utilSer.showFlashMsg($scope, "success", 'authResMsg', "Sometime email sending takes time, check your email, if you got, enter it here and dont refresh the page or wait for the response");
+        $scope.isVerCodeSent = true;
+        $scope.emailVerButton = "Verify Code"
+        $scope.verCodeSentInProgress=false;
+        $interval.cancel(promisEmailVerProg)
       }
     }, interInMilli, noOfTime)
   }
