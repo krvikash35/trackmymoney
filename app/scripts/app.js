@@ -2,7 +2,8 @@
 
 // Declare app level module which depends on other module
 var trackMyMoney = angular.module('trackMyMoney', [
-  'controllerModule',
+  'tmmController',
+  'tmmFilter',
   'tmmSer',
   'ngRoute',
   'ui.bootstrap',

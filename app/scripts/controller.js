@@ -1,10 +1,10 @@
 'use strict'
 
-var controllerModule = angular.module('controllerModule', []);
+var tmmController = angular.module('tmmController', []);
 //****************************************************************************
 // Main controller for handling landing page and controlling navigation item
 //**************************************************************************
-controllerModule.controller('mainController', function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
+tmmController.controller('mainController', function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   //***************************************
@@ -129,7 +129,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
 //*******************************************************************************
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
-controllerModule.controller('userInfoController', function(utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
+tmmController.controller('userInfoController', function(utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
   //******************************************
   //Intializing and populating user Info view
   //******************************************
@@ -423,7 +423,7 @@ controllerModule.controller('userInfoController', function(utilSer, $localStorag
 //**************************************************************************************
 // Controller for handling user transaction
 //**************************************************************************************
-controllerModule.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+tmmController.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -500,11 +500,11 @@ controllerModule.controller('userTrxController', function(valSer,utilSer, $local
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-controllerModule.controller('userReportController', function(valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
+tmmController.controller('userReportController', function(valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   $scope.today = function() {
     $scope.toDate = new Date();
     $scope.fromDate = new Date();
-    $scope.fromDate.setDate($scope.toDate.getDate()-30)
+    $scope.fromDate.setDate($scope.toDate.getDate()-120)
   };
   $scope.today();
   $scope.status = {
@@ -526,14 +526,14 @@ controllerModule.controller('userReportController', function(valSer, utilSer, $l
 
 var data=[];
 var trx={};
-  for(var i=10;i--;){
+  for(var i=1000;i--;){
     var a=new Date();
     a=a.setDate($scope.toDate.getDate()-30*i);
-    data.push({"date": a})
+    data.push({"date": a, amount: i})
   }
   $scope.userTrxReport=data;
 
-  console.log($scope.userTrxReport);
+
   // $http.get($location.path())
   // .success(function(data, status, headers, config){
   //   $scope.userTrxReport=data;
@@ -546,7 +546,7 @@ var trx={};
 //************************************************************************************
 //Navigation controller
 //************************************************************************************
-controllerModule.controller('naviCtrl', function(utilSer, $interval, $scope, $rootScope, $location, $localStorage){
+tmmController.controller('naviCtrl', function(utilSer, $interval, $scope, $rootScope, $location, $localStorage){
   //***************************************
   //Logout function redirecteding to home
   //**************************************
