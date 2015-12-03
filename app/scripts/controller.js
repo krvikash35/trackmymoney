@@ -90,7 +90,7 @@ controllerModule.controller('mainController', function($timeout, $interval, util
   }
 
   $scope.submitRegForm = function(regForm){
-      if(regForm.password !== regForm.password1){
+    if(regForm.password !== regForm.password1){
       return utilSer.showFlashMsg($scope, "error", 'authResMsg', "password did not match", true);
     }
     regForm.signupCode="3";
@@ -423,19 +423,13 @@ controllerModule.controller('userInfoController', function(utilSer, $localStorag
 //**************************************************************************************
 // Controller for handling user transaction
 //**************************************************************************************
-controllerModule.controller('userTrxController', function(utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+controllerModule.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
   var trxUiInit=function(user){
     usrIncomeSrc=user.sourceOfMoneyTrx.incomeSource;
     usrExpenseSrc=user.sourceOfMoneyTrx.expenseSource;
-    // user.sourceOfMoneyTrx.incomeSource.forEach(function(is){
-    //   usrIncomeSrc.push(is.name);
-    // });
-    // user.sourceOfMoneyTrx.expenseSource.forEach(function(es){
-    //   usrExpenseSrc.push(es.name);
-    // })
     user.moneyAccount.forEach(function(ma){
       usrMoneyAcct.push(ma.type+"-"+ma.name);
     });
@@ -451,14 +445,12 @@ controllerModule.controller('userTrxController', function(utilSer, $localStorage
       $scope.trxDestination=usrMoneyAcct;
       $scope.trx.source=usrIncomeSrc[0];
       $scope.trx.destination=usrMoneyAcct[0];
-      console.log(usrIncomeSrc[0]);
       break;
       case 'Transfer':
       $scope.trxSource=usrMoneyAcct;
       $scope.trxDestination=usrMoneyAcct;
       $scope.trx.source=usrMoneyAcct[0];
       $scope.trx.destination=usrMoneyAcct[0];
-      console.log(usrMoneyAcct[0]);
       break;
       default: //Expense
       $scope.trxSource=usrExpenseSrc;
@@ -474,7 +466,12 @@ controllerModule.controller('userTrxController', function(utilSer, $localStorage
   .error(function(data, status, headers, config){
     utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
   });
+
+
   $scope.submitTrxForm=function(trxForm){
+
+    // for(var i=10000; i--; ){
+
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
@@ -482,7 +479,12 @@ controllerModule.controller('userTrxController', function(utilSer, $localStorage
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
+    // }
+
   }
+
+
+
   $scope.trxTypeChanged = function(trxType){
     trxUiHandler(trxType);
   }
@@ -498,14 +500,47 @@ controllerModule.controller('userTrxController', function(utilSer, $localStorage
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-controllerModule.controller('userReportController', function(utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
-  $http.get($location.path())
-  .success(function(data, status, headers, config){
-    $scope.userTrxReport=data;
-  })
-  .error(function(data, status, headers, config){
-  utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
-  })
+controllerModule.controller('userReportController', function(valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
+  $scope.today = function() {
+    $scope.toDate = new Date();
+    $scope.fromDate = new Date();
+    $scope.fromDate.setDate($scope.toDate.getDate()-30)
+  };
+  $scope.today();
+  $scope.status = {
+    opened: false
+  };
+  $scope.showFromDatePicker = function($event) {
+    $scope.status.opened = true;
+  };
+  $scope.showToDatePicker = function($event) {
+    $scope.status.opened = true;
+  };
+  $scope.ValDate = function(){
+    var err;
+    if (err=valSer.valDateForReport($scope.fromDate, $scope.toDate)){
+      utilSer.showFlashMsg($scope, "error", 'usrReportResp', err, true);
+
+    }
+  }
+
+var data=[];
+var trx={};
+  for(var i=10;i--;){
+    var a=new Date();
+    a=a.setDate($scope.toDate.getDate()-30*i);
+    data.push({"date": a})
+  }
+  $scope.userTrxReport=data;
+
+  console.log($scope.userTrxReport);
+  // $http.get($location.path())
+  // .success(function(data, status, headers, config){
+  //   $scope.userTrxReport=data;
+  // })
+  // .error(function(data, status, headers, config){
+  //   utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
+  // })
 })
 
 //************************************************************************************

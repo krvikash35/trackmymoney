@@ -57,12 +57,11 @@ tmmSer.factory("errConfig", function errConfigFactory(){
     E126: 'Invalid Signup Options!',
     E127: 'Please verify your email before signup!',
     E128: '!',
-    E129: 'Invalid Income Source Name!',
-    E130: 'Inavlid Expnese Source',
-    E131: 'Invalid Expnese Source Name!',
-    E131: 'Invalid Amount!',
-    E132: 'Invalid Transaction Description!',
-    E133: 'Token not found in request!',
+    E129: 'Invalid Date!',
+    E130: 'Date can not be a future date!',
+    E131: 'From Date must be lesser than ToDate!',
+    E132: 'You can only see last 1 year record!!',
+    E133: '!',
     E134: 'Authorization Header not found!',
     E135: 'Token Expire!',
     E136: 'Invalid Token!',
@@ -161,9 +160,26 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
         if( desc.length > valConfig.trxDescMaxLen )
         return errConfig.E111;
       }
-    }
-  }
+    },
 
+    valDateForReport : function(fromDate, toDate){
+      var err;
+      if( fromDate instanceof Date && toDate instanceof Date){
+        var today = new Date();
+        var diffInDays=(today-fromDate)/(1000*60*60*24);
+        if(toDate > today || fromDate > today)
+        return err=errConfig.E130;
+        if(fromDate > toDate)
+        return err=errConfig.E131;
+        if(diffInDays > 3650){
+        return err=errConfig.E132;
+      }
+      }else{
+        return err=errConfig.E129;
+      }
+    }
+
+  }
 });
 
 
@@ -199,6 +215,9 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer){
         setTimeout(function(){scope[MsgVar]=false},timeInSec*1000);
       }
     }
+
+
+
   }
 
 });

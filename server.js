@@ -39,7 +39,7 @@ if(sConfig.runEnv === 'dev') {
     return console.log(sConfig.errMsg.invalidRunEvn);
   }
 }
-
+console.log(mongoDBUrl);
 //connect to mongo db
 mongoose.connect(mongoDBUrl, function(err){
   if(err){

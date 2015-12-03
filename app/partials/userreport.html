@@ -1,20 +1,38 @@
 <div style="margin: 4px; padding: 0px", class="panel panel-primary">
   <div class="panel-heading">Individual Transaction</div>
   <div class="panel-body">
-<div ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</div>
-    <div class="form-inline col-sm-12 col-md-12 ">
-      <div class="form-group">
-        <label>Search In:</label>
-        <select ng-init="prop='$'" ng-model="prop" class="form-control">
-          <option value="$">All</option>
-          <option value="date">date</option>
-          <option value="amount">amount</option>
-          <option value="type">type</option>
-          <option value="source">source</option>
-          <option value="destination">destination</option>
-          <option value="description">description</option>
-        </select>
-        <input  class="form-control" ng-model="trxSearch[prop]" id="query">
+    <div ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</div>
+    <div class="row">
+      <div class="form-inline col-sm-12 col-md-12 ">
+        <div class="form-group">
+          <label >Search In:</label>
+          <select  ng-init="prop='$'" ng-model="prop" class="form-control">
+            <option value="$">All</option>
+            <option value="date">date</option>
+            <option value="amount">amount</option>
+            <option value="type">type</option>
+            <option value="source">source</option>
+            <option value="destination">destination</option>
+            <option value="description">description</option>
+          </select>
+          <input  class="form-control" ng-model="trxSearch[prop]" placeholder="Type Here" id="query">
+
+          <label>From:</label>
+          <div class="input-group">
+            <input ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup ng-model="fromDate" is-open="isFromDateOpen"   ng-required="true" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+          <label>To:</label>
+          <div class="input-group">
+            <input ng-change="ValDate()" type="date" class="form-control" uib-datepicker-popup ng-model="toDate" is-open="isToDateOpen"  ng-required="true" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+
+        </div>
       </div>
     </div>
 
