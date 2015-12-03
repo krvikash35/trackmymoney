@@ -196,7 +196,7 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer){
           image: 'img/beauti' + newWidth + '.jpg'
         });
       };
-      for (var i=0; i<4; i++) {
+      for (var i=0; i<5; i++) {
         $scope.addSlide();
       };
     },

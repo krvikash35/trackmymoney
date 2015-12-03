@@ -524,23 +524,25 @@ tmmController.controller('userReportController', function(valSer, utilSer, $loca
     }
   }
 
-var data=[];
-var trx={};
-  for(var i=1000;i--;){
-    var a=new Date();
-    a=a.setDate($scope.toDate.getDate()-30*i);
-    data.push({"date": a, amount: i})
-  }
-  $scope.userTrxReport=data;
+// var data=[];
+// var trx={};
+//   for(var i=3;i--;){
+//     var a=new Date();
+//     console.log(a);
+//     a=a.setDate($scope.toDate.getDate()-30*i);
+//     data.push({"date": a, amount: i})
+//   }
+//   $scope.userTrxReport=data;
 
 
-  // $http.get($location.path())
-  // .success(function(data, status, headers, config){
-  //   $scope.userTrxReport=data;
-  // })
-  // .error(function(data, status, headers, config){
-  //   utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
-  // })
+  $http.get($location.path())
+  .success(function(data, status, headers, config){
+    $scope.userTrxReport=data;
+    console.log(data[0].date);
+  })
+  .error(function(data, status, headers, config){
+    utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
+  })
 })
 
 //************************************************************************************
