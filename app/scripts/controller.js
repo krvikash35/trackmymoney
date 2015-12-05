@@ -666,13 +666,15 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
 
   $scope.openPrivacy = function(size){
     $uibModal.open({
-      templateUrl: 'partials/privacy.html'
+      templateUrl: 'partials/privacy.html',
+      size: size
     });
   }
 
   $scope.openTC = function(size){
     $uibModal.open({
-      templateUrl: 'partials/termcondition.html'
+      templateUrl: 'partials/termcondition.html',
+      size: size
     });
   }
 
