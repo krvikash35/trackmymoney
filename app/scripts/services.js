@@ -29,15 +29,15 @@ tmmSer.factory("errConfig", function errConfigFactory(){
     S120: '',
     S121: '',
     E100: 'Invalid Email!',
-    E101: 'Invalid Password!',
-    E102: 'Invalid Name!',
-    E103: 'Invalid Money Account!',
-    E104: 'Invalid IMoney Account Type!',
-    E105: 'Invalid Money Account Name!',
-    E106: 'Invalid Income Source!',
-    E107: 'Invalid Income Source Name!',
-    E108: 'Inavlid Expnese Source',
-    E109: 'Invalid Expnese Source Name!',
+    E101: 'password must be alphanumeric having 4 and 30 char long and only .*#@ special char allowed!',
+    E102: 'Name should be alphanumeric and start with alphabet having 3 and 30 char long!',
+    E103: 'At least one account require!',
+    E104: 'CreditCard, SavingAccount, DigitalWallet, Cash only allowed!',
+    E105: 'start with alphabet between 4 and 16 char; only(_ ) special char!',
+    E106: 'Atlest one income source required, max 30!',
+    E107: 'income Source name should start with alphabet, between 4 and 20 char long!',
+    E108: 'Atlest one expense source required, max 30',
+    E109: 'expense source name should start with alphabet, between 4 and 20 char long!',
     E110: 'Invalid Amount!',
     E111: 'Invalid Transaction Description!',
     E112: 'Token not found in request!',
@@ -79,12 +79,16 @@ tmmSer.factory("valConfig", function valConfigFactory(){
   return{
     emailRegex: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
     emailMaxLen: 50,
-    pwdRegex: /^[a-zA-Z.*#@]{4,30}$/,
+    pwdRegex: /^[a-zA-Z0-9.*#@]{4,30}$/,
     nameRegex: /^[a-zA-Z][a-zA-Z0-9 ]{3,30}$/,
     maMinLen: 1,
     maMaxLen: 15,
-    iSrcRegex: /^[a-zA-Z][a-zA-Z0-9@-_]{3,20}$/,
-    eSrcRegex: /^[a-zA-Z][a-zA-Z0-9@-_]{3,20}$/,
+    iSrcCountMin: 1,
+    iSrcCountMax: 30,
+    eSrcCountMin: 1,
+    eSrcCountMax: 30,
+    iSrcRegex: /^[a-zA-Z].{3,20}$/,
+    eSrcRegex: /^[a-zA-Z].{3,20}$/,
     amountRegex: /^[0-9]{1,10}$/,
     maTypeRegex: /^(CreditCard|SavingAccount|DigitalWallet|Cash)$/,
     maNameRegex: /^[a-zA-Z][a-zA-Z0-9- _]{3,15}$/,
@@ -119,28 +123,37 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
       var err;
       if( !(ma instanceof Array) || ma.length > valConfig.maMaxLen || ma.length < valConfig.maMinLen )
       return err=errConfig.E103;
-      for(var i=ma.length; i--;){
-        if( !ma[i].type|| !valConfig.maTypeRegex.test(ma[i].type) )
-        return err=errConfig.E104;
-        if( !ma[i].name || !valConfig.maNameRegex.test(ma[i].name) )
-        return err=errConfig.E105;
+    },
+
+
+    valMAType : function(maType){
+      var err;
+      if( !maType || !valConfig.maTypeRegex.test(maType) )
+      return err=errConfig.E104;
+    },
+
+    valMAName : function(maName){
+      var err;
+      if( !maName || !valConfig.maNameRegex.test(maName) ){
+      return err=errConfig.E105;
       }
     },
 
     valIncSrc : function(iSrc){
       var err;
-      if( !(iSrc instanceof Array) || iSrc.length > valConfig.iSrcMaxLen ||  iSrc.length < valConfig.iSrcMinLen )
+      if( !(iSrc instanceof Array) || iSrc.length > valConfig.iSrcCountMax ||  iSrc.length < valConfig.iSrcCountMin )
       return err=errConfig.E106;
       for(var i=iSrc.length; i--;){
-        if( !iSrc[i] || !valConfig.iSrcRegex.test(iSrc[i]) )
+        // if( !iSrc[i] || !valConfig.iSrcRegex.test(iSrc[i]) )
+        // return err=errConfig.E107;
+        if( !iSrc[i] || !iSrc[i].match(valConfig.iSrcRegex) )
         return err=errConfig.E107;
       }
     },
 
     valExpSrc : function(eSrc){
       var err;
-      if( !(eSrc instanceof Array) || eSrc.length > valConfig.eSrcMaxLen ||
-      eSrc.length < valConfig.eSrcMinLen )
+      if( !(eSrc instanceof Array) || eSrc.length > valConfig.eSrcCountMax ||   eSrc.length < valConfig.eSrcCountMin )
       return err=errConfig.E108;
       for(var i=eSrc.length; i--;){
         if( !eSrc[i] || !valConfig.eSrcRegex.test(eSrc[i]) )
@@ -183,7 +196,7 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
 });
 
 
-tmmSer.factory("utilSer", function utilSerFactory(valSer){
+tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
   var isLoggedIn=false;
   return{
     initSlide : function($scope){

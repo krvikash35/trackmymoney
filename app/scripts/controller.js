@@ -36,6 +36,23 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
     })
   }
   //***************************************
+  //Processing user forgot password
+  //***************************************
+  $scope.sendPwdToEmail = function(regEmail){
+    $scope.resAwaiting=true;
+    console.log(regEmail);
+    $http.post('/forgotPwd', {email: regEmail})
+    .success(function(data){
+      utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+      $scope.showForgotPwd=false;
+      $scope.resAwaiting=false;
+    })
+    .error(function(data){
+      utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+      $scope.resAwaiting=false;
+    })
+  }
+  //***************************************
   //Processing user regestration form
   //***************************************
   var promisEmailVerProg=null;
@@ -53,6 +70,7 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
       }
     }, interInMilli, noOfTime)
   }
+
 
 
   $scope.verifyEmail = function verifyEmail(regForm) {
@@ -129,7 +147,7 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
 //*******************************************************************************
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
-tmmController.controller('userInfoController', function(utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
+tmmController.controller('userInfoController', function(valSer, utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
   //******************************************
   //Intializing and populating user Info view
   //******************************************
@@ -140,7 +158,6 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   .error(function(data, status, headers, config){
     utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
   })
-
   var userInfoInit = function(userInfo){
     $scope.userBasicInfo=userInfo.account;
     var eSrc=userInfo.sourceOfMoneyTrx.expenseSource;
@@ -163,8 +180,13 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   //***************************************
   //updating Full Name
   //**************************************
-  $scope.updateFullName = function(){
-    $http.put($location.path(), {updatecode: "7", updateitem: $scope.userBasicInfo.fullname})
+  $scope.updateFullName = function(fullName){
+    var err;
+    if( err=valSer.valName(fullName) ){
+      utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', err, true);
+      return ""
+    }
+    return $http.put($location.path(), {updatecode: "7", updateitem: fullName})
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'usrBasicInfoUpdateResp', data, true);
     })
@@ -175,8 +197,14 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   //***************************************
   //Updating Password
   //**************************************
-  $scope.updatePassword = function(){
-    $http.put($location.path(), {updatecode: "4", updateitem: $scope.userBasicInfo.password})
+  $scope.updatePassword = function(password){
+    var err;
+    if( err=valSer.valPwd(password) ){
+      utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', err, true);
+      return ""
+    }
+
+    return $http.put($location.path(), {updatecode: "4", updateitem: password})
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'usrBasicInfoUpdateResp', data, true);
     })
@@ -187,27 +215,53 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   //***********************************************************
   // Updating User Money Account
   //***********************************************************
+  $scope.valMAType = function valMAType(maType){
+    var err;
+    if( err=valSer.valMAType(maType) ){
+      utilSer.showFlashMsg($scope, "error", 'usrMoneyAcctUpdateResp',err , true);
+      return "";
+    }
+  }
+  $scope.valMAName = function valMAName(maName){
+    var err;
+    if( err=valSer.valMAName(maName) ){
+      utilSer.showFlashMsg($scope, "error", 'usrMoneyAcctUpdateResp',err , true);
+      return "";
+    }
+  }
+
   $scope.updateMoneyAccount = function(){
     var result = [];
-    for(var i = $scope.userMoneyAccount.length; i--;){
-      var ma = $scope.userMoneyAccount[i];
-      if(ma.isDeleted){
-        $scope.userMoneyAccount.splice(i,1);
+    var err;
+    for(var i=0; i<$scope.userMoneyAccount.length; i++){
+      if(!$scope.userMoneyAccount[i].isDeleted){
+        result.push($scope.userMoneyAccount[i])
       }
-      if(ma.isNew){
-        ma.isNew = false;
-      }
-      result.push(ma);
     }
-    $http.put($location.path(), {updatecode: "3", updateitem: $scope.userMoneyAccount})
+    if(err=valSer.valMAcct(result)){
+      utilSer.showFlashMsg($scope, "error", 'usrMoneyAcctUpdateResp', err, true);
+      return ""
+    }
+    // for(var i = $scope.userMoneyAccount.length; i--;){
+    //   var ma = $scope.userMoneyAccount[i];
+    //   // if(ma.isDeleted){
+    //   //   $scope.userMoneyAccount.splice(i,1);
+    //   // }
+    //   // if(ma.isNew){
+    //   //   ma.isNew = false;
+    //   // }
+    //   // result.push(ma);
+    // }
+    return $http.put($location.path(), {updatecode: "3", updateitem: result})
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'usrMoneyAcctUpdateResp', data, true);
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'usrMoneyAcctUpdateResp', data, true);
     })
-    return $q.all(result);
   }
+
+
   $scope.addMoneyAccountRow = function(){
     $scope.userMoneyAccount.push({
       id: $scope.userMoneyAccount.length+1,
@@ -241,19 +295,34 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   //***********************************************************
   $scope.updateExpenseSource = function(){
     var result = [];
-    for(var i = $scope.expenseSource.length; i--;){
-      var es = $scope.expenseSource[i];
-      if(es.isDeleted){
-        $scope.expenseSource.splice(i,1);
-      }
-      if(es.isNew){
-        es.isNew = false;
+    var err;
+    for(var i=0; i<$scope.expenseSource.length; i++){
+      if(!$scope.expenseSource[i].isDeleted){
+        result.push($scope.expenseSource[i].name)
       }
     }
-    for(var i=$scope.expenseSource.length; i--;){
-      result[i]=$scope.expenseSource[i].name;
+    if( err=valSer.valExpSrc(result) ){
+      utilSer.showFlashMsg($scope, "error", 'usrExpSrcUpdateResp', err, true);
+      return ""
     }
-    $http.put($location.path(), {updatecode: "1", updateitem: result})
+
+    //
+    // var result = [];
+    // for(var i = $scope.expenseSource.length; i--;){
+    //   var es = $scope.expenseSource[i];
+    //   if(es.isDeleted){
+    //     $scope.expenseSource.splice(i,1);
+    //   }
+    //   if(es.isNew){
+    //     es.isNew = false;
+    //   }
+    // }
+    // for(var i=$scope.expenseSource.length; i--;){
+    //   result[i]=$scope.expenseSource[i].name;
+    // }
+
+
+    return $http.put($location.path(), {updatecode: "1", updateitem: result})
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'usrExpSrcUpdateResp', data, true);
     })
@@ -292,20 +361,33 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
   // Updating User Income Source
   //***********************************************************
   $scope.updateIncomeSource = function(){
+
     var result = [];
-    for(var i = $scope.incomeSource.length; i--;){
-      var is = $scope.incomeSource[i];
-      if(is.isDeleted){
-        $scope.incomeSource.splice(i,1);
-      }
-      if(is.isNew){
-        is.isNew = false;
+    var err;
+    for(var i=0; i<$scope.incomeSource.length; i++){
+      if(!$scope.incomeSource[i].isDeleted){
+        result.push($scope.incomeSource[i].name)
       }
     }
-    for(var i=$scope.incomeSource.length; i--;){
-      result[i]=$scope.incomeSource[i].name;
+    if( err=valSer.valIncSrc(result) ){
+      utilSer.showFlashMsg($scope, "error", 'usrIncSrcUpdateResp', err, true);
+      return ""
     }
-    $http.put($location.path(), {updatecode: "2", updateitem: result})
+
+    // var result = [];
+    // for(var i = $scope.incomeSource.length; i--;){
+    //   var is = $scope.incomeSource[i];
+    //   if(is.isDeleted){
+    //     $scope.incomeSource.splice(i,1);
+    //   }
+    //   if(is.isNew){
+    //     is.isNew = false;
+    //   }
+    // }
+    // for(var i=$scope.incomeSource.length; i--;){
+    //   result[i]=$scope.incomeSource[i].name;
+    // }
+    return $http.put($location.path(), {updatecode: "2", updateitem: result})
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'usrIncSrcUpdateResp', data, true);
     })
@@ -424,6 +506,8 @@ tmmController.controller('userInfoController', function(utilSer, $localStorage, 
 // Controller for handling user transaction
 //**************************************************************************************
 tmmController.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+
+
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -477,6 +561,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
     })
     .error(function(data, status, headers, config){
+      location.path('/main')
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
     // }
@@ -501,6 +586,14 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 //Controller for handling user transaction report
 //***********************************************************************************
 tmmController.controller('userReportController', function(valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
+  $http.get($location.path())
+  .success(function(data, status, headers, config){
+    $scope.userTrxReport=data;
+  })
+  .error(function(data, status, headers, config){
+    utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
+  })
+
   $scope.today = function() {
     $scope.toDate = new Date();
     $scope.fromDate = new Date();
@@ -524,25 +617,18 @@ tmmController.controller('userReportController', function(valSer, utilSer, $loca
     }
   }
 
-// var data=[];
-// var trx={};
-//   for(var i=3;i--;){
-//     var a=new Date();
-//     console.log(a);
-//     a=a.setDate($scope.toDate.getDate()-30*i);
-//     data.push({"date": a, amount: i})
-//   }
-//   $scope.userTrxReport=data;
+  // var data=[];
+  // var trx={};
+  //   for(var i=3;i--;){
+  //     var a=new Date();
+  //     console.log(a);
+  //     a=a.setDate($scope.toDate.getDate()-30*i);
+  //     data.push({"date": a, amount: i})
+  //   }
+  //   $scope.userTrxReport=data;
 
 
-  $http.get($location.path())
-  .success(function(data, status, headers, config){
-    $scope.userTrxReport=data;
-    console.log(data[0].date);
-  })
-  .error(function(data, status, headers, config){
-    utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
-  })
+
 })
 
 //************************************************************************************

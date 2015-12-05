@@ -36,6 +36,16 @@ valMAcct : function(ma){
   }
 },
 
+valMAType : function(maType){
+  if( !maType || !valConfig.maTypeRegex.test(maType) )
+  return err=errConfig.E104;
+},
+
+valMAName : function(maName){
+  if( !maName || !valConfig.maNameRegex.test(maName) )
+  return err=errConfig.E105;
+},
+
 valIncSrc : function(iSrc){
   var err;
   if( !(iSrc instanceof Array) || iSrc.length > valConfig.iSrcMaxLen ||  iSrc.length < valConfig.iSrcMinLen )
@@ -74,10 +84,6 @@ valTrxDesc : function(desc){
 
 }
 
-// console.log(module.exports.valMAcct());
 
 // var a='kk 9'
 // // var c = a.split(' ')[1].length();
-// console.log(valEmail(77));
-
-console.log();

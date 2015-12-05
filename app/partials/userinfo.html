@@ -1,12 +1,12 @@
 
 <!-- User Basic Info -->
-<div style="", class="panel panel-primary col-md-12">
-<div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
+<div  style="", class="panel panel-primary col-md-12">
+  <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
     <div>
       <span class="title">Full name: </span>
-      <a href="" editable-text="userBasicInfo.fullname" onaftersave=updateFullName()>{{userBasicInfo.fullname || empty}}</a>
+      <a href="" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</a>
     </div>
     <div>
       <span class="title">Email: </span>
@@ -18,7 +18,7 @@
       </div>
       <div>
         <span class="title">Change Password: </span>
-        <a href="#" onaftersave=updatePassword() e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a>
+        <a href="#" onaftersave=updatePassword($data) e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a>
       </div>
       <div>
         <span class="title">Joined Date: </span>
@@ -37,10 +37,11 @@
 
   <!-- Money Account Related Info -->
   <div style="", class="panel panel-primary col-md-12">
-<div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
+    <div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
-      <form editable-form name="maform" onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
+      <!--  -->
+      <form editable-form name="maform"  onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
         <table class="table  table-bordered table-hover table-condensed">
           <tr style="font-weight: bold">
             <td >AccountType</td>
@@ -49,104 +50,105 @@
           </tr>
           <tr ng-repeat="ma in userMoneyAccount | filter:filterMoneyAccountRow ">
             <td>
-              <span editable-select="ma.type"  e-form="maform" e-ng-options="a as a for a in moneyAccountType">
+              <span editable-select="ma.type" onbeforesave="valMAType($data)"  e-form="maform" e-ng-options="a as a for a in moneyAccountType" e-required >
                 {{ma.type}}
               </span>
             </td>
             <td>
-              <span editable-text="ma.name" e-form="maform" e-required>
+              <span editable-text="ma.name" onbeforesave="valMAName($data)" e-form="maform" e-required >
                 {{ma.name}}
               </span>
             </td>
             <td><button type="button" ng-show="maform.$visible" ng-click="deleteMoneyAccountRow(ma.id)" class="btn btn-danger pull-right">
-            Del</button></td>
-          </tr>
-        </table>
-        <div class="btn-edit">
-          <button type="button" class="btn btn-default" ng-show="!maform.$visible" ng-click="maform.$show()">
-            edit
-          </button>
-        </div>
-        <div class="btn-form" ng-show="maform.$visible">
-          <button type="button" ng-disabled="maform.$waiting" ng-click="addMoneyAccountRow()" class="btn btn-default pull-right">add row</button>
-          <button type="submit" ng-disabled="maform.$waiting" class="btn btn-primary">save</button>
-          <button type="button" ng-disabled="maform.$waiting" ng-click="maform.$cancel()" class="btn btn-default">cancel</button>
-        </div>
-      </form>
+              Del</button></td>
+            </tr>
+          </table>
+          <div class="btn-edit">
+            <button type="button" class="btn btn-default" ng-show="!maform.$visible" ng-click="maform.$show()">
+              edit
+            </button>
+          </div>
+          <div class="btn-form" ng-show="maform.$visible">
+            <button type="button" ng-disabled="maform.$waiting" ng-click="addMoneyAccountRow()" class="btn btn-default pull-right">add row</button>
+            <button type="submit" ng-disabled="maform.$waiting" class="btn btn-primary">save</button>
+            <button type="button" ng-disabled="maform.$waiting" ng-click="maform.$cancel()" class="btn btn-default">cancel</button>
+          </div>
+
+        </form>
+      </div>
     </div>
-  </div>
 
 
 
 
-  <!-- user source of transaction -->
-  <div style="", class="panel panel-primary col-sm-6 col-md-6">
-<div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
-    <div class="panel-heading">Expense Source</div>
-    <div class="panel-body ">
-      <form editable-form name="expenseSrcForm" onaftersave="updateExpenseSource()" oncancel="cancelExpenseSourceUpdate()">
-        <table class="table  table-bordered table-hover table-condensed">
-          <tr style="font-weight: bold">
-            <td >Expense Source</td>
-            <td ><span ng-show="expenseSrcForm.$visible">Action</span></td>
-          </tr>
-          <tr ng-repeat="es in expenseSource | filter:filterExpenseAccountRow">
-            <td>
-              <span editable-text="es.name" e-form="expenseSrcForm" >
-                {{es.name}}
-              </span>
-            </td>
-            <td><button type="button" ng-show="expenseSrcForm.$visible" ng-click="deleteExpenseSourceRow(es.id)" class="btn btn-danger pull-right">Del</button></td>
-          </tr>
-        </table>
-        <div class="btn-edit">
-          <button type="button" class="btn btn-default" ng-show="!expenseSrcForm.$visible" ng-click="expenseSrcForm.$show()">
-            edit
-          </button>
-        </div>
-        <div class="btn-form" ng-show="expenseSrcForm.$visible">
-          <button type="button" ng-disabled="expenseSrcForm.$waiting" ng-click="addExpenseSourceRow()" class="btn btn-default pull-right">add row</button>
-          <button type="submit" ng-disabled="expenseSrcForm.$waiting" class="btn btn-priincomeSourcery">save</button>
-          <button type="button" ng-disabled="expenseSrcForm.$waiting" ng-click="expenseSrcForm.$cancel()" class="btn btn-default">cancel</button>
-        </div>
-      </form>
+    <!-- user source of transaction -->
+    <div style="", class="panel panel-primary col-sm-6 col-md-6">
+      <div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
+      <div class="panel-heading">Expense Source</div>
+      <div class="panel-body ">
+        <form editable-form name="expenseSrcForm" onaftersave="updateExpenseSource()" oncancel="cancelExpenseSourceUpdate()">
+          <table class="table  table-bordered table-hover table-condensed">
+            <tr style="font-weight: bold">
+              <td >Expense Source</td>
+              <td ><span ng-show="expenseSrcForm.$visible">Action</span></td>
+            </tr>
+            <tr ng-repeat="es in expenseSource | filter:filterExpenseAccountRow">
+              <td>
+                <span editable-text="es.name" e-form="expenseSrcForm" >
+                  {{es.name}}
+                </span>
+              </td>
+              <td><button type="button" ng-show="expenseSrcForm.$visible" ng-click="deleteExpenseSourceRow(es.id)" class="btn btn-danger pull-right">Del</button></td>
+            </tr>
+          </table>
+          <div class="btn-edit">
+            <button type="button" class="btn btn-default" ng-show="!expenseSrcForm.$visible" ng-click="expenseSrcForm.$show()">
+              edit
+            </button>
+          </div>
+          <div class="btn-form" ng-show="expenseSrcForm.$visible">
+            <button type="button" ng-disabled="expenseSrcForm.$waiting" ng-click="addExpenseSourceRow()" class="btn btn-default pull-right">add row</button>
+            <button type="submit" ng-disabled="expenseSrcForm.$waiting" class="btn btn-priincomeSourcery">save</button>
+            <button type="button" ng-disabled="expenseSrcForm.$waiting" ng-click="expenseSrcForm.$cancel()" class="btn btn-default">cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
 
 
 
 
-  <!-- user income soruce -->
-  <div style="", class="panel panel-primary col-sm-6 col-md-6">
-<div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
-    <div class="panel-heading">Income Source</div>
-    <div class="panel-body ">
-      <form editable-form name="incomeSrcForm" onaftersave="updateIncomeSource()" oncancel="cancelIncomeSourceUpdate()">
-        <table class="table  table-bordered table-hover table-condensed">
-          <tr style="font-weight: bold">
-            <td >IncomeSource</td>
-            <td ><span ng-show="incomeSrcForm.$visible">Action</span></td>
-          </tr>
-          <tr ng-repeat="is in incomeSource | filter:filterIncomeSourceRow">
-            <td>
-              <span editable-text="is.name" e-form="incomeSrcForm" >
-                {{is.name}}
-              </span>
-            </td>
-            <td><button type="button" ng-show="incomeSrcForm.$visible" ng-click="deleteIncomeSourceRow(is.id)" class="btn btn-danger pull-right">Del</button></td>
-          </tr>
-        </table>
-        <div class="btn-edit">
-          <button type="button" class="btn btn-default" ng-show="!incomeSrcForm.$visible" ng-click="incomeSrcForm.$show()">
-            edit
-          </button>
-        </div>
-        <div class="btn-form" ng-show="incomeSrcForm.$visible">
-          <button type="button" ng-disabled="incomeSrcForm.$waiting" ng-click="addIncomeSourceRow()" class="btn btn-default pull-right">add row</button>
-          <button type="submit" ng-disabled="incomeSrcForm.$waiting" class="btn btn-priincomeSourcery">save</button>
-          <button type="button" ng-disabled="incomeSrcForm.$waiting" ng-click="incomeSrcForm.$cancel()" class="btn btn-default">cancel</button>
-        </div>
-      </form>
+    <!-- user income soruce -->
+    <div style="", class="panel panel-primary col-sm-6 col-md-6">
+      <div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
+      <div class="panel-heading">Income Source</div>
+      <div class="panel-body ">
+        <form editable-form name="incomeSrcForm" onaftersave="updateIncomeSource()" oncancel="cancelIncomeSourceUpdate()">
+          <table class="table  table-bordered table-hover table-condensed">
+            <tr style="font-weight: bold">
+              <td >IncomeSource</td>
+              <td ><span ng-show="incomeSrcForm.$visible">Action</span></td>
+            </tr>
+            <tr ng-repeat="is in incomeSource | filter:filterIncomeSourceRow">
+              <td>
+                <span editable-text="is.name" e-form="incomeSrcForm" >
+                  {{is.name}}
+                </span>
+              </td>
+              <td><button type="button" ng-show="incomeSrcForm.$visible" ng-click="deleteIncomeSourceRow(is.id)" class="btn btn-danger pull-right">Del</button></td>
+            </tr>
+          </table>
+          <div class="btn-edit">
+            <button type="button" class="btn btn-default" ng-show="!incomeSrcForm.$visible" ng-click="incomeSrcForm.$show()">
+              edit
+            </button>
+          </div>
+          <div class="btn-form" ng-show="incomeSrcForm.$visible">
+            <button type="button" ng-disabled="incomeSrcForm.$waiting" ng-click="addIncomeSourceRow()" class="btn btn-default pull-right">add row</button>
+            <button type="submit" ng-disabled="incomeSrcForm.$waiting" class="btn btn-priincomeSourcery">save</button>
+            <button type="button" ng-disabled="incomeSrcForm.$waiting" ng-click="incomeSrcForm.$cancel()" class="btn btn-default">cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>

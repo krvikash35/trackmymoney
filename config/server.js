@@ -17,6 +17,8 @@ module.exports = {
   "mailSerUserPwd": "Sur3536#",
   "emailVerSubject": "verify your email to use on trackmymoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
+  "emailPwdSubject": "Forgot password of your trackmymoney account",
+  "emailPwdText": "Please find below the password, you should chagne your password on nex login at your convenience",
   "tokenExpiresInSecond": 3600,
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"

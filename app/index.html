@@ -29,8 +29,8 @@
 
 
     <div class="row content" >
-      <div ng-view class="col-sm-12 col-md-12">
-        <p>currentPath: {{currentPath}}</p>
+      <div ng-if="isValidToken" ng-view class="col-sm-12 col-md-12">
+
       </div>
     </div>
 

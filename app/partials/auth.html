@@ -4,10 +4,11 @@
   </div>
   <div style="padding-top:15px" class="col-sm-4 col-md-4 auth">
     <div ng-show="authResMsg" class={{msgType}} >{{authResMsg}}</div>
+
     <div ng-show="isLoginFormVisible">
       <form role="form"   class="login-form" ng-submit="submitLoginForm(login)">
         <div class="form-group">
-          <input id="userEmail" type="text" ng-model="login.email"  placeholder="Username..." class="form-control">
+          <input id="userEmail" type="email" ng-model="login.email"  placeholder="Username..." class="form-control">
         </div>
         <div class="form-group">
           <input id="userPwd" type="password" ng-model="login.password"  placeholder="Password..." class="form-control">
@@ -15,16 +16,15 @@
         <button type="submit" class="btn btn-lg btn-primary btn-block">Sign in!  </button>
       </form>
       <a style="padding-top:15px" href="" ng-click="toggleLoginAndRegView()"  ><span class="glyphicon glyphicon-user"></span>Register here!</a>
+      <a style="padding-top:15px" href="" ng-click="showForgotPwd=!showForgotPwd"  ><span class="glyphicon glyphicon-user"></span>Forgot Password!</a>
     </div>
 
 
     <div   ng-show="isRegFormVisible">
-
-
-    <uib-progressbar ng-show="verCodeSentInProgress" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
+      <uib-progressbar ng-show="verCodeSentInProgress" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
       <form role="form" class="registration-form" ng-submit="verifyEmail(reg)">
         <div class="form-group" ng-init=" emailVerButton='send verification code to email' ">
-          <input  ng-disabled='isEmailVerified' ng-model="reg.email" type="text" id="email" required placeholder="Enter Email to verify..." class="form-control" >
+          <input  ng-disabled='isEmailVerified' ng-model="reg.email" type="email" id="email" required placeholder="Enter Email to verify..." class="form-control" >
           <input  ng-disabled='isEmailVerified || !isVerCodeSent'  type="password" ng-model="reg.verCode" required placeholder="Enter verification code..." class="form-control" >
           <button ng-disabled='isEmailVerified || verCodeSentInProgress' class="btn btn-primary btn-block"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>
         </div>
@@ -42,6 +42,15 @@
         </div>
         <button ng-disabled='!isEmailVerified' type="submit" class="btn btn-lg btn-primary btn-block">Sign up!</button>
         <a href="" ng-click="toggleLoginAndRegView()" ><span class="glyphicon glyphicon-log-in">Signin here!</a>
+        </form>
+      </div>
+
+      <div ng-if="showForgotPwd">
+        <form role="form" class="registration-form" ng-submit="sendPwdToEmail(regEmail)">
+          <div class="form-group" >
+            <input  ng-model="regEmail" type="email" id="email" required placeholder="Enter your registered email..." class="form-control" >
+            <button ng-disabled='resAwaiting' class="btn btn-primary btn-block">Send password to email</button>
+          </div>
         </form>
       </div>
 

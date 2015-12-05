@@ -4,6 +4,7 @@
 // get:   /user/:id/info    200(ok, json), 401(Unauthorized, lh:/sigin)
 // post:  /user/:id/trx     200(ok, json), 401(Unauthorized, lh:/sigin)
 // put:   /user/:id/info    200(ok),       200(ok)
+// delete: usrVerTemps
 
 //load all the required module
 var express    = require("express");      //main web framework module for node
@@ -54,6 +55,17 @@ mongoose.connect(mongoDBUrl, function(err){
 //@response-success: {res.statusCode: 200, res.body.data: token, locHeader: /usr/:userId/trx}
 //------------------------------------------------------------------------------------------------
 pubRouter.post('/signin', utilMeth.processSigninReq);
+
+
+//----------------------------------------------------------------------------------------
+//post('/forgotPwd')
+//@param: {req.body.email}
+//@response-error
+//@response-success
+//----------------------------------------------------------------------------------------
+pubRouter.post('/forgotPwd', utilMeth.sendPwdToEmail);
+
+
 
 //-----------------------------------------------------------------------------------------------
 //post('/signup')
