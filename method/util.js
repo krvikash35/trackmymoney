@@ -57,14 +57,14 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
     subject: subject, // Subject line
     html: htmltext // plaintext body    html: '<b>Hello world ✔</b>' // html body
   };
-  return setTimeout(function(){ res.status(200).send(htmltext); }, 2000);
-  // return transporter.sendMail(mailOptions, function(error, info){
-  //   if(error){
-  //     return res.status(500).end(errConfig.E118)
-  //   }else {
-  //    return res.status(200).send(errConfig.S100)
-  //   }
-  // });
+  // return setTimeout(function(){ res.status(200).send(htmltext); }, 2000);
+  return transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+      return res.status(500).end(errConfig.E118)
+    }else {
+     return res.status(200).send(errConfig.S100)
+    }
+  });
 }
 
 var processAuthAccessReq = function processAuthAccessReq(req, res, next){
@@ -134,11 +134,10 @@ var sendPwdToEmail = function(req, res){
     if(!user)
     return res.status(400).send(errConfig.E122);
     var tempPwd = Math.floor(1000 + Math.random() * 9000).toString();
-    user.password  = bcrypt.hashSync(tempPwd, 10);
-    user.save(function(err){
+    user.account.password  = bcrypt.hashSync(tempPwd, 10);
+    user.save(function(err, usr){
       if(err)
       return res.status(500).send(errConfig.E120);
-      console.log(user.password);
       var emailPwdText= sConfig.emailPwdText+"<br>"+tempPwd;
       sendEmail(mailTrns, sConfig.mailSerUser, req.body.email, sConfig.emailPwdSubject, emailPwdText, res);
     })

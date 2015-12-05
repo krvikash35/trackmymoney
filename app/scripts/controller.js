@@ -40,10 +40,9 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
   //***************************************
   $scope.sendPwdToEmail = function(regEmail){
     $scope.resAwaiting=true;
-    console.log(regEmail);
     $http.post('/forgotPwd', {email: regEmail})
     .success(function(data){
-      utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+      utilSer.showFlashMsg($scope, "success", 'authResMsg', data, false);
       $scope.showForgotPwd=false;
       $scope.resAwaiting=false;
     })
