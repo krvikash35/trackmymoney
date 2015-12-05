@@ -209,7 +209,7 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
           image: 'img/beauti' + newWidth + '.jpg'
         });
       };
-      for (var i=0; i<5; i++) {
+      for (var i=0; i<8; i++) {
         $scope.addSlide();
       };
     },

@@ -6,7 +6,7 @@
 //**********************************************
 
 module.exports = {
-  S100: 'verification code sent to your email',
+  S100: 'email sent..check your mail',
   S101: 'New verification code sent to your email',
   S102: 'Email Verified Successfully',
   S103: 'Transaction Saved Successfully',
