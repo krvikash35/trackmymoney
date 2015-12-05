@@ -633,7 +633,7 @@ tmmController.controller('userReportController', function(valSer, utilSer, $loca
 //************************************************************************************
 //Navigation controller
 //************************************************************************************
-tmmController.controller('naviCtrl', function(utilSer, $interval, $scope, $rootScope, $location, $localStorage){
+tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $scope, $rootScope, $location, $localStorage){
   //***************************************
   //Logout function redirecteding to home
   //**************************************
@@ -655,4 +655,25 @@ tmmController.controller('naviCtrl', function(utilSer, $interval, $scope, $rootS
     $scope.isLogged = false;
     $location.path('/main');
   };
+
+
+  $scope.openAbout = function(size){
+    $uibModal.open({
+      templateUrl: 'partials/about.html',
+      size: size
+    });
+  }
+
+  $scope.openPrivacy = function(size){
+    $uibModal.open({
+      templateUrl: 'partials/privacy.html'
+    });
+  }
+
+  $scope.openTC = function(size){
+    $uibModal.open({
+      templateUrl: 'partials/termcondition.html'
+    });
+  }
+
 })
