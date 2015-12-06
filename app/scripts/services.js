@@ -203,14 +203,19 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
       $scope.myInterval = 3000;
       $scope.noWrapSlides = false;
       var slides = $scope.slides = [];
-      $scope.addSlide = function() {
-        var newWidth = 0 + slides.length + 1;
+      $scope.addSlide = function(slideImg, slideLink) {
         slides.push({
-          image: 'img/beauti' + newWidth + '.jpg'
+          image: slideImg,
+          link: slideLink
         });
       };
-      for (var i=0; i<2; i++) {
-        $scope.addSlide();
+      var slideDetails=[
+        {"imgSrc": "img/beauti1.jpg", "link": "http://trackourmoney.blogspot.in/"},
+        {"imgSrc": "img/beauti2.jpg", "link": "http://trackourmoney.blogspot.in/"}
+      ];
+
+      for (var i=slideDetails.length;i--;) {
+        $scope.addSlide(slideDetails[i].imgSrc, slideDetails[i].link );
       };
     },
 
