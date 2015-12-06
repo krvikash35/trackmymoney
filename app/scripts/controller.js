@@ -91,14 +91,14 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
       startEmailVerProg(0, 100, 20, 500 );
       $http.post('/signup', {signupCode: "1", email: regForm.email})
       .success(function(data, status, headers, config){
-        utilSer.showFlashMsg($scope, "success", 'authResMsg', data, true);
+        utilSer.showFlashMsg($scope, "success", 'authResMsg', data, false);
         $scope.isVerCodeSent = true;
         $scope.emailVerButton = "Verify Code"
         $scope.verCodeSentInProgress=false;
         $interval.cancel(promisEmailVerProg)
       })
       .error(function(data, status, headers, config){
-        utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+        utilSer.showFlashMsg($scope, "error", 'authResMsg', data, false);
         $scope.isVerCodeSent = false;
         $scope.verCodeSentInProgress=false;
         $interval.cancel(promisEmailVerProg)

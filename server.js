@@ -111,10 +111,10 @@ privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
   privRouter.post('/:userId/trx',utilMeth.processUserPrsTrx);
 
 
-  // // Handle any uncaught Exception, to prevent server from crashing
-  // process.on('uncaughtException', function(err) {
-  //   console.log("uncaughtException: "+err);
-  // });
+  // Handle any uncaught Exception, to prevent server from crashing
+  process.on('uncaughtException', function(err) {
+    console.log("uncaughtException: "+err);
+  });
 
 
   // Start Server
