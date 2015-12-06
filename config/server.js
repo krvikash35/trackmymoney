@@ -13,11 +13,11 @@ module.exports = {
     "appPort": "8080"
   },
   "serverSecret": "ILoveCoding",
-  "mailSerUser": "tmm.trackmymoney@gmail.com",
+  "mailSerUser": "tom.trackourmoney@gmail.com",
   "mailSerUserPwd": "Sur3536#",
-  "emailVerSubject": "verify your email to use on trackmymoney",
+  "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
-  "emailPwdSubject": "Forgot password of your trackmymoney account",
+  "emailPwdSubject": "Forgot password of your trackourmoney account",
   "emailPwdText": "Please find below the password, you should chagne your password on nex login at your convenience",
   "tokenExpiresInSecond": 3600,
   "errMsg" : {
