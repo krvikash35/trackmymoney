@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "prestart": "npm install",
+    "start": "nodemon server.js"
   },
   "author": "Vikash Kumar",
   "license": "ISC",

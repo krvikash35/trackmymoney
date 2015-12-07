@@ -35,6 +35,7 @@ if(sConfig.runEnv === 'dev') {
   if(sConfig.runEnv === 'prod'){
     mongoDBUrl  = sConfig.prodUrl.dbUrl;
     port        = sConfig.prodUrl.appPort;
+    appUrl      = sConfig.prodUrl.appUrl;
   }
   else{
     return console.log(sConfig.errMsg.invalidRunEvn);
@@ -118,6 +119,6 @@ privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
 
 
   // Start Server
-  app.listen(port, function () {
-    console.log( "Express server listening on port " + port);
+  app.listen(appPort, appUrl, function () {
+    console.log("Listening on " + appUrl + ", server_port " + appPort)
   });
