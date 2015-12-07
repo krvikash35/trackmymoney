@@ -44,7 +44,7 @@ if(sConfig.runEnv === 'dev') {
 //connect to mongo db
 mongoose.connect(mongoDBUrl, function(err){
   if(err){
-    return console.log("Could not connect to "+mongoDBUrl);
+    return console.log("Could not connect to "+mongoDBUrl+err);
   }
 });
 

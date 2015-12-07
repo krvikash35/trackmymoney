@@ -8,6 +8,7 @@ var jwt         = require("jsonwebtoken") // this module used for token based au
 var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
+var mongoose   = require("mongoose");
 
 var processUserPrsTrx = function(req, res){
   var userPrsnlTrx            = new usrPrsTrxs();
@@ -104,10 +105,10 @@ var setPreReq = function setPreReq(req, res, next){
   res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-  // if(mongoose.connection.readyState==0){
-  //   res.status(500);
-  //   return  res.send(errConfig.E117);
-  // }
+  if(mongoose.connection.readyState==0){
+    res.status(500);
+    return  res.send(errConfig.E117);
+  }
   next();
 }
 
