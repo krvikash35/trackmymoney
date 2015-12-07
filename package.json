@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "export HOME=$HOME/app-root/runtime/repo; bower install",
-    "prestart": "npm install",
-    "start": "nodemon server.js"
+    "prestart": "npm install"
   },
   "author": "Vikash Kumar",
   "license": "ISC",
