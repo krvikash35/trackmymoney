@@ -3,7 +3,8 @@ module.exports = {
   // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
   "runEnv": process.env.runEnv || "prod", // prod or dev
   "prodUrl":{
-    "dbUrl" : "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
+    // "dbUrl" : "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
+    "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+"/mymongodb",
     "appUrl": process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
     "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "8080"
   },

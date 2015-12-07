@@ -34,7 +34,7 @@ if(sConfig.runEnv === 'dev') {
 } else {
   if(sConfig.runEnv === 'prod'){
     mongoDBUrl  = sConfig.prodUrl.dbUrl;
-    port        = sConfig.prodUrl.appPort;
+    appPort        = sConfig.prodUrl.appPort;
     appUrl      = sConfig.prodUrl.appUrl;
   }
   else{
