@@ -3,7 +3,7 @@
 <nav class="navbar navbar-default ">
 
   <div class="navbar-header dropdown-menu-left">
-    <a class="navbar-brand"> <img src="img/tom.jpg" ></img></a>
+    <a class="navbar-brand"> TrackOurMoney</a>
   </div>
   <div class="navbar-header dropdown-menu-left">
     <ul class="nav pull-left">
@@ -25,11 +25,11 @@
     </div>
     <div class="collapse navbar-collapse navbar-left" ng-class="!navCollapsed && 'in'" >
       <ul class="nav navbar-nav pull-left">
-        <li><a href="#/user/{{userId}}/info">Account</a></li>
-        <li><a href="#/user/{{userId}}/trx">Transaction</a></li>
-        <li><a href="#/user/{{userId}}/report">Report</a></li>
-        <li><a href="http://trackourmoney.blogspot.in/" target="_blank">Blog</a></li>
-        <li><a ng-show="isLogged" href=""ng-click="logout()">Logout</a></li>
+        <li><a href="#/user/{{userId}}/info" ng-click="navCollapsed = !navCollapsed">Account</a></li>
+        <li><a href="#/user/{{userId}}/trx" ng-click="navCollapsed = !navCollapsed">Transaction</a></li>
+        <li><a href="#/user/{{userId}}/report" ng-click="navCollapsed = !navCollapsed">Report</a></li>
+        <li><a href="http://trackourmoney.blogspot.in/" ng-click="navCollapsed = !navCollapsed" target="_blank">Blog</a></li>
+        <li><a ng-show="isLogged" href=""ng-click="navCollapsed = !navCollapsed;logout()">Logout</a></li>
       </ul>
     </div>
 
