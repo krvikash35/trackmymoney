@@ -24,13 +24,14 @@ app.use(morgan("dev"));
 app.use(utilMeth.setPreReq);
 app.use(express.static("app"));
 app.use('/user', privRouter);
-app.use('', pubRouter);
+app.use('/', pubRouter);
 privRouter.use('/:userId', utilMeth.processAuthAccessReq); //Middleware for private router to validate the token
 
 // use config var to run this app: Development or production
 if(sConfig.runEnv === 'dev') {
   mongoDBUrl = sConfig.devUrl.dbUrl;
-  port       = sConfig.devUrl.appPort;
+  appPort       = sConfig.devUrl.appPort;
+  appUrl      = sConfig.devUrl.appUrl;
 } else {
   if(sConfig.runEnv === 'prod'){
     mongoDBUrl  = sConfig.prodUrl.dbUrl;
@@ -45,7 +46,10 @@ if(sConfig.runEnv === 'dev') {
 mongoose.connect(mongoDBUrl, function(err){
   if(err){
     return console.log("Could not connect to "+mongoDBUrl+err);
+  }else{
+    console.log("connected to "+mongoDBUrl);
   }
+
 });
 
 //-----------------------------------------------------------------------------------------------
@@ -112,9 +116,9 @@ privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
 
 
   // Handle any uncaught Exception, to prevent server from crashing
-  process.on('uncaughtException', function(err) {
-    console.log("uncaughtException: "+err);
-  });
+  // process.on('uncaughtException', function(err) {
+  //   console.log("uncaughtException: "+err);
+  // });
 
 
   // Start Server
