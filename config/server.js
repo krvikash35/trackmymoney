@@ -10,13 +10,13 @@ module.exports = {
     "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "8080"
   },
   "devUrl":{
-    "dbUrl" : "mongodb://localhost/trackmymoney",
+    "dbUrl" : "mongodb://localhost/trackourmoney",
     "appUrl": "localhost",
     "appPort": "8080"
   },
   "serverSecret": "ILoveCoding",
-  "mailSerUser": "tom.trackourmoney@gmail.com",
-  "mailSerUserPwd": "Sur3536#",
+  "mailSerUser": "vikash@trackourmoney.com",
+  "mailSerUserPwd": "newYear2016",
   "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
   "emailPwdSubject": "Forgot password of your trackourmoney account",
