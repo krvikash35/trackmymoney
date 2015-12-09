@@ -552,15 +552,17 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 
 
   $scope.submitTrxForm=function(trxForm){
-
-    // for(var i=10000; i--; ){
+    var err;
+    if(err=valSer.valAmount(trxForm.amount)){
+      utilSer.showFlashMsg($scope, "error", 'prsTrxResp', err, true);
+      return err;
+    }
 
     $http.post($location.path(), trxForm)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
     })
     .error(function(data, status, headers, config){
-      location.path('/main')
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
     // }

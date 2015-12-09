@@ -38,7 +38,7 @@ tmmSer.factory("errConfig", function errConfigFactory(){
     E107: 'income Source name should start with alphabet, between 4 and 20 char long!',
     E108: 'Atlest one expense source required, max 30',
     E109: 'expense source name should start with alphabet, between 4 and 20 char long!',
-    E110: 'Invalid Amount!',
+    E110: 'Invalid Amount-Only number allowed!',
     E111: 'Invalid Transaction Description!',
     E112: 'Token not found in request!',
     E113: 'Authorization Header not found!',
