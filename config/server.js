@@ -11,7 +11,7 @@ module.exports = {
   },
   "devUrl":{
     "dbUrl" : "mongodb://localhost/trackourmoney",
-    "appUrl": "localhost",
+    "appUrl": "0.0.0.0",
     "appPort": "8080"
   },
   "serverSecret": "ILoveCoding",
