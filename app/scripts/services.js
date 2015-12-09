@@ -210,8 +210,8 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
         });
       };
       var slideDetails=[
-        {"imgSrc": "img/beauti1.jpg", "link": "http://trackourmoney.blogspot.in/"},
-        {"imgSrc": "img/beauti2.jpg", "link": "http://trackourmoney.blogspot.in/"}
+        {"imgSrc": "img/beauti1.jpg", "link": "http://blog.trackourmoney.com/"},
+        {"imgSrc": "img/beauti2.jpg", "link": "http://blog.trackourmoney.com/"}
       ];
 
       for (var i=slideDetails.length;i--;) {
