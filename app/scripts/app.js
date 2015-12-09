@@ -25,6 +25,17 @@ function($routeProvider){
   when('/user/:userId/report', {
     templateUrl: 'partials/userreport.html',
     controller: 'userReportController'
+    // resolve: {
+    //   user: function($q, $http, $location){
+    //     var deffered =$q.defer();
+    //     $http.get($location.path())
+    //     .success(resData) ->
+    //       return deffered.resolve(resData);
+    //     .error(resData) ->
+    //       return deffered.reject(resData);
+    //     })
+    //   }
+
   }).
   when('/user/:userId/trx', {
     templateUrl: 'partials/usertrxn.html',
@@ -50,17 +61,12 @@ trackMyMoney.config(function interceptReqRes($httpProvider){
         if ($localStorage.token) {
           config.headers.Authorization = 'Bearer ' + $localStorage.token;
         }
+        $rootScope.isValidToken=false;
         return config;
-      },
-
-      response: function(res){
-        $rootScope.isValidToken=true;
-        return res;
       },
 
       responseError: function(resError){
         if(resError.status === 401 || resError.status === 403) {
-          $rootScope.isValidToken=false;
           $location.path("/#/main")
         }
         return $q.reject(resError);

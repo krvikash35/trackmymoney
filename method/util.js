@@ -64,7 +64,7 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
       console.log(error);
       return res.status(500).end(errConfig.E118)
     }else {
-     return res.status(200).send(errConfig.S100)
+      return res.status(200).send(errConfig.S100)
     }
   });
 }
