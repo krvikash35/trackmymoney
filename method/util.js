@@ -9,6 +9,28 @@ var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 var mongoose   = require("mongoose");
+var winston     = require("winston")
+var logger = new winston.Logger({
+    transports: [
+        new winston.transports.File({
+            level: 'info',
+            filename: 'logs/all-logs1.log',
+            handleExceptions: true,
+            json: false,
+            maxsize: 5242880, //5MB
+            maxFiles: 2,
+            colorize: false
+        }),
+        new winston.transports.Console({
+            level: 'debug',
+            handleExceptions: true,
+            json: false,
+            colorize: true,
+            humanReadableUnhandledException: true
+        })
+    ],
+    exitOnError: false
+});
 
 var processUserPrsTrx = function(req, res){
   var userPrsnlTrx            = new usrPrsTrxs();

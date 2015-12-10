@@ -627,11 +627,15 @@ tmmController.controller('userReportController', function( valSer, utilSer, $loc
   //     data.push({"date": a, amount: i})
   //   }
   //   $scope.userTrxReport=data;
-
-
-
 })
 
+
+tmmController.controller('ModalInstanceCtrl', function($scope, $uibModalInstance){
+  $scope.closeModal = function(){
+    console.log("called");
+    $uibModalInstance.dismiss();
+  }
+})
 //************************************************************************************
 //Navigation controller
 //************************************************************************************
@@ -655,7 +659,6 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
   })
 
   $scope.logout = function(){
-
     delete $localStorage.token;
     delete $localStorage.userId;
     $scope.userId=null;
@@ -664,9 +667,11 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
   };
 
 
+
   $scope.openAbout = function(size){
     $uibModal.open({
       templateUrl: 'partials/about.html',
+      controller: 'ModalInstanceCtrl',
       size: size
     });
   }
@@ -674,6 +679,7 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
   $scope.openPrivacy = function(size){
     $uibModal.open({
       templateUrl: 'partials/privacy.html',
+      controller: 'ModalInstanceCtrl',
       size: size
     });
   }
@@ -681,6 +687,7 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
   $scope.openTC = function(size){
     $uibModal.open({
       templateUrl: 'partials/termcondition.html',
+      controller: 'ModalInstanceCtrl',
       size: size
     });
   }

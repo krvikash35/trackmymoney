@@ -20,6 +20,7 @@
     "mongoose": "^4.2.6",
     "morgan": "^1.6.1",
     "nodemailer": "^1.10.0",
-    "nodemon": ""
+    "nodemon": "",
+    "winston": "^2.1.1"
   }
 }
