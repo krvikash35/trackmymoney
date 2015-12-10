@@ -1,8 +1,8 @@
-<div class="row"  >
+<div   class="row"  >
   <div style="padding-top:15px" class="col-sm-8 col-md-8 feed">
     <div ng-include="'partials/feed.html'"></div>
   </div>
-  <div style="padding-top:15px" class="col-sm-4 col-md-4 auth">
+  <div ng-show="!isLogged" style="padding-top:15px" class="col-sm-4 col-md-4 auth">
     <div ng-show="authResMsg" class={{msgType}} >{{authResMsg}}</div>
 
     <div ng-show="isLoginFormVisible">

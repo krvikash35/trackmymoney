@@ -650,7 +650,12 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
     $scope.userId=$localStorage.userId;
   })
 
+  $rootScope.$on('eventLoggedOut', function (event, args) {
+    $scope.logout();
+  })
+
   $scope.logout = function(){
+
     delete $localStorage.token;
     delete $localStorage.userId;
     $scope.userId=null;

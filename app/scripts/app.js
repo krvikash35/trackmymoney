@@ -67,6 +67,8 @@ trackMyMoney.config(function interceptReqRes($httpProvider){
 
       responseError: function(resError){
         if(resError.status === 401 || resError.status === 403) {
+          $rootScope.$emit('eventLoggedOut', true);
+          // $rootScope.logout();
           $location.path("/#/main")
         }
         return $q.reject(resError);
