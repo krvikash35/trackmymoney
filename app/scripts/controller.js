@@ -175,7 +175,7 @@ tmmController.controller('userInfoController', function(valSer, utilSer, $localS
     }
   }
 
-  $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
+  $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","Cash"];
   //***************************************
   //updating Full Name
   //**************************************
