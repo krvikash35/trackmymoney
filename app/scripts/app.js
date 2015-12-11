@@ -25,18 +25,7 @@ function($routeProvider){
   when('/user/:userId/report', {
     templateUrl: 'partials/userreport.html',
     controller: 'userReportController'
-    // resolve: {
-    //   user: function($q, $http, $location){
-    //     var deffered =$q.defer();
-    //     $http.get($location.path())
-    //     .success(resData) ->
-    //       return deffered.resolve(resData);
-    //     .error(resData) ->
-    //       return deffered.reject(resData);
-    //     })
-    //   }
-
-  }).
+    }).
   when('/user/:userId/trx', {
     templateUrl: 'partials/usertrxn.html',
     controller: 'userTrxController'

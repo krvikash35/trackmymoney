@@ -1,11 +1,8 @@
 module.exports = {
 
-  // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
-  "runEnv": process.env.runEnv || "prod", // prod or dev
+  "runEnv": process.env.runEnv || "prod",
   "prodUrl":{
-    // "dbUrl" : "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
     "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+ process.env.OPENSHIFT_APP_NAME || "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
-    // "dbUrl" : "mongodb://admin:EYKIDAcx1Vpg@5666059f2d527187a7000029-buggycoder.rhcloud.com:51961/",
     "appUrl": process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
     "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "8080"
   },
@@ -14,9 +11,9 @@ module.exports = {
     "appUrl": "0.0.0.0",
     "appPort": "8080"
   },
-  "serverSecret": "ILoveCoding",
+  "serverSecret": process.env.serverSecret,
   "mailSerUser": "vikash@trackourmoney.com",
-  "mailSerUserPwd": "newYear2016",
+  "mailSerUserPwd": process.env.mailSerUserPwd,
   "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
   "emailPwdSubject": "Forgot password of your trackourmoney account",

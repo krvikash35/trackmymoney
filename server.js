@@ -16,6 +16,8 @@ var sConfig    = require('./config/server');     // holds all the important conf
 var pubRouter  = express.Router();        //this is public router used for public resources
 var privRouter = express.Router();        //this is private router used for private resources
 var utilMeth   = require('./method/util');
+var logger     = utilMeth.logger;
+
 
 //use middleware stack, these are executed in declared order whenever any req, res occur
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,31 +28,6 @@ app.use(express.static("app"));
 app.use('/user', privRouter);
 app.use('/', pubRouter);
 privRouter.use('/:userId', utilMeth.processAuthAccessReq); //Middleware for private router to validate the token
-
-// use config var to run this app: Development or production
-if(sConfig.runEnv === 'dev') {
-  mongoDBUrl = sConfig.devUrl.dbUrl;
-  appPort       = sConfig.devUrl.appPort;
-  appUrl      = sConfig.devUrl.appUrl;
-} else {
-  if(sConfig.runEnv === 'prod'){
-    mongoDBUrl  = sConfig.prodUrl.dbUrl;
-    appPort        = sConfig.prodUrl.appPort;
-    appUrl      = sConfig.prodUrl.appUrl;
-  }
-  else{
-    return console.log(sConfig.errMsg.invalidRunEvn);
-  }
-}
-//connect to mongo db
-mongoose.connect(mongoDBUrl, function(err){
-  if(err){
-    return console.log("Could not connect to "+mongoDBUrl+err);
-  }else{
-    console.log("connected to "+mongoDBUrl);
-  }
-
-});
 
 //-----------------------------------------------------------------------------------------------
 //post('/signin')
@@ -98,30 +75,58 @@ privRouter.get('/:userId/info',utilMeth.getUserInfo);
 privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
 
 
-  //-----------------------------------------------------------------------------------------------
-  //get('/user/:userId/info')
-  //@param: {req.param.[userId]}
-  //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
-  //@response-success: {res.statusCode: 200, res.body.data: "userReport"}
-  //----------------------------------------------------------------------------------------------
-  privRouter.get('/:userId/report', utilMeth.getUserPrsTrx);
+//-----------------------------------------------------------------------------------------------
+//get('/user/:userId/info')
+//@param: {req.param.[userId]}
+//@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
+//@response-success: {res.statusCode: 200, res.body.data: "userReport"}
+//----------------------------------------------------------------------------------------------
+privRouter.get('/:userId/report', utilMeth.getUserPrsTrx);
 
-  //-----------------------------------------------------------------------------------------------
-  //post('/user/:userId/trx')
-  //@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
-  //@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
-  //@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
-  //----------------------------------------------------------------------------------------------
-  privRouter.post('/:userId/trx',utilMeth.processUserPrsTrx);
-
-
-  // Handle any uncaught Exception, to prevent server from crashing
-  // process.on('uncaughtException', function(err) {
-  //   console.log("uncaughtException: "+err);
-  // });
+//-----------------------------------------------------------------------------------------------
+//post('/user/:userId/trx')
+//@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
+//@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
+//@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
+//----------------------------------------------------------------------------------------------
+privRouter.post('/:userId/trx',utilMeth.processUserPrsTrx);
 
 
-  // Start Server
-  app.listen(appPort, appUrl, function () {
-    console.log("Listening on " + appUrl + ", server_port " + appPort)
-  });
+
+
+logger.debug("choosing env")
+if(sConfig.runEnv === 'dev') {
+  mongoDBUrl = sConfig.devUrl.dbUrl;
+  appPort       = sConfig.devUrl.appPort;
+  appUrl      = sConfig.devUrl.appUrl;
+} else {
+  if(sConfig.runEnv === 'prod'){
+    mongoDBUrl  = sConfig.prodUrl.dbUrl;
+    appPort        = sConfig.prodUrl.appPort;
+    appUrl      = sConfig.prodUrl.appUrl;
+  }
+  else{
+    return logger.error("Invalid run env: "+sConfig.runEnv)
+  }
+}
+logger.info("using env: "+sConfig.runEnv)
+
+logger.debug("connecting to Database")
+mongoose.connect(mongoDBUrl, function(err){
+  if(err){
+    throw new Error("could not connect to "+mongoDBUrl)
+    return logger.error("failed to connect to: "+mongoDBUrl+" "+err)
+  }else{
+    logger.info("connected to "+mongoDBUrl)
+    logger.debug("Starting app server")
+    app.listen(appPort, appUrl, function () {
+      logger.info("Listening on " + appUrl + ", server_port " + appPort)
+    });
+  }
+});
+
+
+
+process.on('uncaughtException', function(err) {
+  logger.error("uncaughtException: "+err+"/n1"+err.stack)
+});

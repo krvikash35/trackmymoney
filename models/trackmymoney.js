@@ -39,12 +39,17 @@ var usrPrsTrx = new schema({
   "date":         { type: Date, default: Date.now }
 });
 
+var serverInfo = new schema({
+  "serverSecret": {type: String},
+  "mailSerUserPwd": {type: String}
+})
 
 //database containing all the schema
 var tmcdb = {
   "usrAccts":    mongoose.model("usrAccts",usrAcct),
   "usrPrsTrxs":  mongoose.model("usrPrsTrxs",usrPrsTrx),
-  "usrVerTemps": mongoose.model("usrVerTemps",usrVerTemp)
+  "usrVerTemps": mongoose.model("usrVerTemps",usrVerTemp),
+  "serverInfo": mongoose.model('serverInfo', serverInfo)
 }
 
 

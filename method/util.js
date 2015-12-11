@@ -8,28 +8,39 @@ var jwt         = require("jsonwebtoken") // this module used for token based au
 var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
+var serverInfo  = tmcdb.serverInfo;
 var mongoose   = require("mongoose");
-var winston     = require("winston")
+var winston     = require("winston");
+
+
+var getServerInfo = function(){
+  return serverInfo.findOne().exec(); 
+}
+
+var setServerInfo = function(){
+serInfo = new serverInfo();
+serInfo.serverSecret = sConfig.serverSecret;
+serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
+serInfo.save();
+}
+
 var logger = new winston.Logger({
-    transports: [
-        new winston.transports.File({
-            level: 'info',
-            filename: 'logs/all-logs1.log',
-            handleExceptions: true,
-            json: false,
-            maxsize: 5242880, //5MB
-            maxFiles: 2,
-            colorize: false
-        }),
-        new winston.transports.Console({
-            level: 'debug',
-            handleExceptions: true,
-            json: false,
-            colorize: true,
-            humanReadableUnhandledException: true
-        })
-    ],
-    exitOnError: false
+  transports: [
+    new winston.transports.File({
+      level: 'info',
+      filename: 'logs/all-logs1.log',
+      json: false,
+      maxsize: 5242880, //5MB
+      maxFiles: 2,
+      colorize: false
+    }),
+    new winston.transports.Console({
+      level: 'debug',
+      json: false,
+      colorize: true
+    })
+  ],
+  exitOnError: false
 });
 
 var processUserPrsTrx = function(req, res){
@@ -135,6 +146,7 @@ var setPreReq = function setPreReq(req, res, next){
 }
 
 var processSigninReq = function processSigninReq(req, res){
+  json.stringify(req)
   if( !req.body.email || !req.body.password)
   return res.status(400).send(errConfig.E119);
   usrAccts.findOne({"account.email": req.body.email}, function(err, data){
@@ -360,7 +372,10 @@ module.exports ={
   getUserPrsTrx:           getUserPrsTrx,
   processUserPrsTrx:       processUserPrsTrx,
   usrInfoUpdate:           usrInfoUpdate,
-  sendPwdToEmail:          sendPwdToEmail
+  sendPwdToEmail:          sendPwdToEmail,
+  logger:                  logger,
+  setServerInfo:           setServerInfo,
+  initServerInfo:           initServerInfo
 }
 
 
