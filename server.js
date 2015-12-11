@@ -118,6 +118,10 @@ mongoose.connect(mongoDBUrl, function(err){
     return logger.error("failed to connect to: "+mongoDBUrl+" "+err)
   }else{
     logger.info("connected to "+mongoDBUrl)
+    logger.debug("checking sConfig env value");
+    if(utilMeth.isSconfigEnvValid()){
+      return logger.error("Invalid sConfig env value init")
+    }
     logger.debug("Starting app server")
     app.listen(appPort, appUrl, function () {
       logger.info("Listening on " + appUrl + ", server_port " + appPort)

@@ -11,8 +11,8 @@ module.exports = {
     "appUrl": "0.0.0.0",
     "appPort": "8080"
   },
-  "serverSecret": process.env.serverSecret,
-  "mailSerUser": "vikash@trackourmoney.com",
+  "serverSecret": process.env.serverSecret || null,
+  "mailSerUser": "vikash@trackourmoney.com" || null,
   "mailSerUserPwd": process.env.mailSerUserPwd,
   "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",

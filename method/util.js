@@ -11,19 +11,6 @@ var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 var serverInfo  = tmcdb.serverInfo;
 var mongoose   = require("mongoose");
 var winston     = require("winston");
-
-
-var getServerInfo = function(){
-  return serverInfo.findOne().exec(); 
-}
-
-var setServerInfo = function(){
-serInfo = new serverInfo();
-serInfo.serverSecret = sConfig.serverSecret;
-serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
-serInfo.save();
-}
-
 var logger = new winston.Logger({
   transports: [
     new winston.transports.File({
@@ -42,6 +29,31 @@ var logger = new winston.Logger({
   ],
   exitOnError: false
 });
+
+
+
+
+var isSconfigEnvValid = function(){
+  var result=[{"serverSecret": sConfig.serverSecret}, {"mailSerUserPwd": sConfig.mailSerUserPwd}];
+  logger.info("sConfig env "+result)
+  if(!sConfig.serverSecret)
+  return false;
+  if(!sConfig.mailSerUserPwd)
+  return false;
+}
+
+var getServerInfo = function(){
+  return serverInfo.findOne().exec();
+}
+
+var setServerInfo = function(){
+serInfo = new serverInfo();
+serInfo.serverSecret = sConfig.serverSecret;
+serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
+serInfo.save();
+}
+
+
 
 var processUserPrsTrx = function(req, res){
   var userPrsnlTrx            = new usrPrsTrxs();
@@ -76,6 +88,8 @@ var getUserPrsTrx = function(req, res){
   });
 }
 
+console.log(sConfig.mailSerUser);
+console.log(sConfig.mailSerUserPwd);
 var mailTrns = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -146,7 +160,6 @@ var setPreReq = function setPreReq(req, res, next){
 }
 
 var processSigninReq = function processSigninReq(req, res){
-  json.stringify(req)
   if( !req.body.email || !req.body.password)
   return res.status(400).send(errConfig.E119);
   usrAccts.findOne({"account.email": req.body.email}, function(err, data){
@@ -374,8 +387,7 @@ module.exports ={
   usrInfoUpdate:           usrInfoUpdate,
   sendPwdToEmail:          sendPwdToEmail,
   logger:                  logger,
-  setServerInfo:           setServerInfo,
-  initServerInfo:           initServerInfo
+  isSconfigEnvValid:        isSconfigEnvValid
 }
 
 
