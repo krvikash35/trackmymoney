@@ -35,11 +35,12 @@ var logger = new winston.Logger({
 
 var isSconfigEnvValid = function(){
   var result=[{"serverSecret": sConfig.serverSecret}, {"mailSerUserPwd": sConfig.mailSerUserPwd}];
-  logger.info("sConfig env "+result)
+  logger.info("sConfigInit env "+JSON.stringify(result))
   if(!sConfig.serverSecret)
   return false;
   if(!sConfig.mailSerUserPwd)
   return false;
+  return true;
 }
 
 var getServerInfo = function(){
@@ -47,15 +48,16 @@ var getServerInfo = function(){
 }
 
 var setServerInfo = function(){
-serInfo = new serverInfo();
-serInfo.serverSecret = sConfig.serverSecret;
-serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
-serInfo.save();
+  serInfo = new serverInfo();
+  serInfo.serverSecret = sConfig.serverSecret;
+  serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
+  serInfo.save();
 }
 
 
 
 var processUserPrsTrx = function(req, res){
+  logger.info("process prsnlTrx request "+ JSON.stringify(req.body))
   var userPrsnlTrx            = new usrPrsTrxs();
   userPrsnlTrx.amount         = req.body.amount;
   userPrsnlTrx.type           = req.body.type;
@@ -71,6 +73,7 @@ var processUserPrsTrx = function(req, res){
 }
 
 var getUserInfo = function(req, res){
+  logger.info("get userInfo request "+ JSON.stringify(req.headers))
   usrAccts.findById(req.userId, function(err, user){
     if(err)
     return res.status(500).send(errConfig.E120);
@@ -81,6 +84,7 @@ var getUserInfo = function(req, res){
 }
 
 var getUserPrsTrx = function(req, res){
+  logger.info("get PrsnlTrx request "+ JSON.stringify(req.headers))
   usrPrsTrxs.find({userId: req.userId}, function(err, userPrsTrx){
     if(err)
     return res.status(500).send(errConfig.E120);
@@ -88,8 +92,6 @@ var getUserPrsTrx = function(req, res){
   });
 }
 
-console.log(sConfig.mailSerUser);
-console.log(sConfig.mailSerUserPwd);
 var mailTrns = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -99,6 +101,7 @@ var mailTrns = nodemailer.createTransport({
 })
 
 var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res){
+  logger.debug("Inside emailSend ")
   var mailOptions = {
     from: from, // sender address
     to: to, // list of receivers
@@ -107,26 +110,29 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
   };
   //  return setTimeout(function(){ res.status(500).send(htmltext); }, 2000);
   return transporter.sendMail(mailOptions, function(error, info){
+    logger.info("mailOptions "+JSON.stringify(mailOptions))
     if(error){
-      console.log(error);
+      logger.error("error while sending mail "+" error "+ error)
       return res.status(500).end(errConfig.E118)
     }else {
+      logger.info("email sent")
       return res.status(200).send(errConfig.S100)
     }
   });
 }
 
 var processAuthAccessReq = function processAuthAccessReq(req, res, next){
+  logger.debug("Inside Priviledge Area Request")
   var bearerHeader = req.headers["authorization"]; //Authorization :'Bearer token'
-  if( !bearerHeader )
-  return res.status(401).send(errConfig.E113)
-  var bearerToken = bearerHeader.split(" ")[1];
-  if(!bearerToken)
-  return res.status(401).send(errConfig.E115)
+  if( !bearerHeader || bearerHeader.split(" ")[1] ){
+    logger.warn("Invalid Auth header "+JSON.stringify(req.headers))
+    return res.status(401).send(errConfig.E115)
+  }
   jwt.verify(bearerToken, sConfig.serverSecret, function(err, decoded){
     if(err){
       if( err.name == 'TokenExpiredError')
       return res.status(401).send(errConfig.E114)
+      logger.warn("Invalid token "+JSON.stringify(req.headers))
       return res.status(401).send(errConfig.E115)
     }
     req.userId = decoded.userId;
@@ -160,6 +166,7 @@ var setPreReq = function setPreReq(req, res, next){
 }
 
 var processSigninReq = function processSigninReq(req, res){
+  logger.info("SignIn request "+ JSON.stringify(req.body))
   if( !req.body.email || !req.body.password)
   return res.status(400).send(errConfig.E119);
   usrAccts.findOne({"account.email": req.body.email}, function(err, data){
@@ -175,6 +182,7 @@ var processSigninReq = function processSigninReq(req, res){
 }
 
 var sendPwdToEmail = function(req, res){
+  logger.info("Forgot password request "+ JSON.stringify(req.body))
   if( !req.body.email)
   return res.status(400).send(errConfig.E119);
   usrAccts.findOne({"account.email": req.body.email}, function(err, user){
@@ -194,6 +202,7 @@ var sendPwdToEmail = function(req, res){
 }
 
 var usrInfoUpdate = function(req, res){
+  logger.info("Update Request "+ JSON.stringify(req.body))
   usrAccts.findById(req.userId, function(err, user){
     if(err)
     return res.status(500).send(errConfig.E120);
@@ -280,6 +289,7 @@ var usrInfoUpdate = function(req, res){
 
 
 var processSignupReq = function(req, res){
+  logger.info("Signup request "+ JSON.stringify(req.body))
   var err;
   if( err=valMeth.valEmail(req.body.email) )
   return res.status(400).send(err);
