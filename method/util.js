@@ -102,7 +102,7 @@ var getUserPrsTrx = function(req, res){
 }
 
 var mailTrns = nodemailer.createTransport({
-  service: 'Gmail1',
+  service: 'Gmail',
   auth: {
     user: sConfig.mailSerUser,
     pass: sConfig.mailSerUserPwd
