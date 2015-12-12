@@ -68,9 +68,8 @@ trackMyMoney.config(function interceptReqRes($httpProvider){
           $location.path("/#/main")
         }
         if(resError.status === 500){
-          console.log(resError.data);
-          $location.path('/error')
           $rootScope.$emit('serverError', resError.data);
+          $location.path('/error')
         }
         return $q.reject(resError);
       }

@@ -682,13 +682,16 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
       size: size
     });
   }
+
+  $rootScope.$on('serverError', function (event, errRes) {
+    $scope.serErrMsg=errRes
+  })
+
 })
 
 //************************************************************************************
 //ErrorPage controller
 //*************************************************************************************
-tmmController.controller("errorCtrl", function($rootScope){
-  $rootScope.$on('serverError', function (event, errRes) {
-    $rootScope.serErrMsg=errRes;
-  })
+tmmController.controller("errorCtrl", function($scope, $rootScope){
+
 })
