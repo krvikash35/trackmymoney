@@ -6,6 +6,17 @@ body{
   margin-right: auto;
   background-color: #FFFFFF;
 }*/
+.panel-primary > .panel-heading {
+  background-color: #5D4037;
+}
+
+.panel-primary > .panel-body {
+  background-color: #795548;
+}
+
+input{
+  background-color: red
+}
 
 .myarticle{
   display: block;

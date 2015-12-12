@@ -1,6 +1,6 @@
-<div ng-show="isLogged">
+<div  ng-show="isLogged">
 <!-- User Basic Info -->
-<div  style="", class="panel panel-primary col-md-12">
+<div  style="", class="panel panel-primary ">
   <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
@@ -36,7 +36,7 @@
 
 
   <!-- Money Account Related Info -->
-  <div style="", class="panel panel-primary col-md-12">
+  <div style="", class="panel panel-primary">
     <div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
@@ -79,10 +79,10 @@
     </div>
 
 
-
+<div class="row">
 
     <!-- user source of transaction -->
-    <div style="", class="panel panel-primary col-sm-6 col-md-6">
+    <div style="", class="panel panel-primary ">
       <div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
       <div class="panel-heading">Expense Source</div>
       <div class="panel-body ">
@@ -120,7 +120,7 @@
 
 
     <!-- user income soruce -->
-    <div style="", class="panel panel-primary col-sm-6 col-md-6">
+    <div style="", class="panel panel-primary ">
       <div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
       <div class="panel-heading">Income Source</div>
       <div class="panel-body ">
@@ -152,4 +152,6 @@
         </form>
       </div>
     </div>
+</div>
+
 </div>
