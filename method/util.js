@@ -154,20 +154,6 @@ var processAuthAccessReq = function processAuthAccessReq(req, res, next){
   });
 }
 
-var isEmailAlreadyVerReg = function isEmailAlreadyVerReg(usrAcctModel, email, callback){
-  usrAcctModel.count({'account.email': email}, function(err, count){
-    if (err){
-      return callback(err)
-    }
-    if( count > 0 ){
-      return callback(null, true);
-    }else {
-      return callback(null, false);
-    }
-  });
-}
-
-
 
 var processSigninReq = function processSigninReq(req, res){
   logger.info("SignIn request "+ JSON.stringify(req.body))
