@@ -589,12 +589,20 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 tmmController.controller('userReportController', function( valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   $http.get($location.path())
   .success(function(data, status, headers, config){
-    // $scope.isLoggedIn=true;
     $scope.userTrxReport=data;
   })
   .error(function(data, status, headers, config){
     utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
   })
+
+  $scope.calTotalAmount = function(filterdTrx){
+    var totalAmount=0
+    for(var i=filterdTrx.length;i--;){
+      totalAmount=totalAmount+filterdTrx[i].amount
+    }
+    return totalAmount;
+  }
+
   $scope.today = function() {
     $scope.toDate = new Date();
     $scope.fromDate = new Date();

@@ -49,7 +49,7 @@
         </thead>
         <tbody>
 
-          <tr  ng-repeat="a in userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc">
+          <tr  ng-repeat="a in (filterdTrx=(userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc)) ">
             <td>{{a.date | date:'dd-MMM-yyyy'}}</td>
             <td>{{a.amount}}</td>
             <td>{{a.type}}</td>
@@ -57,9 +57,14 @@
             <td>{{a.destination}}</td>
             <td>{{a.description}}</td>
           </tr>
+          <tr>
+            <td>Total:</td>
+            <td>{{calTotalAmount(filterdTrx)}}</td>
+          </tr>
         </tbody>
       </table>
-      </div>
 
-      </div>
     </div>
+
+  </div>
+</div>
