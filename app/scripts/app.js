@@ -14,6 +14,7 @@ var trackMyMoney = angular.module('trackMyMoney', [
 
 
 
+
 //config the module to wire controller, view template and current URL
 trackMyMoney.config(['$routeProvider',
 function($routeProvider){

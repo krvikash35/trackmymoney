@@ -586,7 +586,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-tmmController.controller('userReportController', function( valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
+tmmController.controller('userReportController', function( $filter, valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   $http.get($location.path())
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data;
@@ -594,7 +594,6 @@ tmmController.controller('userReportController', function( valSer, utilSer, $loc
   .error(function(data, status, headers, config){
     utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
   })
-
   $scope.calTotalAmount = function(filterdTrx){
     var totalAmount=0
     for(var i=filterdTrx.length;i--;){
@@ -602,7 +601,6 @@ tmmController.controller('userReportController', function( valSer, utilSer, $loc
     }
     return totalAmount;
   }
-
   $scope.today = function() {
     $scope.toDate = new Date();
     $scope.fromDate = new Date();
@@ -625,6 +623,10 @@ tmmController.controller('userReportController', function( valSer, utilSer, $loc
 
     }
   }
+
+  // $scope.$watch('fromDate', function (newValue) {
+  //   $scope.fromDate = $filter('date')(newValue, 'yyyy/MM/dd');
+  // });
 
   // var data=[];
   // var trx={};

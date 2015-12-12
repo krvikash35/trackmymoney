@@ -16,18 +16,17 @@
           </select>
           <input  class="form-control" ng-model="trxSearch[prop]" placeholder="Type Here" id="query">
 
-          <label>From:</label>
+
           <div class="input-group">
-            <input ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup ng-model="fromDate" is-open="isFromDateOpen"   ng-required="true" />
+            <input  ng-show="false" ng-model="fromDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
-          <label>To:</label>
           <div class="input-group">
-            <input ng-change="ValDate()" type="date" class="form-control" uib-datepicker-popup ng-model="toDate" is-open="isToDateOpen"  ng-required="true" />
+            <input ng-show="false" ng-model="toDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
 
@@ -60,11 +59,11 @@
           <tr>
             <td><b>Total:</b></td>
             <td><b>{{calTotalAmount(filterdTrx)}}<b></td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
 
     </div>
-
   </div>
-</div>
