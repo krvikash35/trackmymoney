@@ -6,7 +6,7 @@
       <div class="form-inline col-sm-12 col-md-12 ">
         <div class="form-group">
           <label >Search In:</label>
-          <select  ng-init="prop='$'" ng-model="prop" class="form-control">
+          <select  style="background-color:#795548;color:#D7CCC8" ng-init="prop='$'" ng-model="prop" class="form-control">
             <option value="$">All</option>
             <option value="amount">amount</option>
             <option value="type">type</option>
@@ -14,19 +14,19 @@
             <option value="destination">destination</option>
             <option value="description">description</option>
           </select>
-          <input  class="form-control" ng-model="trxSearch[prop]" placeholder="Type Here" id="query">
+          <input  style="background-color:#795548;color:#D7CCC8" class="form-control" ng-model="trxSearch[prop]" placeholder="Type Here" id="query">
 
 
           <div class="input-group">
             <input  ng-show="false" ng-model="fromDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
+              <button style="background-color:#795548;color:#D7CCC8" type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
           <div class="input-group">
             <input ng-show="false" ng-model="toDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
+              <button style="background-color:#795548;color:#D7CCC8" type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
 
