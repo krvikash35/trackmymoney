@@ -102,7 +102,7 @@ var getUserPrsTrx = function(req, res){
 }
 
 var mailTrns = nodemailer.createTransport({
-  service: 'Gmail',
+  service: 'Gmail1',
   auth: {
     user: sConfig.mailSerUser,
     pass: sConfig.mailSerUserPwd
@@ -341,7 +341,7 @@ var processSignupReq = function(req, res){
             tempUser.save(function(err, data){
               if (err)
               return res.status(500).send(errConfig.E121);
-              var emilVerCodeText= sConfig.emailverText+"<br>"+usr.verCode;
+              var emilVerCodeText= sConfig.emailverText+"<br>"+tempUser.verCode;
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
