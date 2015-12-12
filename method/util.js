@@ -124,11 +124,11 @@ var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res)
 var processAuthAccessReq = function processAuthAccessReq(req, res, next){
   logger.debug("Inside Priviledge Area Request")
   var bearerHeader = req.headers["authorization"]; //Authorization :'Bearer token'
-  if( !bearerHeader || bearerHeader.split(" ")[1] ){
+  if( !bearerHeader || !bearerHeader.split(" ")[1] ){
     logger.warn("Invalid Auth header "+JSON.stringify(req.headers))
     return res.status(401).send(errConfig.E115)
   }
-  jwt.verify(bearerToken, sConfig.serverSecret, function(err, decoded){
+  jwt.verify(bearerHeader.split(" ")[1], sConfig.serverSecret, function(err, decoded){
     if(err){
       if( err.name == 'TokenExpiredError')
       return res.status(401).send(errConfig.E114)
