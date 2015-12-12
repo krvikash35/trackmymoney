@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "export HOME=$HOME/app-root/runtime/repo; bower install",
-    "prestart": "npm install"
+    "prestart": "mkdir logs;touch logs/all-logs1.log;npm install"
   },
   "author": "Vikash Kumar",
   "license": "ISC",
