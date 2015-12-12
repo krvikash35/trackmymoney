@@ -45,7 +45,7 @@ module.exports = {
   E114: 'Expired Token!',
   E115: 'Invalid Token!',
   E116: 'Illegal Token!',
-  E117: 'We are having problem with connecting to DB..Dont worry, will be back soon',
+  E117: 'connection to database has broken, we are looking into it',
   E118: 'Error Occured while sending email',
   E119: 'Invalid Email or password',
   E120: 'DB Error Occured while querying',

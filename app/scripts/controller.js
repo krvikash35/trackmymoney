@@ -175,7 +175,7 @@ tmmController.controller('userInfoController', function(valSer, utilSer, $localS
     }
   }
 
-  $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","Cash"];
+  $scope.moneyAccountType=["SavingAccount", "CreditCard","DigitalWallet","CashAccount"];
   //***************************************
   //updating Full Name
   //**************************************
@@ -643,21 +643,17 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
   //***************************************
   //Logout function redirecteding to home
   //**************************************
-
   if($localStorage.token){
     $scope.isLogged=true;
     $scope.userId=$localStorage.userId;
   }
-
   $scope.$on('eventLoggedIn', function (event, args) {
     $scope.isLogged=args;
     $scope.userId=$localStorage.userId;
   })
-
   $rootScope.$on('eventLoggedOut', function (event, args) {
     $scope.logout();
   })
-
   $scope.logout = function(){
     delete $localStorage.token;
     delete $localStorage.userId;
@@ -665,9 +661,6 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
     $scope.isLogged = false;
     $location.path('/main');
   };
-
-
-
   $scope.openAbout = function(size){
     $uibModal.open({
       templateUrl: 'partials/about.html',
@@ -675,7 +668,6 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
       size: size
     });
   }
-
   $scope.openPrivacy = function(size){
     $uibModal.open({
       templateUrl: 'partials/privacy.html',
@@ -683,7 +675,6 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
       size: size
     });
   }
-
   $scope.openTC = function(size){
     $uibModal.open({
       templateUrl: 'partials/termcondition.html',
@@ -691,5 +682,13 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
       size: size
     });
   }
+})
 
+//************************************************************************************
+//ErrorPage controller
+//*************************************************************************************
+tmmController.controller("errorCtrl", function($rootScope){
+  $rootScope.$on('serverError', function (event, errRes) {
+    $rootScope.serErrMsg=errRes;
+  })
 })

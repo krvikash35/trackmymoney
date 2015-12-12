@@ -90,7 +90,7 @@ tmmSer.factory("valConfig", function valConfigFactory(){
     iSrcRegex: /^[a-zA-Z].{3,20}$/,
     eSrcRegex: /^[a-zA-Z].{3,20}$/,
     amountRegex: /^[0-9]{1,10}$/,
-    maTypeRegex: /^(CreditCard|SavingAccount|DigitalWallet|Cash)$/,
+    maTypeRegex: /^(CreditCard|SavingAccount|DigitalWallet|CashAccount)$/,
     maNameRegex: /^[a-zA-Z][a-zA-Z0-9- _]{3,15}$/,
     trxTypeRegex: /^(Income|Saving|Transfer)$/,
     trxDescMaxLen: 4

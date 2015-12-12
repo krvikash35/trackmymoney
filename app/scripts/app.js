@@ -34,9 +34,14 @@ function($routeProvider){
     templateUrl: 'partials/auth.html',
     controller: 'mainController'
   }).
+  when('/error',{
+    templateUrl: 'partials/error.html',
+    controller: 'errorCtrl'
+  }).
   otherwise({
     redirectTo: '/main'
   })
+
 }
 ]);
 
@@ -55,10 +60,17 @@ trackMyMoney.config(function interceptReqRes($httpProvider){
       },
 
       responseError: function(resError){
-        if(resError.status === 401 || resError.status === 403) {
-          $rootScope.$emit('eventLoggedOut', true);
-          // $rootScope.logout();
+        if(resError.status === 403){
           $location.path("/#/main")
+        }
+        if(resError.status === 401) {
+          $rootScope.$emit('eventLoggedOut', true);
+          $location.path("/#/main")
+        }
+        if(resError.status === 500){
+          console.log(resError.data);
+          $location.path('/error')
+          $rootScope.$emit('serverError', resError.data);
         }
         return $q.reject(resError);
       }
