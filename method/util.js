@@ -11,6 +11,8 @@ var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 var serverInfo  = tmcdb.serverInfo;
 var mongoose   = require("mongoose");
 var winston     = require("winston");
+var promise    = require("bluebird")
+
 var logger = new winston.Logger({
   transports: [
     new winston.transports.File({
@@ -100,26 +102,29 @@ var mailTrns = nodemailer.createTransport({
   }
 })
 
-var sendEmail = function sendEmail(transporter,from, to, subject, htmltext, res){
+var sendEmail = function sendEmail(to, subject, htmltext){
   logger.debug("Inside emailSend ")
   var mailOptions = {
-    from: from, // sender address
-    to: to, // list of receivers
-    subject: subject, // Subject line
-    html: htmltext // plaintext body    html: '<b>Hello world ✔</b>' // html body
+    from: sConfig.mailSerUser,
+    to: to,
+    subject: subject,
+    html: htmltext
   };
-  //  return setTimeout(function(){ res.status(500).send(htmltext); }, 2000);
-  return transporter.sendMail(mailOptions, function(error, info){
-    logger.info("mailOptions "+JSON.stringify(mailOptions))
-    if(error){
-      logger.error("error while sending mail "+" error "+ error)
-      return res.status(500).end(errConfig.E118)
-    }else {
-      logger.info("email sent")
-      return res.status(200).send(errConfig.S100)
-    }
-  });
+
+  return new promise(function(resolve, reject){
+    mailTrns.sendMail(mailOptions,function(err, info){
+      logger.info("mailOptions "+JSON.stringify(mailOptions))
+      if(err){
+        logger.error("error while sending mail "+" error "+ err)
+        reject(errConfig.E118)
+      }else{
+        logger.info("email sent")
+        resolve(errConfig.S100)
+      }
+    })
+  })
 }
+
 
 var processAuthAccessReq = function processAuthAccessReq(req, res, next){
   logger.debug("Inside Priviledge Area Request")
@@ -196,7 +201,13 @@ var sendPwdToEmail = function(req, res){
       if(err)
       return res.status(500).send(errConfig.E120);
       var emailPwdText= sConfig.emailPwdText+"<br>"+tempPwd;
-      sendEmail(mailTrns, sConfig.mailSerUser, req.body.email, sConfig.emailPwdSubject, emailPwdText, res);
+      sendEmail(req.body.email, sConfig.emailPwdSubject, emailPwdText)
+      .then(function(data){
+        return res.status(200).send(data)
+      })
+      .catch(function(err){
+        return res.status(500).send(err)
+      })
     })
   })
 }
@@ -312,7 +323,13 @@ var processSignupReq = function(req, res){
             if (err)
             return res.status(500).send(errConfig.E121);
             var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
-            sendEmail(mailTrns, sConfig.mailSerUser, usrEmail, sConfig.emailVerSubject, emilVerCodeText, res);
+            sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
+            .then(function(data){
+              return res.status(200).send(data)
+            })
+            .catch(function(err){
+              return res.status(500).send(err)
+            })
           })
         }else {
           usr.verCode = Math.floor(1000 + Math.random() * 9000);
@@ -320,7 +337,13 @@ var processSignupReq = function(req, res){
             if (err)
             return res.status(500).send(errConfig.E121);
             var emilVerCodeText= sConfig.emailverText+"<br>"+usr.verCode;
-            sendEmail(mailTrns, sConfig.mailSerUser, usrEmail, sConfig.emailVerSubject, emilVerCodeText, res);
+            sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
+            .then(function(data){
+              return res.status(200).send(data)
+            })
+            .catch(function(err){
+              return res.status(500).send(err)
+            })
           })
         }
       })

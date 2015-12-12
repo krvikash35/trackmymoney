@@ -13,6 +13,7 @@
   "engine": "5.0.0",
   "dependencies": {
     "bcrypt": "^0.8.5",
+    "bluebird": "^3.0.6",
     "body-parser": "^1.14.1",
     "bower": "^1.6.5",
     "express": "^4.13.3",
