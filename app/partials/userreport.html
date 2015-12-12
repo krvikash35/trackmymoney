@@ -36,14 +36,14 @@
     <p></p>
     <div class="table-responsive col-md-12">
       <table class="table table-bordered table-striped table-condensed ">
-        <thead>
-          <tr>
-            <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date">Date</th>
-            <th ng-click="asc=!asc; orderProp=amount">Amount</th>
-            <th ng-click="asc=!asc; orderProp=type">Trx Type</th>
-            <th ng-click="asc=!asc; orderProp=source">Trx Source</th>
-            <th ng-click="asc=!asc; orderProp=destination">Trx Destination</th>
-            <th ng-click="asc=!asc; orderProp=description">Description</th>
+        <thead uib-tooltip="Click to any column to sort" tooltip-placement="bottom" tooltip-trigger="mouseenter">
+          <tr >
+            <th  ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date"><a>Date</a></th>
+            <th ng-click="asc=!asc; orderProp=amount"><a >Amount</a></th>
+            <th ng-click="asc=!asc; orderProp=type"><a>Trx Type</a></th>
+            <th ng-click="asc=!asc; orderProp=source"><a>Trx Source</a></th>
+            <th ng-click="asc=!asc; orderProp=destination"><a>Trx Destination</a></th>
+            <th ng-click="asc=!asc; orderProp=description"><a>Description</a></th>
           </tr>
         </thead>
         <tbody>
