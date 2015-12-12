@@ -2,7 +2,7 @@ module.exports = {
 
   "runEnv": process.env.runEnv || "prod",
   "prodUrl":{
-    "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+ process.env.OPENSHIFT_APP_NAME || "mongodb://krvikash35:1234@ds053784.mongolab.com:53784/mymongodb",
+    "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+ process.env.OPENSHIFT_APP_NAME || process.env.HEROKU_MONGODB_URL,
     "appUrl": process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
     "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "8080"
   },
