@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "export HOME=$HOME/app-root/runtime/repo;mkdir logs;touch logs/all-logs1.log; bower install",
+    "postinstall": "export HOME=$HOME/app-root/runtime/repo;touch logs/all-logs1.log; bower install",
     "prestart": "npm install"
   },
   "author": "Vikash Kumar",
