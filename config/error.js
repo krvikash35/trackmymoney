@@ -71,7 +71,7 @@ module.exports = {
   E138: 'Account Updated successfully',
   E139: 'Invalid update Option!',
   E140: 'Invalid TrxId',
-  E141: '',
+  E141: 'Invalid UserId',
   E142: '',
   E143: '',
   E144: ''

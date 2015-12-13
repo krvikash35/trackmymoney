@@ -1,9 +1,9 @@
 <div  ng-show="isLogged">
 <!-- User Basic Info -->
 <div  style="", class="panel panel-primary ">
-  <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
+  <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
     <div>
       <span class="title">Full name: </span>
       <a href="" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</a>
@@ -37,10 +37,9 @@
 
   <!-- Money Account Related Info -->
   <div style="", class="panel panel-primary">
-    <div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
     <div class="panel-heading">Money Account Details</div>
     <div class="panel-body ">
-      <!--  -->
+    <div ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</div>
       <form editable-form name="maform"  onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
         <table class="table  table-bordered  table-condensed">
           <tr style="font-weight: bold">
@@ -83,9 +82,9 @@
 
     <!-- user source of transaction -->
     <div style="", class="panel panel-primary ">
-      <div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
       <div class="panel-heading">Expense Source</div>
       <div class="panel-body ">
+      <div ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</div>
         <form editable-form name="expenseSrcForm" onaftersave="updateExpenseSource()" oncancel="cancelExpenseSourceUpdate()">
           <table class="table  table-bordered table-condensed">
             <tr style="font-weight: bold">
@@ -121,9 +120,9 @@
 
     <!-- user income soruce -->
     <div style="", class="panel panel-primary ">
-      <div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
       <div class="panel-heading">Income Source</div>
       <div class="panel-body ">
+      <div ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</div>
         <form editable-form name="incomeSrcForm" onaftersave="updateIncomeSource()" oncancel="cancelIncomeSourceUpdate()">
           <table class="table  table-bordered  table-condensed">
             <tr style="font-weight: bold">

@@ -84,7 +84,9 @@ var createUserPrsTrx = function(req, res){
 
 var getUserInfo = function(req, res){
   logger.info("get userInfo request "+ JSON.stringify(req.headers))
-  usrAccts.findById(req.userId, function(err, user){
+  if ( !(mongoose.Types.ObjectId.isValid(req.userId)) )
+  return res.status(400).send(errConfig.E141)
+    usrAccts.findById(req.userId, function(err, user){
     if(err)
     return res.status(500).send(errConfig.E120);
     if(!user)

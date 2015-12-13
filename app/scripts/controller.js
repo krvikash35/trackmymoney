@@ -155,7 +155,7 @@ tmmController.controller('userInfoController', function($routeParams, valSer, ut
     userInfoInit(data);
   })
   .error(function(data, status, headers, config){
-    utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
+    return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
   })
   var userInfoInit = function(userInfo){
     $scope.userBasicInfo=userInfo.account;
