@@ -242,6 +242,7 @@ var usrInfoUpdate = function(req, res){
     if(!user)
     return res.status(400).send(errConfig.E137);
     var err;
+    user.account.updateDate=new Date().toISOString();
     switch (req.body.updatecode) {
       case "1":
       user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;

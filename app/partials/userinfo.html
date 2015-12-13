@@ -1,7 +1,8 @@
 <div  ng-show="isLogged">
 <!-- User Basic Info -->
 <div  style="", class="panel panel-primary ">
-  <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
+{{usrBasicInfoUpdateResp}}
+  <div ng-show='usrBasicInfoUpdateResp' class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
   <div class="panel-heading">Basic Info</div>
   <div class="panel-body">
     <div>
@@ -42,7 +43,7 @@
     <div class="panel-body ">
       <!--  -->
       <form editable-form name="maform"  onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
-        <table class="table  table-bordered table-hover table-condensed">
+        <table class="table  table-bordered  table-condensed">
           <tr style="font-weight: bold">
             <td >AccountType</td>
             <td >AccountName</td>
@@ -87,7 +88,7 @@
       <div class="panel-heading">Expense Source</div>
       <div class="panel-body ">
         <form editable-form name="expenseSrcForm" onaftersave="updateExpenseSource()" oncancel="cancelExpenseSourceUpdate()">
-          <table class="table  table-bordered table-hover table-condensed">
+          <table class="table  table-bordered table-condensed">
             <tr style="font-weight: bold">
               <td >Expense Source</td>
               <td ><span ng-show="expenseSrcForm.$visible">Action</span></td>
@@ -125,7 +126,7 @@
       <div class="panel-heading">Income Source</div>
       <div class="panel-body ">
         <form editable-form name="incomeSrcForm" onaftersave="updateIncomeSource()" oncancel="cancelIncomeSourceUpdate()">
-          <table class="table  table-bordered table-hover table-condensed">
+          <table class="table  table-bordered  table-condensed">
             <tr style="font-weight: bold">
               <td >IncomeSource</td>
               <td ><span ng-show="incomeSrcForm.$visible">Action</span></td>

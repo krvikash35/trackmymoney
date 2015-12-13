@@ -230,7 +230,8 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
         if(!timeInSec){
           timeInSec=2;
         }
-        setTimeout(function(){scope[MsgVar]=false},timeInSec*1000);
+        console.log(MsgVar);
+        setTimeout(function(){scope[MsgVar]=false;},timeInSec*1000);
       }
     }
 

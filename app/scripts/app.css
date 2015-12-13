@@ -14,6 +14,14 @@ body{
   background-color: #795548;
 }
 
+.panel-danger > .panel-heading {
+  background-color: #5D4037;
+  color: #FF5252
+}
+
+.panel-danger > .panel-body {
+  background-color: #795548;
+}
 
 .myarticle{
   display: block;
