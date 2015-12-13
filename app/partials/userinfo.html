@@ -5,20 +5,32 @@
     <div class="panel-body">
       <div ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</div>
 
+<!-- <div class="table-responsive"> -->
       <table class="table  table-bordered  table-condensed">
-        <th><span class="info-text-header">Full name </span></th>
-        <th><span class="info-text-header">Email </span></th>
-        <th><span class="info-text-header">Change Password </span></th>
-        <th><span class="info-text-header">Joined Date </span></th>
-        <th><span class="info-text-header">Last Updated </span></th>
         <tr>
-          <td><a href="" e-class="input-box" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</a></td>
+          <th><span class="info-text-header">Full name </span></th>
+          <td style="overflow: scroll;"><span  href="" e-class="input-box pull-left" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</span></td>
+
+        </tr>
+        <tr>
+          <th><span class="info-text-header">Email </span></th>
           <td>{{userBasicInfo.email}}</td>
-          <td><a href="" e-class="input-box" onaftersave=updatePassword($data) e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a></td>
+        </tr>
+        <tr>
+          <th><span class="info-text-header">Change Password </span></th>
+          <td style="overflow: scroll;"><span href="" e-class="input-box" onaftersave=updatePassword($data) e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a></td>
+        </tr>
+        <tr>
+          <th><span class="info-text-header">Joined Date </span></th>
           <td><label>{{userBasicInfo.creatDate | date}}</label></td>
+        </tr>
+        <tr>
+          <th><span class="info-text-header">Last Updated </span></th>
           <td><label>{{userBasicInfo.updateDate | date}}</label></td>
         </tr>
       </table>
+<!-- </div> -->
+
     </div>
   </div>
 
