@@ -81,7 +81,7 @@ privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
 //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
 //@response-success: {res.statusCode: 200, res.body.data: "userReport"}
 //----------------------------------------------------------------------------------------------
-privRouter.get('/:userId/report', utilMeth.getUserPrsTrx);
+privRouter.get('/:userId/trx/', utilMeth.readUserPrsTrx);
 
 //-----------------------------------------------------------------------------------------------
 //post('/user/:userId/trx')
@@ -89,9 +89,15 @@ privRouter.get('/:userId/report', utilMeth.getUserPrsTrx);
 //@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
 //@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
 //----------------------------------------------------------------------------------------------
-privRouter.post('/:userId/trx',utilMeth.processUserPrsTrx);
+privRouter.post('/:userId/trx',utilMeth.createUserPrsTrx);
 
-
+//-----------------------------------------------------------------------------------------------
+//delete('/user/:userId/trx')
+//@param: {req.param.[userId], req.body.[amount,type,source,destination,description]}
+//@response-error:   {res.statusCode: 400, res.body.data: "Invalid transaction data" }
+//@response-success: {res.statusCode: 201, res.body.data: "Trx saved successfully"}
+//----------------------------------------------------------------------------------------------
+privRouter.delete('/:userId/trx/:trxId', utilMeth.deleteUserPrsTrx)
 
 
 logger.debug("choosing env")
@@ -114,7 +120,6 @@ logger.info("using env: "+sConfig.runEnv)
 logger.debug("connecting to Database")
 mongoose.connect(mongoDBUrl, function(err){
   if(err){
-    throw new Error("could not connect to "+mongoDBUrl)
     return logger.error("failed to connect to: "+mongoDBUrl+" "+err)
   }else{
     logger.info("connected to "+mongoDBUrl)
@@ -128,8 +133,6 @@ mongoose.connect(mongoDBUrl, function(err){
     });
   }
 });
-
-
 
 process.on('uncaughtException', function(err) {
   logger.error("uncaughtException: "+err+"/n1"+err.stack)

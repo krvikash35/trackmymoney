@@ -231,9 +231,7 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
           timeInSec=2;
         }
         setTimeout(function(){
-          console.log(scope.usrBasicInfoUpdateResp);
           scope[MsgVar]=false;
-          console.log(scope.usrBasicInfoUpdateResp);
         },timeInSec*1000);
       }
     }

@@ -146,11 +146,11 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
 //*******************************************************************************
 //Controller for handing updating and viewing user related info including templete
 //********************************************************************************
-tmmController.controller('userInfoController', function(valSer, utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
+tmmController.controller('userInfoController', function($routeParams, valSer, utilSer, $localStorage, $filter, $q, $scope, $rootScope, $location, $http,  $window){
   //******************************************
   //Intializing and populating user Info view
   //******************************************
-  $http.get($location.path())
+  $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
     userInfoInit(data);
   })
@@ -565,7 +565,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
-    // }
+
 
   }
 
@@ -589,8 +589,9 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 //************************************************************************************
 //Controller for handling user transaction report
 //***********************************************************************************
-tmmController.controller('userReportController', function( $filter, valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
-  $http.get($location.path())
+tmmController.controller('userReportController', function( $routeParams, $filter, valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
+  // $http.get($location.path())
+  $http.get("/user/"+$routeParams.userId+"/trx")
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data;
   })
@@ -627,19 +628,16 @@ tmmController.controller('userReportController', function( $filter, valSer, util
     }
   }
 
-  // $scope.$watch('fromDate', function (newValue) {
-  //   $scope.fromDate = $filter('date')(newValue, 'yyyy/MM/dd');
-  // });
+$scope.deletePrsTrx = function(trxId){
+  $http.delete("/user/"+$routeParams.userId+"/trx/"+trxId)
+  .success(function(data, status){
+    utilSer.showFlashMsg($scope, "success", 'usrReportResp', data, false);
+  })
+  .error(function(data, status){
+    utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
+  })
+}
 
-  // var data=[];
-  // var trx={};
-  //   for(var i=3;i--;){
-  //     var a=new Date();
-  //     console.log(a);
-  //     a=a.setDate($scope.toDate.getDate()-30*i);
-  //     data.push({"date": a, amount: i})
-  //   }
-  //   $scope.userTrxReport=data;
 })
 
 

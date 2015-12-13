@@ -65,7 +65,7 @@ var setServerInfo = function(){
 
 
 
-var processUserPrsTrx = function(req, res){
+var createUserPrsTrx = function(req, res){
   logger.info("process prsnlTrx request "+ JSON.stringify(req.body))
   var userPrsnlTrx            = new usrPrsTrxs();
   userPrsnlTrx.amount         = req.body.amount;
@@ -93,7 +93,7 @@ var getUserInfo = function(req, res){
   })
 }
 
-var getUserPrsTrx = function(req, res){
+var readUserPrsTrx = function(req, res){
   logger.info("get PrsnlTrx request "+ JSON.stringify(req.headers))
   usrPrsTrxs.find({userId: req.userId}, function(err, userPrsTrx){
     if(err)
@@ -101,6 +101,28 @@ var getUserPrsTrx = function(req, res){
     return res.status(200).send(userPrsTrx);
   });
 }
+
+deleteUserPrsTrx = function(req, res){
+  logger.info("delete PrsnlTrx request"+JSON.stringify(req.headers));
+  var trxId=req.params.trxId;
+  if (mongoose.Types.ObjectId.isValid(req.params.trxId)){
+    usrPrsTrxs.findById({_id: trxId}, function(err, trx){
+      if(err){
+        logger.error(err)
+        return res.status(500).send(errConfig.E120);
+      }
+      if(trx){
+        trx.remove();
+        return res.status(200).send(errConfig.S104)
+      }else{
+        return res.status(400).send(errConfig.E140)
+      }
+    })
+  }else {
+    return res.status(400).send(errConfig.E140)
+  }
+}
+
 
 var mailTrns = nodemailer.createTransport({
   service: 'Gmail',
@@ -207,6 +229,8 @@ var getTempUserByEmail = function(email){
     })
   })
 }
+
+
 
 
 var sendPwdToEmail = function(req, res){
@@ -442,12 +466,13 @@ module.exports ={
   processSigninReq :       processSigninReq,
   processSignupReq :       processSignupReq,
   getUserInfo:             getUserInfo,
-  getUserPrsTrx:           getUserPrsTrx,
-  processUserPrsTrx:       processUserPrsTrx,
+  readUserPrsTrx:           readUserPrsTrx,
+  createUserPrsTrx:       createUserPrsTrx,
   usrInfoUpdate:           usrInfoUpdate,
   sendPwdToEmail:          sendPwdToEmail,
   logger:                  logger,
-  isSconfigEnvValid:        isSconfigEnvValid
+  isSconfigEnvValid:        isSconfigEnvValid,
+  deleteUserPrsTrx:       deleteUserPrsTrx
 }
 
 
