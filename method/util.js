@@ -12,7 +12,13 @@ var serverInfo  = tmcdb.serverInfo;
 var mongoose   = require("mongoose");
 var winston     = require("winston");
 var promise    = require("bluebird")
-
+var mailTrns = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: sConfig.mailSerUser,
+    pass: sConfig.mailSerUserPwd
+  }
+})
 var logger = new winston.Logger({
   transports: [
     new winston.transports.File({
@@ -41,8 +47,7 @@ var isDBConnectionLive = function(){
   }
 }
 
-
-var isSconfigEnvValid = function(){
+var isSconfigEnvValid   = function(){
   var result=[{"serverSecret": sConfig.serverSecret}, {"mailSerUserPwd": sConfig.mailSerUserPwd}];
   logger.info("sConfigInit env "+JSON.stringify(result))
   if(!sConfig.serverSecret)
@@ -51,88 +56,6 @@ var isSconfigEnvValid = function(){
   return false;
   return true;
 }
-
-var getServerInfo = function(){
-  return serverInfo.findOne().exec();
-}
-
-var setServerInfo = function(){
-  serInfo = new serverInfo();
-  serInfo.serverSecret = sConfig.serverSecret;
-  serInfo.mailSerUserPwd = sConfig.mailSerUserPwd;
-  serInfo.save();
-}
-
-
-
-var createUserPrsTrx = function(req, res){
-  logger.info("process prsnlTrx request "+ JSON.stringify(req.body))
-  var userPrsnlTrx            = new usrPrsTrxs();
-  userPrsnlTrx.amount         = req.body.amount;
-  userPrsnlTrx.type           = req.body.type;
-  userPrsnlTrx.source         = req.body.source;
-  userPrsnlTrx.destination    = req.body.destination
-  userPrsnlTrx.description    = req.body.description;
-  userPrsnlTrx.userId         = req.userId;
-  userPrsnlTrx.date           = req.body.date;
-  userPrsnlTrx.save(function(err, data){
-    if(err)
-    return res.status(500).send(errConfig.E120);
-    return res.status(201).send(errConfig.S103);
-  });
-}
-
-var getUserInfo = function(req, res){
-  logger.info("get userInfo request "+ JSON.stringify(req.headers))
-  if ( !(mongoose.Types.ObjectId.isValid(req.userId)) )
-  return res.status(400).send(errConfig.E141)
-    usrAccts.findById(req.userId, function(err, user){
-    if(err)
-    return res.status(500).send(errConfig.E120);
-    if(!user)
-    return res.status(400).send(errConfig.E129)
-    return res.status(200).send(user);
-  })
-}
-
-var readUserPrsTrx = function(req, res){
-  logger.info("get PrsnlTrx request "+ JSON.stringify(req.headers))
-  usrPrsTrxs.find({userId: req.userId}, function(err, userPrsTrx){
-    if(err)
-    return res.status(500).send(errConfig.E120);
-    return res.status(200).send(userPrsTrx);
-  });
-}
-
-deleteUserPrsTrx = function(req, res){
-  logger.info("delete PrsnlTrx request"+JSON.stringify(req.headers));
-  var trxId=req.params.trxId;
-  if (mongoose.Types.ObjectId.isValid(req.params.trxId)){
-    usrPrsTrxs.findById({_id: trxId}, function(err, trx){
-      if(err){
-        logger.error(err)
-        return res.status(500).send(errConfig.E120);
-      }
-      if(trx){
-        trx.remove();
-        return res.status(200).send(errConfig.S104)
-      }else{
-        return res.status(400).send(errConfig.E140)
-      }
-    })
-  }else {
-    return res.status(400).send(errConfig.E140)
-  }
-}
-
-
-var mailTrns = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: sConfig.mailSerUser,
-    pass: sConfig.mailSerUserPwd
-  }
-})
 
 var sendEmail = function sendEmail(to, subject, htmltext){
   logger.debug("Inside emailSend ")
@@ -155,53 +78,6 @@ var sendEmail = function sendEmail(to, subject, htmltext){
       }
     })
   })
-}
-
-
-var processAuthAccessReq = function processAuthAccessReq(req, res, next){
-
-  logger.debug("Inside Priviledge Area Request")
-
-  var bearerHeader = req.headers["authorization"]; //Authorization :'Bearer token'
-  if( !bearerHeader || !bearerHeader.split(" ")[1] ){
-    logger.warn("Invalid Auth header "+JSON.stringify(req.headers))
-    return res.status(403).send(errConfig.E115)
-  }
-  jwt.verify(bearerHeader.split(" ")[1], sConfig.serverSecret, function(err, decoded){
-    if(err){
-      if( err.name == 'TokenExpiredError')
-      return res.status(401).send(errConfig.E114)
-      logger.warn("Invalid token "+JSON.stringify(req.headers))
-      return res.status(403).send(errConfig.E115)
-    }
-    req.userId = decoded.userId;
-    next();
-  });
-}
-
-
-var processSigninReq = function processSigninReq(req, res){
-  logger.info("SignIn request "+ JSON.stringify(req.body))
-  if( !req.body.email || !req.body.password)
-  return res.status(400).send(errConfig.E119);
-  getUserByEmail(req.body.email)
-  .then(function(data){
-    if(!data)
-    return res.status(400).send(errConfig.E122);
-    if(!bcrypt.compareSync(req.body.password, data.account.password))
-    return res.status(400).send(errConfig.E123)
-    var token = jwt.sign({ "userId": data._id }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
-    res.location("user/"+data._id+"/trx").status(200).send(token);
-  })
-  .catch(function(err){return res.status(500).send(err);})
-
-}
-
-var setPreReq = function setPreReq(req, res, next){
-  res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-  next();
 }
 
 var getUserByEmail = function(email){
@@ -261,95 +137,52 @@ var sendPwdToEmail = function(req, res){
   })
 }
 
-var usrInfoUpdate = function(req, res){
-  logger.info("Update Request "+ JSON.stringify(req.body))
-  usrAccts.findById(req.userId, function(err, user){
-    if(err)
-    return res.status(500).send(errConfig.E120);
-    if(!user)
-    return res.status(400).send(errConfig.E137);
-    var err;
-    user.account.updateDate=new Date();
-    switch (req.body.updatecode) {
-      case "1":
-      user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "2":
-      user.sourceOfMoneyTrx.incomeSource=req.body.updateitem;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "3":
-      user.moneyAccount=req.body.updateitem;
-      // return setTimeout(function(){ res.status(500).send(errConfig.E120); }, 2000);
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "4":
-      if( err=valMeth.valPwd(req.body.updateitem) )
-      return res.status(400).send(err);
-      var hashpwd = bcrypt.hashSync(req.body.updateitem, 10);
-      user.account.password = hashpwd;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "5":
-      if( err=valMeth.valEmail(req.body.updateitem) )
-      return res.status(400).send(err);
-      user.account.email=req.body.updateitem;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "6":
-      user.account.phone=req.body.updateitem;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      case "7":
-      if( err=valMeth.valName(req.body.updateitem) )
-      return res.status(400).send(err);
-      user.account.fullname=req.body.updateitem;
-      user.save(function(err){
-        if(err)
-        return res.status(500).send(errConfig.E120);
-        return res.status(200).send(errConfig.E138);
-      })
-      break;
-
-      default:
-      return res.status(400).send(errConfig.E139);
+var processAuthAccessReq = function processAuthAccessReq(req, res, next){
+  logger.debug("Inside Priviledge Area Request")
+  var bearerHeader = req.headers["authorization"]; //Authorization :'Bearer token'
+  if( !bearerHeader || !bearerHeader.split(" ")[1] ){
+    logger.warn("Invalid Auth header "+JSON.stringify(req.headers))
+    return res.status(403).send(errConfig.E115)
+  }
+  jwt.verify(bearerHeader.split(" ")[1], sConfig.serverSecret, function(err, decoded){
+    if(err){
+      if( err.name == 'TokenExpiredError')
+      return res.status(401).send(errConfig.E114)
+      logger.warn("Invalid token "+JSON.stringify(req.headers))
+      return res.status(403).send(errConfig.E115)
     }
-  })
+    if(req.params.userId != decoded.userId){
+      return res.status(403).send(errConfig.E116)
+    }
+    req.userId = decoded.userId;
+    next();
+  });
 }
 
+var setPreReq = function setPreReq(req, res, next){
+  res.setHeader('Access-Control-Allow-Origin', '*'); //used to allow same user request from any client
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  next();
+}
 
-var processSignupReq = function(req, res){
+var processSigninReq  = function processSigninReq(req, res){
+  logger.info("SignIn request "+ JSON.stringify(req.body))
+  if( !req.body.email || !req.body.password)
+  return res.status(400).send(errConfig.E119);
+  getUserByEmail(req.body.email)
+  .then(function(data){
+    if(!data)
+    return res.status(400).send(errConfig.E122);
+    if(!bcrypt.compareSync(req.body.password, data.account.password))
+    return res.status(400).send(errConfig.E123)
+    var token = jwt.sign({ "userId": data._id }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
+    res.location("user/"+data._id+"/trx").status(200).send(token);
+  })
+  .catch(function(err){return res.status(500).send(err);})
+}
+
+var processSignupReq  = function(req, res){
   logger.info("Signup request "+ JSON.stringify(req.body))
   var err;
   if( err=valMeth.valEmail(req.body.email) )
@@ -456,6 +289,159 @@ var processSignupReq = function(req, res){
   }
 }
 
+var updateUserInfo    = function(req, res){
+  logger.info("Update Request "+ JSON.stringify(req.body))
+  usrAccts.findById(req.userId, function(err, user){
+    if(err){
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(errConfig.E120);
+    }
+    if(!user)
+    return res.status(400).send(errConfig.E137);
+    var err;
+    user.account.updateDate=new Date();
+    switch (req.body.updatecode) {
+      case "1":
+      user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "2":
+      user.sourceOfMoneyTrx.incomeSource=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "3":
+      user.moneyAccount=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "4":
+      if( err=valMeth.valPwd(req.body.updateitem) )
+      return res.status(400).send(err);
+      var hashpwd = bcrypt.hashSync(req.body.updateitem, 10);
+      user.account.password = hashpwd;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "5":
+      if( err=valMeth.valEmail(req.body.updateitem) )
+      return res.status(400).send(err);
+      user.account.email=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "6":
+      user.account.phone=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      case "7":
+      if( err=valMeth.valName(req.body.updateitem) )
+      return res.status(400).send(err);
+      user.account.fullname=req.body.updateitem;
+      user.save(function(err){
+        if(err)
+        return res.status(500).send(errConfig.E120);
+        return res.status(200).send(errConfig.E138);
+      })
+      break;
+
+      default:
+      return res.status(400).send(errConfig.E139);
+    }
+  })
+}
+
+var readUserInfo      = function(req, res){
+  logger.info("get userInfo request "+ JSON.stringify(req.headers))
+  if ( !(mongoose.Types.ObjectId.isValid(req.userId)) )
+  return res.status(400).send(errConfig.E141)
+  usrAccts.findById(req.userId, function(err, user){
+    if(err){
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(errConfig.E120);
+    }
+    if(!user)
+    return res.status(400).send(errConfig.E129)
+    return res.status(200).send(user);
+  })
+}
+
+var createUserPrsTrx  = function(req, res){
+  logger.info("process prsnlTrx request "+ JSON.stringify(req.body))
+  var userPrsnlTrx            = new usrPrsTrxs();
+  userPrsnlTrx.amount         = req.body.amount;
+  userPrsnlTrx.type           = req.body.type;
+  userPrsnlTrx.source         = req.body.source;
+  userPrsnlTrx.destination    = req.body.destination
+  userPrsnlTrx.description    = req.body.description;
+  userPrsnlTrx.userId         = req.userId;
+  userPrsnlTrx.date           = req.body.date;
+  userPrsnlTrx.save(function(err, data){
+    if(err){
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(errConfig.E120);
+    }
+    return res.status(201).send(errConfig.S103);
+  });
+}
+
+var readUserPrsTrx    = function(req, res){
+  logger.info("get PrsnlTrx request "+ JSON.stringify(req.headers))
+  usrPrsTrxs.find({userId: req.userId}, function(err, userPrsTrx){
+    if(err){
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(errConfig.E120);
+    }
+    return res.status(200).send(userPrsTrx);
+  });
+}
+
+var deleteUserPrsTrx  = function(req, res){
+  logger.info("delete PrsnlTrx request"+JSON.stringify(req.headers));
+  var trxId=req.params.trxId;
+  if (mongoose.Types.ObjectId.isValid(req.params.trxId)){
+    usrPrsTrxs.findById({_id: trxId}, function(err, trx){
+      if(err){
+        logger.error(err)
+        return res.status(500).send(errConfig.E120);
+      }
+      if(trx){
+        trx.remove();
+        return res.status(200).send(errConfig.S104)
+      }else{
+        return res.status(400).send(errConfig.E140)
+      }
+    })
+  }else {
+    return res.status(400).send(errConfig.E140)
+  }
+}
 
 
 
@@ -467,14 +453,14 @@ module.exports ={
   setPreReq :              setPreReq,
   processSigninReq :       processSigninReq,
   processSignupReq :       processSignupReq,
-  getUserInfo:             getUserInfo,
-  readUserPrsTrx:           readUserPrsTrx,
-  createUserPrsTrx:       createUserPrsTrx,
-  usrInfoUpdate:           usrInfoUpdate,
   sendPwdToEmail:          sendPwdToEmail,
   logger:                  logger,
-  isSconfigEnvValid:        isSconfigEnvValid,
-  deleteUserPrsTrx:       deleteUserPrsTrx
+  isSconfigEnvValid:       isSconfigEnvValid,
+  readUserInfo:            readUserInfo,
+  updateUserInfo:          updateUserInfo,
+  createUserPrsTrx:        createUserPrsTrx,
+  readUserPrsTrx:          readUserPrsTrx,
+  deleteUserPrsTrx:        deleteUserPrsTrx
 }
 
 

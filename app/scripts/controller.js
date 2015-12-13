@@ -629,7 +629,7 @@ tmmController.controller('userReportController', function( $routeParams, $filter
   $scope.deletePrsTrx = function(trxId){
     $http.delete("/user/"+$routeParams.userId+"/trx/"+trxId)
     .success(function(data, status){
-      $scope.userTrxReport=$filter('filter')($scope.userTrxReport, {$: '!'+trxId})      
+      $scope.userTrxReport=$filter('filter')($scope.userTrxReport, {$: '!'+trxId})
       utilSer.showFlashMsg($scope, "success", 'usrReportResp', data, true);
     })
     .error(function(data, status){

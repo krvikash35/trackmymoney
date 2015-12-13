@@ -63,7 +63,7 @@ pubRouter.post('/signup', utilMeth.processSignupReq);
 //@response-error:   {res.statusCode: 400, res.body.data: "No Data Found" }
 //@response-success: {res.statusCode: 200, res.body.data: "userInfo"}
 //------------------------------------------------------------------------------------------------
-privRouter.get('/:userId/info',utilMeth.getUserInfo);
+privRouter.get('/:userId/info',utilMeth.readUserInfo);
 
 //--------------------------------------------------------------------------------------------
 //put('/user:userId/info')
@@ -72,7 +72,7 @@ privRouter.get('/:userId/info',utilMeth.getUserInfo);
 //@response-success: {res.statusCode: 200, res.body.data: "Account Info Updated successfully"}
 //1:expenseSource 2:incomeSource 3:moneyAccount 4:password 5:email  6:phone 7:fullname
 //------------------------------------------------------------------------------------------
-privRouter.put('/:userId/info', utilMeth.usrInfoUpdate);
+privRouter.put('/:userId/info', utilMeth.updateUserInfo);
 
 
 //-----------------------------------------------------------------------------------------------

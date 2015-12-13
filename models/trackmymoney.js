@@ -4,7 +4,7 @@ var schema       = mongoose.Schema;
 // User Account Schema
 var usrAcct = new schema({
   "account":  {
-      "email":                { type: String, index: true, unique: true },
+      "email":                { type: String, required: true, index: true, unique: true },
       "phone":                { type: Number},
       "fullname":             { type: String},
       "password":             { type: String},
@@ -23,14 +23,14 @@ var usrAcct = new schema({
 
 // User Temporary model where user account verification details stored
 var usrVerTemp = new schema({
-  "email":    {type: String, index: true},
+  "email":    {type: String},
   "verCode":  {type: Number},
   "verStatus": {type: Number, default: 0}
 })
 
 // User individual transaction schema
 var usrPrsTrx = new schema({
-  "amount":       { type: Number, required: true},
+  "amount":       { type: Number},
   "type":         { type: String },
   "source":       { type: String },
   "destination":  { type: String},
