@@ -38,7 +38,7 @@
       <table class="table table-bordered  table-condensed ">
         <thead uib-tooltip="Click to any column to sort" tooltip-placement="bottom" tooltip-trigger="mouseenter">
           <tr >
-            <th  ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date"><a>Date</a></th>
+            <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date"><a>Date</a></th>
             <th ng-click="asc=!asc; orderProp=amount"><a >Amount</a></th>
             <th ng-click="asc=!asc; orderProp=type"><a>Trx Type</a></th>
             <th ng-click="asc=!asc; orderProp=source"><a>Trx Source</a></th>
@@ -47,15 +47,14 @@
           </tr>
         </thead>
         <tbody>
-
-          <tr  ng-show='true' ng-repeat="a in (filterdTrx=(userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc)) ">
-            <td>{{a.date | date:'dd-MMM-yyyy'}}</td>
-            <td>{{a.amount}}</td>
-            <td>{{a.type}}</td>
-            <td>{{a.source}}</td>
-            <td>{{a.destination}}</td>
-            <td>{{a.description}}</td>
-            <td><level ng-click="deletePrsTrx(a._id)">Delete</level></td>
+          <tr  ng-init="test=true" ng-show='true' ng-repeat="a in (filterdTrx=(userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc)) ">
+            <td >{{a.date | date:'dd-MMM-yyyy'}}</td>
+            <td >{{a.amount}}</td>
+            <td >{{a.type}}</td>
+            <td >{{a.source}}</td>
+            <td >{{a.destination}}</td>
+            <td >{{a.description}}</td>
+            <td ><level ng-click="deletePrsTrx(a._id)">Delete</level></td>
           </tr>
           <tr>
             <td><b>Total:</b></td>

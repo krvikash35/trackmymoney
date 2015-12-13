@@ -196,7 +196,7 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
 });
 
 
-tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
+tmmSer.factory("utilSer", function utilSerFactory(valSer, $timeout, $q, $location){
   var isLoggedIn=false;
   return{
     initSlide : function($scope){
@@ -230,7 +230,7 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
         if(!timeInSec){
           timeInSec=2;
         }
-        setTimeout(function(){
+        $timeout(function(){
           scope[MsgVar]=false;
         },timeInSec*1000);
       }

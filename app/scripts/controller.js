@@ -505,8 +505,6 @@ tmmController.controller('userInfoController', function($routeParams, valSer, ut
 // Controller for handling user transaction
 //**************************************************************************************
 tmmController.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
-
-
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -571,7 +569,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 
   $scope.initTrxDate = function() {
     $scope.trx.date = new Date();
-    };
+  };
 
 
   $scope.trxTypeChanged = function(trxType){
@@ -628,15 +626,16 @@ tmmController.controller('userReportController', function( $routeParams, $filter
     }
   }
 
-$scope.deletePrsTrx = function(trxId){
-  $http.delete("/user/"+$routeParams.userId+"/trx/"+trxId)
-  .success(function(data, status){
-    utilSer.showFlashMsg($scope, "success", 'usrReportResp', data, false);
-  })
-  .error(function(data, status){
-    utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
-  })
-}
+  $scope.deletePrsTrx = function(trxId){
+    $http.delete("/user/"+$routeParams.userId+"/trx/"+trxId)
+    .success(function(data, status){
+      $scope.userTrxReport=$filter('filter')($scope.userTrxReport, {$: '!'+trxId})      
+      utilSer.showFlashMsg($scope, "success", 'usrReportResp', data, true);
+    })
+    .error(function(data, status){
+      utilSer.showFlashMsg($scope, "error", 'usrReportResp', data, true);
+    })
+  }
 
 })
 
