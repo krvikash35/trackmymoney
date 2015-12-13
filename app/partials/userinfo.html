@@ -9,8 +9,7 @@
       <table class="table  table-bordered  table-condensed">
         <tr>
           <th><span class="info-text-header">Full name </span></th>
-          <td style="overflow: scroll;"><span  href="" e-class="input-box pull-left" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</span></td>
-
+          <td style="overflow: auto;"><a e-style="" href="" e-class="input-box pull-left" e-required editable-text="userBasicInfo.fullname" onbeforesave=updateFullName($data) >{{userBasicInfo.fullname || empty}}</a></td>
         </tr>
         <tr>
           <th><span class="info-text-header">Email </span></th>
@@ -18,7 +17,7 @@
         </tr>
         <tr>
           <th><span class="info-text-header">Change Password </span></th>
-          <td style="overflow: scroll;"><span href="" e-class="input-box" onaftersave=updatePassword($data) e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a></td>
+          <td style="overflow:auto"><a href="" e-class="input-box" onaftersave=updatePassword($data) e-name="password" e-type="password" editable-text="userBasicInfo.password">*****</a></td>
         </tr>
         <tr>
           <th><span class="info-text-header">Joined Date </span></th>
