@@ -74,6 +74,7 @@ var processUserPrsTrx = function(req, res){
   userPrsnlTrx.destination    = req.body.destination
   userPrsnlTrx.description    = req.body.description;
   userPrsnlTrx.userId         = req.userId;
+  userPrsnlTrx.date           = req.body.date;
   userPrsnlTrx.save(function(err, data){
     if(err)
     return res.status(500).send(errConfig.E120);
@@ -242,7 +243,7 @@ var usrInfoUpdate = function(req, res){
     if(!user)
     return res.status(400).send(errConfig.E137);
     var err;
-    user.account.updateDate=new Date().toISOString();
+    user.account.updateDate=new Date();
     switch (req.body.updatecode) {
       case "1":
       user.sourceOfMoneyTrx.expenseSource=req.body.updateitem;
@@ -408,7 +409,7 @@ var processSignupReq = function(req, res){
       usrAcctRec.account.phone      = req.body.phone;
       usrAcctRec.account.fullname   = req.body.fullname;
       usrAcctRec.account.password   = hashpwd;
-      usrAcctRec.account.creatDate  = new Date().toISOString();
+      usrAcctRec.account.creatDate  = new Date();
       usrAcctRec.moneyAccount       = sConfig.initMoneyAccount;
       usrAcctRec.sourceOfMoneyTrx.incomeSource =sConfig.initIncomeSource;
       usrAcctRec.sourceOfMoneyTrx.expenseSource =sConfig.initExpenseSource;

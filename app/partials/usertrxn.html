@@ -5,12 +5,12 @@
   <div class="panel-body">
     <div ng-show="prsTrxResp" class={{msgType}} >{{prsTrxResp}}</div>
     <form ng-submit="submitTrxForm(trx)" role="form" class="trx-form">
-      <div class="form-group col-sm-2 col-md-2">
+      <div class="form-group col-sm-2 ">
         <label >Amount</label>
         <input ng-model="trx.amount" type="text" class="form-control" required  autofocus>
       </div>
 
-      <div class="form-group col-sm-5 col-md-2">
+      <div class="form-group col-sm-5">
         <label>Type</label>
         <select ng-model="trx.type" ng-init="trx.type='Expense'" ng-change="trxTypeChanged(trx.type)" class="form-control">
           <option>Expense</option>
@@ -20,24 +20,32 @@
       </div>
 
 
-      <div class="form-group col-sm-5 col-md-3">
+      <div class="form-group col-sm-5 ">
         <label>Source</label>
         <select ng-model="trx.source" ng-options="source as source for source in trxSource" class="form-control">
           <option>choose source</option>
         </select>
       </div>
 
-      <div class="form-group col-sm-6 col-md-3">
+      <div class="form-group col-sm-4 ">
         <label>destination</label>
         <select ng-model="trx.destination" ng-options="dest as dest for dest in trxDestination" class="form-control">
           <option>Choose dest</option>
         </select>
       </div>
 
-      <div class="form-group col-sm-6 col-md-2">
+      <div class="form-group col-sm-4 ">
         <label >description</label>
         <input ng-init="trx.description=''" ng-model="trx.description" type="text" class="form-control" id="trxDesc">
       </div>
+
+      <div class="form-group col-sm-4">
+        <label >Date</label>
+        <input  ng-show="false" ng-init="initTrxDate()" ng-model="trx.date"  type="date" class="form-control" show-weeks=false uib-datepicker-popup show-button-bar=false  is-open="istrxDateOpen"   ng-required="true" />
+          <button   type="button" class="form-control" ng-click="istrxDateOpen=!istrxDateOpen"><i class="glyphicon glyphicon-calendar">{{trx.date | date:'dd-MMM-yyyy'}}</i></button>
+
+      </div>
+
 
       <button type="submit" style="background-color:#5D4037" class="btn btn-primary col-xs-4 col-sm-2 col-md-3 col-lg-3">Submit</button>
     </form>

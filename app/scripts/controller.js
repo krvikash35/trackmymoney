@@ -569,6 +569,9 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 
   }
 
+  $scope.initTrxDate = function() {
+    $scope.trx.date = new Date();
+    };
 
 
   $scope.trxTypeChanged = function(trxType){

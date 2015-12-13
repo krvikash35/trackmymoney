@@ -180,8 +180,8 @@ tmmSer.factory("valSer", function valSerFactory(errConfig, valConfig){
       if( fromDate instanceof Date && toDate instanceof Date){
         var today = new Date();
         var diffInDays=(today-fromDate)/(1000*60*60*24);
-        if(toDate > today || fromDate > today)
-        return err=errConfig.E130;
+        // if(toDate > today || fromDate > today)
+        // return err=errConfig.E130;
         if(fromDate > toDate)
         return err=errConfig.E131;
         if(diffInDays > 3650){
@@ -230,8 +230,11 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $q, $location){
         if(!timeInSec){
           timeInSec=2;
         }
-        console.log(MsgVar);
-        setTimeout(function(){scope[MsgVar]=false;},timeInSec*1000);
+        setTimeout(function(){
+          console.log(scope.usrBasicInfoUpdateResp);
+          scope[MsgVar]=false;
+          console.log(scope.usrBasicInfoUpdateResp);
+        },timeInSec*1000);
       }
     }
 
