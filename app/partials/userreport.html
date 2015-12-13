@@ -1,4 +1,4 @@
-<div ng-show="isLogged"  style="margin: 4px; padding: 0px", class="panel panel-primary">
+<div ng-show="isLogged"   class="panel panel-primary">
   <div class="panel-heading">Individual Transaction</div>
   <div class="panel-body">
     <div ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</div>
@@ -6,7 +6,7 @@
       <div class="form-inline col-sm-12 col-md-12 ">
         <div class="form-group">
           <label >Search In:</label>
-          <select  style="background-color:#795548;color:#D7CCC8" ng-init="prop='$'" ng-model="prop" class="form-control">
+          <select  s ng-init="prop='$'" ng-model="prop" class="input-box form-control">
             <option value="$">All</option>
             <option value="amount">amount</option>
             <option value="type">type</option>
@@ -20,13 +20,13 @@
           <div class="input-group">
             <input  ng-show="false" ng-model="fromDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
             <span class="input-group-btn">
-              <button style="background-color:#795548;color:#D7CCC8" type="button" class="btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
+              <button  type="button" class="input-box btn btn-default" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
           <div class="input-group">
             <input ng-show="false" ng-model="toDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
             <span class="input-group-btn">
-              <button style="background-color:#795548;color:#D7CCC8" type="button" class="btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
+              <button  type="button" class="input-box btn btn-default" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
             </span>
           </div>
 
@@ -38,12 +38,12 @@
       <table class="table table-bordered  table-condensed ">
         <thead uib-tooltip="Click to any column to sort" tooltip-placement="bottom" tooltip-trigger="mouseenter">
           <tr >
-            <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date"><a>Date</a></th>
-            <th ng-click="asc=!asc; orderProp=amount"><a >Amount</a></th>
-            <th ng-click="asc=!asc; orderProp=type"><a>Trx Type</a></th>
-            <th ng-click="asc=!asc; orderProp=source"><a>Trx Source</a></th>
-            <th ng-click="asc=!asc; orderProp=destination"><a>Trx Destination</a></th>
-            <th ng-click="asc=!asc; orderProp=description"><a>Description</a></th>
+            <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date" class="info-text-header"><u>Date</u></th>
+            <th ng-click="asc=!asc; orderProp=amount" class="info-text-header"> <u> Amount</u></th>
+            <th ng-click="asc=!asc; orderProp=type" class="info-text-header"><u>Trx Type</u></th>
+            <th ng-click="asc=!asc; orderProp=source" class="info-text-header"><u>Trx Source</u></th>
+            <th ng-click="asc=!asc; orderProp=destination" class="info-text-header"><u>Trx Destination</u></th>
+            <th ng-click="asc=!asc; orderProp=description" class="info-text-header"><u>Description</u></th>
           </tr>
         </thead>
         <tbody>
@@ -54,11 +54,11 @@
             <td >{{a.source}}</td>
             <td >{{a.destination}}</td>
             <td >{{a.description}}</td>
-            <td ><level ng-click="deletePrsTrx(a._id)">Delete</level></td>
+            <td ><level class="btn btn-danger" ng-click="deletePrsTrx(a._id)">Delete</level></td>
           </tr>
           <tr>
-            <td><b>Total:</b></td>
-            <td><b>{{calTotalAmount(filterdTrx)}}<b></td>
+            <td class="info-text-header"><b>Total:</b></td>
+            <td class="info-text-header"><b>{{calTotalAmount(filterdTrx)}}<b></td>
             </tr>
           </tbody>
         </table>

@@ -1,11 +1,35 @@
 /*
 body{
-  max-width: 300px;
-  border: solid 1px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #FFFFFF;
+max-width: 300px;
+border: solid 1px;
+margin-left: auto;
+margin-right: auto;
+background-color: #FFFFFF;
 }*/
+.body{
+  background-color: #2B2B2B;
+  color: #D7CCC8
+}
+
+.info-text-header{
+color:#FFFFFF   
+}
+
+.input-box{
+  background-color:#795548;
+  color:#D7CCC8
+}
+
+.input-button{
+  background-color:#5D4037;
+  color:#D7CCC8
+}
+
+.input-button-red{
+  color:#FFFFFF;
+  background-color: #FF5252;
+}
+
 .panel-primary > .panel-heading {
   background-color: #5D4037;
 }
@@ -48,41 +72,41 @@ body{
 /*.feed, .auth, .navigation, .content, .header, .footer, .container{
   box-shadow: 0 1px 1px black;
   outline: 1px solid black;
-}*/
+  }*/
 
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+  .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
-/*.registration-form, .login-form{
-  max-width: 350px;
-}
+  /*.registration-form, .login-form{
+    max-width: 350px;
+  }
 
-.trx-form .form-group{
-  max-width: 350px;
-}*/
+  .trx-form .form-group{
+    max-width: 350px;
+    }*/
 
-/*.container{
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  /*background-color: azure;
-}*/
+    /*.container{
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      /*background-color: azure;
+      }*/
 
 
-body{
-  /*background-color: beige;*/
-}
+      body{
+        /*background-color: beige;*/
+      }
 
-/*.footer{
-  padding-top: 5px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  /*height: 50px;*/
-  /*background-color: lavender;*/
-}*/
+      /*.footer{
+        padding-top: 5px;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        /*height: 50px;*/
+        /*background-color: lavender;*/
+        }*/
 
-/*.navigation{
-  padding-top: 5px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-}*/
+        /*.navigation{
+          padding-top: 5px;
+          border-top: 1px solid black;
+          border-bottom: 1px solid black;
+          }*/
