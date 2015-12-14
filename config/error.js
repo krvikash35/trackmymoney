@@ -7,11 +7,11 @@
 
 module.exports = {
   S100: 'email sent..check your mail',
-  S101: '',
+  S101: 'Group Member deleted Successfully',
   S102: 'Email Verified Successfully',
   S103: 'Transaction Saved Successfully',
   S104: 'Transaction Deleted Successfully',
-  S105: '!',
+  S105: 'Group Member Added Successfully!',
   S106: '!',
   S107: '!',
   S108: '!',
@@ -72,7 +72,10 @@ module.exports = {
   E139: 'Invalid update Option!',
   E140: 'Invalid TrxId',
   E141: 'Invalid UserId',
-  E142: '',
-  E143: '',
-  E144: ''
+  E142: 'No such group or email found ',
+  E143: 'Invalid groupId',
+  E144: 'You are not admin of this group, only admin can delete group/groupMember',
+  E145: 'Invalid group update option',
+  E146: 'Only Actual member can add himself to any group',
+  E147: 'User alrady added in this group'
 }

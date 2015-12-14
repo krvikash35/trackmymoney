@@ -9,6 +9,9 @@ var usrAccts    = tmcdb.usrAccts;
 var usrVerTemps = tmcdb.usrVerTemps;
 var usrPrsTrxs  = tmcdb.usrPrsTrxs;
 var serverInfo  = tmcdb.serverInfo;
+var userGroup   = tmcdb.userGroup;
+var userGroupTrx= tmcdb.userGroupTrx;
+var userNoti    = tmcdb.userNoti;
 var mongoose   = require("mongoose");
 var winston     = require("winston");
 var promise    = require("bluebird")
@@ -108,8 +111,139 @@ var getTempUserByEmail = function(email){
   })
 }
 
+var getUserGroup = function(userId){
+  return new promise(function(resolve, reject){
+    userGroup.find({'grMember.grMemId': userId}, function(err, userGroupData){
+      if(err){
+        logger.error(JSON.stringify(err))
+        reject(errConfig.E120)
+      }else{
+        resolve(userGroupData)
+      }
+    })
+  })
+}
+
+var createUserGroup = function(creator, groupName){
+  return new promise(function(resolve, reject){
+    usrGp = new userGroup();
+    usrGp.grName = groupName;
+    usrGp.admin  = creator;
+    usrGp.grCreateDate = new Date()
+    usrGp.save(function(err, usrGpData){
+      if(err){
+        logger.error(JSON.String(err));
+        reject(errConfig.E120);
+      }else {
+        resolve(usrGpData)
+      }
+    })
+  })
+}
 
 
+//1-add 2-delete
+var updateUserGroup = function( updator, groupId,  userEmail, upTypeCode){
+  return new promise(function(resolve, reject){
+    if ( !(mongoose.Types.ObjectId.isValid(groupId)) ) {
+      reject(errConfig.E143)
+    }
+    getUserByEmail(userEmail)
+    .then(function(data){
+      if(!data)
+      reject(errConfig.E122)
+    })
+    .catch(function(err){reject(err)})
+    userGroup.findOne({_id: groupId, 'grMember.grMemEmail':userEmail}, function(err, usrGpData){
+      if(err){
+        logger.error(JSON.stringify(err))
+        reject(errConfig.E120)
+      }else{
+
+
+          switch (upTypeCode) {
+            case "1":
+            if(usrGpData){
+              reject(errConfig.E147)
+            }
+            if(userEmail !== updator){
+              reject(errConfig.E146)
+            }else {
+              usrGpData.groupMember.push({grMemEmail: userEmail})
+              usrGpData.save(function(err){
+                if(err){
+                  logger.error(JSON.stringify(err))
+                  reject(errConfig.E120)
+                }else {
+                  resolve(errConfig.S105)
+                }
+              })
+            }
+            break;
+
+            case "2":
+            if(!usrGpData){
+              reject(errConfig.E142)
+            }
+            if(usrGpData.grAdmin != updator){
+              reject(errConfig.E144)
+            }else {
+              usrGpData.groupMember.pull({grMemEmail: userEmail})
+              usrGpData.save(function(err){
+                if(err){
+                  logger.error(JSON.stringify(err))
+                  reject(errConfig.E120)
+                }else {
+                  resolve(errConfig.S101)
+                }
+              })
+            }
+            break;
+            default:
+            reject(errConfig.E145)
+          }
+      }
+    })
+  })
+}
+
+var deleteUserGroup = function( groupId, updator, userEmail){
+  return new promise(function(resolve, reject){
+    if ( !(mongoose.Types.ObjectId.isValid(groupId)) ) {
+      reject(errConfig.E143)
+    }
+    getUserByEmail(userEmail)
+    .then(function(data){
+      if(!data)
+      reject(errConfig.E122)
+    })
+    .catch(function(err){reject(err)})
+    userGroup.findOne({_id: groupId, 'grMember.grMemEmail':userEmail}, function(err, usrGpData){
+      if(err){
+        logger.error(JSON.stringify(err))
+        reject(errConfig.E120)
+      }else{
+        if(!usrGpData){
+          reject(errConfig.E142)
+        }else {
+          if(usrGpData.grAdmin != updator){
+            reject(errConfig.E144)
+          }else {
+            usrGpData.groupMember.pull({grMemEmail: userEmail})
+            usrGpData.save(function(err){
+              if(err){
+                logger.error(JSON.stringify(err))
+                reject(errConfig.E120)
+              }else {
+                resolve(errConfig.S101)
+              }
+            })
+          }
+        }
+      }
+    })
+  })
+}
 
 var sendPwdToEmail = function(req, res){
   logger.info("Forgot password request "+ JSON.stringify(req.body))
