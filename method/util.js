@@ -161,47 +161,47 @@ var updateUserGroup = function( updator, groupId,  userEmail, upTypeCode){
       }else{
 
 
-          switch (upTypeCode) {
-            case "1":
-            if(usrGpData){
-              reject(errConfig.E147)
-            }
-            if(userEmail !== updator){
-              reject(errConfig.E146)
-            }else {
-              usrGpData.groupMember.push({grMemEmail: userEmail})
-              usrGpData.save(function(err){
-                if(err){
-                  logger.error(JSON.stringify(err))
-                  reject(errConfig.E120)
-                }else {
-                  resolve(errConfig.S105)
-                }
-              })
-            }
-            break;
-
-            case "2":
-            if(!usrGpData){
-              reject(errConfig.E142)
-            }
-            if(usrGpData.grAdmin != updator){
-              reject(errConfig.E144)
-            }else {
-              usrGpData.groupMember.pull({grMemEmail: userEmail})
-              usrGpData.save(function(err){
-                if(err){
-                  logger.error(JSON.stringify(err))
-                  reject(errConfig.E120)
-                }else {
-                  resolve(errConfig.S101)
-                }
-              })
-            }
-            break;
-            default:
-            reject(errConfig.E145)
+        switch (upTypeCode) {
+          case "1":
+          if(usrGpData){
+            reject(errConfig.E147)
           }
+          if(userEmail !== updator){
+            reject(errConfig.E146)
+          }else {
+            usrGpData.groupMember.push({grMemEmail: userEmail})
+            usrGpData.save(function(err){
+              if(err){
+                logger.error(JSON.stringify(err))
+                reject(errConfig.E120)
+              }else {
+                resolve(errConfig.S105)
+              }
+            })
+          }
+          break;
+
+          case "2":
+          if(!usrGpData){
+            reject(errConfig.E142)
+          }
+          if(usrGpData.grAdmin != updator){
+            reject(errConfig.E144)
+          }else {
+            usrGpData.groupMember.pull({grMemEmail: userEmail})
+            usrGpData.save(function(err){
+              if(err){
+                logger.error(JSON.stringify(err))
+                reject(errConfig.E120)
+              }else {
+                resolve(errConfig.S101)
+              }
+            })
+          }
+          break;
+          default:
+          reject(errConfig.E145)
+        }
       }
     })
   })
@@ -243,6 +243,74 @@ var deleteUserGroup = function( groupId, updator, userEmail){
       }
     })
   })
+}
+
+var reqToAddGrpMem = function(){
+
+}
+
+var createNotification = function(nSub, nText, nUsers, nParams, nType){
+  return new promise(function(resolve, reject){
+    for(var i=0; i<nUsers.length;i++){
+      var noti = new userNoti();
+      noti.notiSubject = nSub;
+      noti.notiText = nText;
+      noti.nParams  = nParams;
+      noti.nType    = nType;
+      noti.notiUser = nUsers[i];
+      noti.save(function(err){
+        logger.error(JSON.stringify(err))
+        reject(errConfig.E120)
+      })
+    }
+    resolve(errConfig.S106)
+  })
+}
+
+var readNotification = function(userEmail){
+return new promise(function(resolve, reject){
+  userNoti.find({notiUser: userEmail}, function(err, notiData){
+    if(err){
+      logger.error(JSON.stringify(err))
+      reject(errConfig.E120);
+    }else{
+      resolve(notiData)
+    }
+  })
+})
+
+var deleteNotification = function(userEmail, which){
+var q;
+switch (which) {
+  case "all":
+    q={notiUser: userEmail}
+    break;
+  case "unread":
+    q={notiUser: userEmail, notiIsRead: false}
+  default:
+    q={notiUser: userEmail, notiIsRead: true}
+}
+return new promise(function(resolve, reject){
+  userNoti.remove(q, function(err, uNoti){
+    if(err){
+      logger.error(JSON.stringify(err))
+      reject(errConfig.E120);
+    }else{
+      resolve(errConfig.S107)
+    }
+  })
+})
+}
+
+
+}
+
+var createGrpTrx = function(){
+
+}
+
+var deleteGrpTrx = function(){
+
 }
 
 var sendPwdToEmail = function(req, res){

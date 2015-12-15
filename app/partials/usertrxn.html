@@ -1,9 +1,9 @@
 <div ng-show="isLogged">
 
   <div  class="panel panel-primary">
-    <div class="panel-heading">Today's Individual Transaction</div>
+    <div class="panel-heading">Personal Trx<span ng-if="prsTrxResp" class={{msgType}} >{{prsTrxResp}}</span></div>
     <div class="panel-body">
-      <div ng-if="prsTrxResp" class={{msgType}} >{{prsTrxResp}}</div>
+
       <form ng-submit="submitTrxForm(trx)" role="form" class="trx-form">
         <div class="form-group col-sm-2 ">
           <label >Amount</label>

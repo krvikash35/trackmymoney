@@ -221,9 +221,9 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $timeout, $q, $locatio
 
     showFlashMsg: function(scope, msgType,  MsgVar, MsgData, isItFlash,  timeInSec){
       if(msgType == "success"){
-        scope.msgType="alert btn-success"
+        scope.msgType="msg-green"
       }else {
-        scope.msgType="alert btn-danger"
+        scope.msgType="msg-red"
       }
       scope[MsgVar]=MsgData;
       if(isItFlash){

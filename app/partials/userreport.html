@@ -1,7 +1,7 @@
 <div ng-show="isLogged"   class="panel panel-primary">
-  <div class="panel-heading">Individual Transaction</div>
+  <div class="panel-heading">Individual Transaction<span ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</span></div>
   <div class="panel-body">
-    <div ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</div>
+
     <div class="row">
       <div class="form-inline col-sm-12 col-md-12 ">
         <div class="form-group">

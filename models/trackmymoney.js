@@ -76,13 +76,14 @@ var userGroupTrx = new schema({
 var userNoti = new schema({
   "notiSubject" : {type: String},
   "notiText" :    {type: String},
-  "notiDate" :    {type: String},
+  "notiDate" :    {type: Date,default: Date.now},
   "notiUser" :    {type: String},
   "notiType" :    {type: String}, //read, acceptGrMem, delGrTrx
   "notiParam":    [{
     "pName":  {type: String},
     "pValue": {type: String}
-  }]
+  }],
+  "notiIsRead":     {type: Boolean, default: false}
 })
 
 //database containing all the schema
