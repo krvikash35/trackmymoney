@@ -15,6 +15,7 @@ var userNoti    = tmcdb.userNoti;
 var mongoose   = require("mongoose");
 var winston     = require("winston");
 var promise    = require("bluebird")
+mongoose.Promise = require("bluebird")
 var mailTrns = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -124,186 +125,184 @@ var getUserGroup = function(userId){
   })
 }
 
-var createUserGroup = function(creator, groupName){
-  return new promise(function(resolve, reject){
-    usrGp = new userGroup();
-    usrGp.grName = groupName;
-    usrGp.admin  = creator;
-    usrGp.grCreateDate = new Date()
-    usrGp.save(function(err, usrGpData){
-      if(err){
-        logger.error(JSON.String(err));
-        reject(errConfig.E120);
-      }else {
-        resolve(usrGpData)
-      }
-    })
+var createUserGroup = function(req, res){
+  logger.info("createUserGroup Request By: "+req.email+" req: "+JSON.stringify(req.body))
+  var err;
+  if(err=valMeth.valGrName(req.body.grName)){
+    return res.status(400).send(err);
+  }
+  usrGp = new userGroup();
+  usrGp.grName = req.body.grName;
+  usrGp.grAdmin  = req.email;
+  usrGp.grMember.push({grMemName: req.body.grMemName, grMemEmail:req.email})
+  usrGp.grCreateDate = new Date()
+  usrGp.save(function(err, usrGpData){
+    if(err){
+      logger.error(JSON.String(err));
+      res.status(500).send(errConfig.E120);
+    }else {
+      res.status(201).send(usrGpData);
+    }
   })
 }
 
+var isGroupExist = function(groupId){
+  return new promise(function(resolve, reject){
+
+  })
+}
+
+var getGroupByGrId = function(grId){
+  return new promise(function(resolve, reject){
+    userGroup.findOne({_id: req.body.groupId, 'grMember.grMemEmail': req.body.grMemEmail})
+  })
+}
 
 //1-add 2-delete
-var updateUserGroup = function( updator, groupId,  userEmail, upTypeCode){
-  return new promise(function(resolve, reject){
-    if ( !(mongoose.Types.ObjectId.isValid(groupId)) ) {
-      reject(errConfig.E143)
+var updateUserGroup = function(req, res){
+  logger.debug("inside updateUserGroup");
+  logger.info("updateUserGroup Request By: "+ req.email+" req: "+JSON.stringify(req.body))
+
+
+  switch (req.body.updateTypeCode) {
+    case "1":
+    var gData;
+    if ( !(mongoose.Types.ObjectId.isValid(req.body.groupId)) ) {
+      return res.status(400).send(errConfig.E143);
     }
-    getUserByEmail(userEmail)
-    .then(function(data){
-      if(!data)
-      reject(errConfig.E122)
+    userGroup.findOne({_id: req.body.groupId, grAdmin: req.email, 'grMember.grMemEmail': req.email}, {grName:1, 'grMember.$':1}).exec()
+    .then(function isGroupCreatedByAdmin(gData){
+      if(!gData){
+        throw ({name: "BadRequestError", message: errConfig.E151})
+      }
+      this.gData=gData;
     })
-    .catch(function(err){reject(err)})
-    userGroup.findOne({_id: groupId, 'grMember.grMemEmail':userEmail}, function(err, usrGpData){
-      if(err){
-        logger.error(JSON.stringify(err))
-        reject(errConfig.E120)
-      }else{
-
-
-        switch (upTypeCode) {
-          case "1":
-          if(usrGpData){
-            reject(errConfig.E147)
-          }
-          if(userEmail !== updator){
-            reject(errConfig.E146)
-          }else {
-            usrGpData.groupMember.push({grMemEmail: userEmail})
-            usrGpData.save(function(err){
-              if(err){
-                logger.error(JSON.stringify(err))
-                reject(errConfig.E120)
-              }else {
-                resolve(errConfig.S105)
-              }
-            })
-          }
-          break;
-
-          case "2":
-          if(!usrGpData){
-            reject(errConfig.E142)
-          }
-          if(usrGpData.grAdmin != updator){
-            reject(errConfig.E144)
-          }else {
-            usrGpData.groupMember.pull({grMemEmail: userEmail})
-            usrGpData.save(function(err){
-              if(err){
-                logger.error(JSON.stringify(err))
-                reject(errConfig.E120)
-              }else {
-                resolve(errConfig.S101)
-              }
-            })
-          }
-          break;
-          default:
-          reject(errConfig.E145)
-        }
+    .then(function getInviteeDetails(){
+      return usrAccts.findOne({'account.email': req.body.inviteeEmail}).exec()
+    })
+    .then(function isInviteeIsRegisterd(iData){
+      if(!iData){
+        throw ({name: "BadRequestError", message: errConfig.E122})
       }
     })
-  })
-}
-
-var deleteUserGroup = function( groupId, updator, userEmail){
-  return new promise(function(resolve, reject){
-    if ( !(mongoose.Types.ObjectId.isValid(groupId)) ) {
-      reject(errConfig.E143)
-    }
-    getUserByEmail(userEmail)
-    .then(function(data){
-      if(!data)
-      reject(errConfig.E122)
+    .then(function isInviteeAlreadyAdded(){
+      return userGroup.findOne({_id: req.body.groupId, 'grMember.grMemEmail': req.body.inviteeEmail}).exec()
     })
-    .catch(function(err){reject(err)})
-    userGroup.findOne({_id: groupId, 'grMember.grMemEmail':userEmail}, function(err, usrGpData){
-      if(err){
-        logger.error(JSON.stringify(err))
-        reject(errConfig.E120)
-      }else{
-        if(!usrGpData){
-          reject(errConfig.E142)
-        }else {
-          if(usrGpData.grAdmin != updator){
-            reject(errConfig.E144)
-          }else {
-            usrGpData.groupMember.pull({grMemEmail: userEmail})
-            usrGpData.save(function(err){
-              if(err){
-                logger.error(JSON.stringify(err))
-                reject(errConfig.E120)
-              }else {
-                resolve(errConfig.S101)
-              }
-            })
-          }
-        }
+    .then(function isInviteeAlreadyAdded(iData){
+      if(iData){
+        throw ({name: "BadRequestError", message: errConfig.E150})
+      }else {
+        var noti={};
+        grName    = this.gData.grName;
+        gAdminEmail = this.gData.grMember[0].grMemEmail;
+        gAdminName = this.gData.grMember[0].grMemName;
+        noti.nSub=sConfig.addToGrNotiSub;
+        noti.nText = gAdminName+"["+ gAdminEmail+"] has invited you to join group "+grName
+        noti.nUsers = [req.body.inviteeEmail]
+        noti.notiDate = new Date();
+        noti.nParams =[{pName: "groupId", pValue: req.body.groupId}];
+        noti.nType = sConfig.nType.reqToAddGrpMem;
+        return createNotification(noti)
       }
     })
-  })
-}
-
-var reqToAddGrpMem = function(){
-
-}
-
-var createNotification = function(nSub, nText, nUsers, nParams, nType){
-  return new promise(function(resolve, reject){
-    for(var i=0; i<nUsers.length;i++){
-      var noti = new userNoti();
-      noti.notiSubject = nSub;
-      noti.notiText = nText;
-      noti.nParams  = nParams;
-      noti.nType    = nType;
-      noti.notiUser = nUsers[i];
-      noti.save(function(err){
-        logger.error(JSON.stringify(err))
-        reject(errConfig.E120)
-      })
-    }
-    resolve(errConfig.S106)
-  })
-}
-
-var readNotification = function(userEmail){
-return new promise(function(resolve, reject){
-  userNoti.find({notiUser: userEmail}, function(err, notiData){
-    if(err){
+    .then(function(noti){
+      return res.status(201).send(noti)
+    })
+    .catch(function(err){
+      if(err.name === "BadRequestError"){
+        logger.warn(JSON.stringify(err))
+        return res.status(400).send(err.message)
+      }
       logger.error(JSON.stringify(err))
-      reject(errConfig.E120);
-    }else{
-      resolve(notiData)
-    }
-  })
-})
-
-var deleteNotification = function(userEmail, which){
-var q;
-switch (which) {
-  case "all":
-    q={notiUser: userEmail}
+      return res.status(500).send(err.message)
+    })
     break;
-  case "unread":
-    q={notiUser: userEmail, notiIsRead: false}
-  default:
-    q={notiUser: userEmail, notiIsRead: true}
-}
-return new promise(function(resolve, reject){
-  userNoti.remove(q, function(err, uNoti){
-    if(err){
-      logger.error(JSON.stringify(err))
-      reject(errConfig.E120);
-    }else{
-      resolve(errConfig.S107)
+
+    case "2":
+    var nData;
+    if ( !(mongoose.Types.ObjectId.isValid(req.body.notificationId)) ) {
+      return res.status(400).send(errConfig.E153);
     }
+    userNoti.findById({_id: req.body.notificationId, notiUser: req.email}).exec()
+    .then(function(data){
+      if(!data){
+        throw ({name: "BadRequestError", message: errConfig.E153})
+      }else {
+        return data
+      }
+    })
+    .then(function(nData){
+      if(nData.notiType != 1 || nData.notiIsRead){
+        throw ({name: "BadRequestError", message: errConfig.E154})
+      }else {
+        this.nData=nData
+        return userGroup.findOne({_id: nData.notiParam[0].pValue})
+      }
+    })
+    .then(function(gData){
+      gData.grUpdateDate = new Date();
+      gData.grMember.push({grMemName: req.body.grMemName, grMemEmail: req.email})
+      return gData.save();
+    })
+    .then(function(upGData){
+      this.nData.notiIsRead=true;
+      this.nData.save()
+      return res.status(200).send(upGData)
+    })
+    .catch(function(err){
+      if(err.name === "BadRequestError"){
+        logger.warn(JSON.stringify(err))
+        return res.status(400).send(err.message)
+      }
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(err.message)
+    })
+
+    break;
+    default:
+    return res.status(400).send(errConfig.E145)
+  }
+
+
+}
+
+var createNotification = function(noti){
+  logger.debug("Inside createNotification")
+  return new promise(function(resolve, reject){
+    for(var i=0; i<noti.nUsers.length;i++){
+      var uNoti = new userNoti();
+      uNoti.notiSubject = noti.nSub;
+      uNoti.notiText = noti.nText;
+      uNoti.notiParam  = noti.nParams;
+      uNoti.notiType    = noti.nType;
+      uNoti.notiUser = noti.nUsers[i];
+      uNoti.save()
+      .then(function(){
+        if(i == noti.nUsers.length)
+        return resolve(errConfig.S106)
+      })
+      .catch(function(err){
+        return reject(err)
+      })
+
+    }
+
   })
-})
 }
 
-
+var readNotification = function(req, res){
+  logger.debug("inside readNotification")
+  logger.info("readNotification request by: "+req.email)
+  userNoti.find({notiUser: req.email})
+  .exec()
+  .then(function(userNoti){
+    res.status(200).send(userNoti)
+  })
+  .catch(function(err){
+    res.status(500).send(err.message);
+  })
 }
+
 
 var createGrpTrx = function(){
 
@@ -357,6 +356,7 @@ var processAuthAccessReq = function processAuthAccessReq(req, res, next){
       return res.status(403).send(errConfig.E116)
     }
     req.userId = decoded.userId;
+    req.email  = decoded.email;
     next();
   });
 }
@@ -369,7 +369,7 @@ var setPreReq = function setPreReq(req, res, next){
 }
 
 var processSigninReq  = function processSigninReq(req, res){
-  logger.info("SignIn request "+ JSON.stringify(req.body))
+  logger.info("SignIn request: "+ JSON.stringify(req.body))
   if( !req.body.email || !req.body.password)
   return res.status(400).send(errConfig.E119);
   getUserByEmail(req.body.email)
@@ -378,7 +378,7 @@ var processSigninReq  = function processSigninReq(req, res){
     return res.status(400).send(errConfig.E122);
     if(!bcrypt.compareSync(req.body.password, data.account.password))
     return res.status(400).send(errConfig.E123)
-    var token = jwt.sign({ "userId": data._id }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
+    var token = jwt.sign({ "userId": data._id, "email": data.account.email }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
     res.location("user/"+data._id+"/trx").status(200).send(token);
   })
   .catch(function(err){return res.status(500).send(err);})
@@ -451,6 +451,7 @@ var processSignupReq  = function(req, res){
           if (err)
           return res.status(500).send(errConfig.E121);
           return res.status(200).send(errConfig.S102);
+
         })
       }
     })
@@ -662,7 +663,10 @@ module.exports ={
   updateUserInfo:          updateUserInfo,
   createUserPrsTrx:        createUserPrsTrx,
   readUserPrsTrx:          readUserPrsTrx,
-  deleteUserPrsTrx:        deleteUserPrsTrx
+  deleteUserPrsTrx:        deleteUserPrsTrx,
+  createUserGroup:         createUserGroup,
+  updateUserGroup:         updateUserGroup,
+  readNotification:        readNotification
 }
 
 

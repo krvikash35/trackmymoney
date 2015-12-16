@@ -100,6 +100,45 @@ privRouter.post('/:userId/trx',utilMeth.createUserPrsTrx);
 privRouter.delete('/:userId/trx/:trxId', utilMeth.deleteUserPrsTrx)
 
 
+
+//----------------------------------------------------------
+//CreateGroup by admin
+//post('/user/:userId/group') and token
+//@req.body: {grName, grMemName}
+//@response-error: appropriate error Code
+//@response-success: group details is returned (200)
+//------------------------------------------------------------
+privRouter.post('/:userId/group', utilMeth.createUserGroup);
+
+
+//------------------------------------------------------
+//update group
+//1-sendMemAddInvite, 2-addGrMem, 3-
+//put('/user/:userId/group/')
+//@req.body.[updateTypeCode, groupId, inviteeEmail]
+//1- updateTypeCode, groupId, inviteeEmail, token
+//2- updateTypeCode, notificationId, grMemName, token
+//@response-error:
+//@response-success:
+//---------------------------------------------------
+privRouter.put('/:userId/group', utilMeth.updateUserGroup)
+
+//------------------------------------------------------
+//read notification
+//@req token
+//@response-error:
+//@response-success:
+//---------------------------------------------------
+privRouter.get('/:userId/notification', utilMeth.readNotification)
+
+
+
+
+
+
+
+
+
 logger.debug("choosing env")
 if(sConfig.runEnv === 'dev') {
   mongoDBUrl = sConfig.devUrl.dbUrl;

@@ -19,6 +19,7 @@ module.exports = {
   "emailPwdSubject": "Forgot password of your trackourmoney account",
   "emailPwdText": "Please find below the password, you should chagne your password on nex login at your convenience",
   "tokenExpiresInSecond": 43200,
+  "addToGrNotiSub": "Group Invite to add you",
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
@@ -39,5 +40,9 @@ module.exports = {
     {"name": "Mobikwik", "type": "DigitalWallet"},
     {"name": "Others",   "type": "DigitalWallet"},
     {"name": "Cash",     "type": "CashAccount"}
-  ]
+  ],
+  "nType": {
+    "reqToAddGrpMem": 1,
+    "deleteGroup": 2
+  }
 };

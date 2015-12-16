@@ -79,6 +79,13 @@ valTrxDesc : function(desc){
     if( desc.length > valConfig.trxDescMaxLen )
     return errConfig.E111;
   }
+},
+
+valGrName: function(grName){
+  var err;
+  if(!grName || grName.length<valConfig.grNameMinLen){
+    return errConfig.E149
+  }
 }
 
 

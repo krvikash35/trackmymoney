@@ -11,5 +11,6 @@ module.exports = {
   maTypeRegex: /^(CreditCard|SavingAccount|DigitalWallet|Cash)$/,
   maNameRegex: /^[a-zA-Z][a-zA-Z0-9- _]{3,15}$/,
   trxTypeRegex: /^(Income|Saving|Transfer)$/,
-  trxDescMaxLen: 4
+  trxDescMaxLen: 4,
+  grNameMinLen: 4
 }
