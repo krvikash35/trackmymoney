@@ -134,7 +134,7 @@ var createUserGroup = function(req, res){
   usrGp = new userGroup();
   usrGp.grName = req.body.grName;
   usrGp.grAdmin  = req.email;
-  usrGp.grMember.push({grMemName: req.body.grMemName, grMemEmail:req.email})
+  usrGp.grMember.push({grMemName: req.fullname, grMemEmail:req.email})
   usrGp.grCreateDate = new Date()
   usrGp.save(function(err, usrGpData){
     if(err){
@@ -198,7 +198,7 @@ var updateUserGroup = function(req, res){
         gAdminName = this.gData.grMember[0].grMemName;
         noti.nSub=sConfig.addToGrNotiSub;
         noti.nText = gAdminName+"["+ gAdminEmail+"] has invited you to join group "+grName
-        noti.nUsers = [req.body.inviteeEmail]
+        noti.nUsers = [{"grMemEmail": req.body.inviteeEmail}]
         noti.notiDate = new Date();
         noti.nParams =[{pName: "groupId", pValue: req.body.groupId}];
         noti.nType = sConfig.nType.reqToAddGrpMem;
@@ -241,7 +241,7 @@ var updateUserGroup = function(req, res){
     })
     .then(function(gData){
       gData.grUpdateDate = new Date();
-      gData.grMember.push({grMemName: req.body.grMemName, grMemEmail: req.email})
+      gData.grMember.push({grMemName: req.fullname, grMemEmail: req.email})
       return gData.save();
     })
     .then(function(upGData){
@@ -257,7 +257,33 @@ var updateUserGroup = function(req, res){
       logger.error(JSON.stringify(err))
       return res.status(500).send(err.message)
     })
+    break;
 
+    case "3":
+    var gData;
+    if ( !(mongoose.Types.ObjectId.isValid(req.body.groupId)) ) {
+      return res.status(400).send(errConfig.E143);
+    }
+    userGroup.findOne({_id: req.body.groupId, grAdmin: req.email, 'grMember.grMemEmail': req.email}, {grName:1, 'grMember.$':1}).exec()
+    .then(function isGroupCreatedByAdmin(gData){
+      if(!gData){
+        throw ({name: "BadRequestError", message: errConfig.E151})
+      }
+    })
+    .then(function(){
+      userGroup.update({_id: req.body.groupId}, {$pull: {grMember: {grMemEmail: req.body.grMemEmail}}}).exec()
+    })
+    .then(function(){
+      return res.status(200).send(errConfig.S108)
+    })
+    .catch(function(err){
+      if(err.name === "BadRequestError"){
+        logger.warn(JSON.stringify(err))
+        return res.status(400).send(err.message)
+      }
+      logger.error(JSON.stringify(err))
+      return res.status(500).send(err.message)
+    })
     break;
     default:
     return res.status(400).send(errConfig.E145)
@@ -275,7 +301,7 @@ var createNotification = function(noti){
       uNoti.notiText = noti.nText;
       uNoti.notiParam  = noti.nParams;
       uNoti.notiType    = noti.nType;
-      uNoti.notiUser = noti.nUsers[i];
+      uNoti.notiUser = noti.nUsers[i].grMemEmail;
       uNoti.save()
       .then(function(){
         if(i == noti.nUsers.length)
@@ -304,8 +330,66 @@ var readNotification = function(req, res){
 }
 
 
-var createGrpTrx = function(){
+var createGrpTrx = function(req, res){
+  logger.debug("inside createGrpTrx")
+  logger.info("createGrpTrx request by: "+req.email+"Req: "+JSON.stringify(req.body))
+  var err;
+  var grData;
 
+  userGroup.findOne({_id: req.body.grId, 'grMember.grMemEmail': req.email},{grName:1, 'grMember.grMemEmail': 1}).exec()
+  .then(function(grData){
+    if(!grData){
+      throw ({name: "BadRequestError", message: errConfig.E143})
+    }
+    if (!(req.body.gtMem instanceof Array))
+    throw ({name: "BadRequestError", message: errConfig.E155})
+
+    this.grData=grData;
+    var grMemEmail=[];;
+    for(var i=req.body.gtMem.length;i--;){
+      grMemEmail.push(req.body.gtMem[i].gtMemEmail)
+    }
+    return userGroup.findOne({_id: req.body.grId, 'grMember.grMemEmail': {$all: grMemEmail}}).exec()
+  })
+  .then(function(data){
+    if(!data)
+    throw ({name: "BadRequestError", message: errConfig.E155})
+    this.data=data;
+  })
+  .then(function(){
+    if (err = valMeth.valAmount(req.body.gtAmount)){
+      throw ({name: "BadRequestError", message: errConfig.E110})
+    }
+    var grTrx = new userGroupTrx()
+    grTrx.grId = req.body.grId
+    grTrx.gtAmount = req.body.gtAmount
+    grTrx.gtInitiator = req.email
+    grTrx.gtDate = req.body.gtDate
+    grTrx.gtMem = req.body.gtMem
+    grTrx.gtItem = req.body.gtItem
+    grTrx.gtDesc = req.body.gtDesc
+    return grTrx.save()
+  })
+  .then(function(){
+    var noti={};
+    noti.nSub=sConfig.addGrTrx;
+    noti.nText = req.fullname + "has added transaction in group "+this.grData.grName;
+    noti.nUsers = this.grData.grMember;
+    noti.notiDate = new Date();
+    noti.nType = sConfig.nType.addGrTrx;
+    createNotification(noti)
+  })
+  .then(function(){
+    return res.status(201).send(errConfig.S103)
+  })
+  .catch(function(err){
+    if(err.name === "BadRequestError"){
+      logger.warn(JSON.stringify(err))
+      return res.status(400).send(err.message)
+    }
+    logger.error(JSON.stringify(err))
+    return res.status(500).send(err.message)
+  })
 }
 
 var deleteGrpTrx = function(){
@@ -315,7 +399,7 @@ var deleteGrpTrx = function(){
 var sendPwdToEmail = function(req, res){
   logger.info("Forgot password request "+ JSON.stringify(req.body))
   if( !req.body.email)
-  return res.status(400).send(errConfig.E119);
+  return res.status(400).send(errConfig.E122);
   usrAccts.findOne({"account.email": req.body.email}, function(err, user){
     if(err)
     return res.status(500).send(errConfig.E120);
@@ -327,6 +411,8 @@ var sendPwdToEmail = function(req, res){
       if(err)
       return res.status(500).send(errConfig.E120);
       var emailPwdText= sConfig.emailPwdText+"<br>"+tempPwd;
+      //devprod
+      return res.status(200).send(emailPwdText);
       sendEmail(req.body.email, sConfig.emailPwdSubject, emailPwdText)
       .then(function(data){
         return res.status(200).send(data)
@@ -357,6 +443,7 @@ var processAuthAccessReq = function processAuthAccessReq(req, res, next){
     }
     req.userId = decoded.userId;
     req.email  = decoded.email;
+    req.fullname = decoded.fullname;
     next();
   });
 }
@@ -378,7 +465,7 @@ var processSigninReq  = function processSigninReq(req, res){
     return res.status(400).send(errConfig.E122);
     if(!bcrypt.compareSync(req.body.password, data.account.password))
     return res.status(400).send(errConfig.E123)
-    var token = jwt.sign({ "userId": data._id, "email": data.account.email }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
+    var token = jwt.sign({ "userId": data._id, "email": data.account.email, "fullname": data.account.fullname }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
     res.location("user/"+data._id+"/trx").status(200).send(token);
   })
   .catch(function(err){return res.status(500).send(err);})
@@ -666,7 +753,8 @@ module.exports ={
   deleteUserPrsTrx:        deleteUserPrsTrx,
   createUserGroup:         createUserGroup,
   updateUserGroup:         updateUserGroup,
-  readNotification:        readNotification
+  readNotification:        readNotification,
+  createGrpTrx:            createGrpTrx
 }
 
 

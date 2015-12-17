@@ -19,7 +19,8 @@ module.exports = {
   "emailPwdSubject": "Forgot password of your trackourmoney account",
   "emailPwdText": "Please find below the password, you should chagne your password on nex login at your convenience",
   "tokenExpiresInSecond": 43200,
-  "addToGrNotiSub": "Group Invite to add you",
+  "addToGrNotiSub": "you got GroupInvite",
+  "addGrTrx": "added record in GroupTrx",
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
@@ -43,6 +44,7 @@ module.exports = {
   ],
   "nType": {
     "reqToAddGrpMem": 1,
-    "deleteGroup": 2
+    "deleteGrpTrx": 2,
+    "addGrTrx": 3
   }
 };

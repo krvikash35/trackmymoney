@@ -20,7 +20,7 @@ var logger     = utilMeth.logger;
 
 
 //use middleware stack, these are executed in declared order whenever any req, res occur
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(utilMeth.setPreReq);
@@ -104,7 +104,7 @@ privRouter.delete('/:userId/trx/:trxId', utilMeth.deleteUserPrsTrx)
 //----------------------------------------------------------
 //CreateGroup by admin
 //post('/user/:userId/group') and token
-//@req.body: {grName, grMemName}
+//@req.body: {grName}
 //@response-error: appropriate error Code
 //@response-success: group details is returned (200)
 //------------------------------------------------------------
@@ -113,11 +113,12 @@ privRouter.post('/:userId/group', utilMeth.createUserGroup);
 
 //------------------------------------------------------
 //update group
-//1-sendMemAddInvite, 2-addGrMem, 3-
+//1-sendMemAddInvite, 2-addGrMem, 3-deleteGrMem
 //put('/user/:userId/group/')
 //@req.body.[updateTypeCode, groupId, inviteeEmail]
 //1- updateTypeCode, groupId, inviteeEmail, token
-//2- updateTypeCode, notificationId, grMemName, token
+//2- updateTypeCode, notificationId, token
+//3- updateTypeCode, notificationId, grMemEmail, token
 //@response-error:
 //@response-success:
 //---------------------------------------------------
@@ -132,6 +133,13 @@ privRouter.put('/:userId/group', utilMeth.updateUserGroup)
 privRouter.get('/:userId/notification', utilMeth.readNotification)
 
 
+//------------------------------------------------------
+//Create Group Transaction
+//@req token, grId, gtAmount, gtDate, gtMem, gtItem, gtDesc
+//@response-error:
+//@response-success:
+//---------------------------------------------------
+privRouter.post('/:userId/group/trx', utilMeth.createGrpTrx)
 
 
 

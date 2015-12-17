@@ -65,7 +65,7 @@ var userGroupTrx = new schema({
   "gtInitiator":    {type: String},
   "gtDate":         {type: Date, default: Date.now},
   "gtMem":  [{
-    "gtMemId":      {type: String},
+    "gtMemEmail":      {type: String},
     "gtMemAmount":  {type: Number}
   }],
   "gtItem": {type: String},
