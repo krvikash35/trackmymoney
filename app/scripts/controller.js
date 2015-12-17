@@ -705,3 +705,18 @@ tmmController.controller('naviCtrl', function($uibModal, utilSer, $interval, $sc
 tmmController.controller("errorCtrl", function($scope, $rootScope){
 
 })
+
+
+//*****************************************************************
+//groupController
+//***************************************************************
+tmmController.controller("groupController", function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
+  $scope.msg="welcome"
+  $http.get("/user/"+$localStorage.userId+"/group")
+  .success(function(data, status, headers, config){
+    $scope.userGroup=data;
+  })
+  .error(function(data, status, headers, config){
+    return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
+  })
+})

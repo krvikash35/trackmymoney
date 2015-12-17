@@ -110,6 +110,8 @@ privRouter.delete('/:userId/trx/:trxId', utilMeth.deleteUserPrsTrx)
 //------------------------------------------------------------
 privRouter.post('/:userId/group', utilMeth.createUserGroup);
 
+privRouter.get('/:userId/group', utilMeth.readUserGroup);
+
 
 //------------------------------------------------------
 //update group

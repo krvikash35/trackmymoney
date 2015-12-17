@@ -1,0 +1,36 @@
+<div ng-show="isLogged">
+
+  <div  class="panel panel-primary">
+    <div class="panel-heading">Group<span ng-if="grAcctResp" class={{msgType}} >{{grAcctResp}}</span></div>
+    <div class="panel-body">
+      {{msg}}
+      <i   ng-repeat="a in userGroup">
+        <div  class="panel panel-primary">
+          <div class="panel-heading">{{a.grName}}</div>
+          <div class="panel-body">
+
+            <table  class="table  table-bordered table-condensed ">
+              <thead>
+                <tr >
+                  <th>Member Name</th>
+                  <th>Member Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  ng-repeat="m in a.grMember">
+                  <td  >{{m.grMemName}}</i></td>
+                  <td style="display: table-cell; max-width: 0; overflow: hidden;overflow: auto;">{{m.grMemEmail}}</td>
+                  <td  ng-if="true"><level class="btn btn-danger"   ng-click="deletePrsTrx(a._id)">Delete</level></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+      </i>
+    </div>
+  </div>
+</div>

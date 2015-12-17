@@ -112,17 +112,18 @@ var getTempUserByEmail = function(email){
   })
 }
 
-var getUserGroup = function(userId){
-  return new promise(function(resolve, reject){
-    userGroup.find({'grMember.grMemId': userId}, function(err, userGroupData){
+var readUserGroup = function(req, res){
+  logger.debug("Inside readUserGroup")
+  logger.info("readUserGroup Request by: "+ req.email)
+    userGroup.find({'grMember.grMemEmail': req.email}, function(err, userGroupData){
       if(err){
         logger.error(JSON.stringify(err))
-        reject(errConfig.E120)
+        return res.status(500).end(errConfig.E120)
       }else{
-        resolve(userGroupData)
+        console.log(userGroupData);
+        return res.status(200).send(userGroupData)
       }
     })
-  })
 }
 
 var createUserGroup = function(req, res){
@@ -754,7 +755,8 @@ module.exports ={
   createUserGroup:         createUserGroup,
   updateUserGroup:         updateUserGroup,
   readNotification:        readNotification,
-  createGrpTrx:            createGrpTrx
+  createGrpTrx:            createGrpTrx,
+  readUserGroup:           readUserGroup
 }
 
 

@@ -35,6 +35,10 @@ function($routeProvider){
     templateUrl: 'partials/auth.html',
     controller: 'mainController'
   }).
+  when('/user/:userId/group', {
+    templateUrl: 'partials/group.html',
+    controller: 'groupController'
+  }).
   when('/error',{
     templateUrl: 'partials/error.html',
     controller: 'errorCtrl'
