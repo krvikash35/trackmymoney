@@ -542,6 +542,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
   }
   $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
+    $localStorage.email=data.account.email;
     trxUiInit(data);
   })
   .error(function(data, status, headers, config){
@@ -715,8 +716,18 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
   $http.get("/user/"+$localStorage.userId+"/group")
   .success(function(data, status, headers, config){
     $scope.userGroup=data;
+    $scope.userEmail=$localStorage.email;
   })
   .error(function(data, status, headers, config){
     return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
   })
+  var test=true;
+  $scope.isAdminGroup  = function(a){
+    // if(a.grAdmin==$localStorage.email){
+
+      a.isAdmin=test
+      test=!test;
+    // }
+
+  }
 })

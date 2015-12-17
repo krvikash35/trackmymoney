@@ -3,26 +3,29 @@
   <div  class="panel panel-primary">
     <div class="panel-heading">Group<span ng-if="grAcctResp" class={{msgType}} >{{grAcctResp}}</span></div>
     <div class="panel-body">
-      {{msg}}
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
-          <div class="panel-heading">{{a.grName}}</div>
+          <div class="panel-heading"  >{{a.grName}}<i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:4px"class="fa fa-cog fa-lg"></i> <i  ng-if="a.grAdmin==userEmail"style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">You</i><i ng-if="a.grAdmin!=userEmail" style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">{{a.grAdmin}}</i></div>
           <div class="panel-body">
-
             <table  class="table  table-bordered table-condensed ">
               <thead>
                 <tr >
                   <th>Member Name</th>
                   <th>Member Email</th>
-                  <th>Action</th>
+                  <th ng-if="a.isAdmin">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr  ng-repeat="m in a.grMember">
                   <td  >{{m.grMemName}}</i></td>
                   <td style="display: table-cell; max-width: 0; overflow: hidden;overflow: auto;">{{m.grMemEmail}}</td>
-                  <td  ng-if="true"><level class="btn btn-danger"   ng-click="deletePrsTrx(a._id)">Delete</level></td>
+                  <td  ng-if="a.isAdmin"><level class="btn btn-danger col-sm-5 col-xs-12"   ng-click="deleteGrMem(m.grMemEmail)">Delete</level></td>
                 </tr>
+                <tr ng-if="a.isAdmin">
+                  <td colspan=2>  <input class="form-control input-box"type="text"  placeholder="Enter Invitee Email...notification will be send to join the group"/>  </td>
+                  <td><level class=" btn btn-success col-sm-5 col-xs-12" >Invite   </level>  </td>
+                </tr>
+
               </tbody>
             </table>
           </div>
