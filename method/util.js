@@ -140,24 +140,31 @@ var createUserGroup = function(req, res){
   usrGp.save(function(err, usrGpData){
     if(err){
       logger.error(JSON.String(err));
-      res.status(500).send(errConfig.E120);
+      return res.status(500).send(errConfig.E120);
     }else {
-      res.status(201).send(usrGpData);
+      return res.status(201).send(errConfig.S109);
     }
   })
 }
 
-var isGroupExist = function(groupId){
-  return new promise(function(resolve, reject){
+var deleteUserGroup = function(req, res){
+  logger.debug("Inside deleteUserGroup")
+  logger.info("deleteUserGroup request by: "+req.email)
+  if ( !(mongoose.Types.ObjectId.isValid(req.params.groupId)) ) {
+    return res.status(400).send(errConfig.E143);
+  }
 
-  })
+userGroup.findById({_id: req.params.groupId }, function(err, userGroup){
+  if(err)
+  res.status(500).send(errConfig.E120);
+  if(userGroup.grAdmin !== req.email)
+  return res.status(400).send(errConfig.E157)
+  userGroup.remove()
+  return res.status(200).send(errConfig.S110)
+})
 }
 
-var getGroupByGrId = function(grId){
-  return new promise(function(resolve, reject){
-    userGroup.findOne({_id: req.body.groupId, 'grMember.grMemEmail': req.body.grMemEmail})
-  })
-}
+
 
 //1-add 2-delete
 var updateUserGroup = function(req, res){
@@ -758,7 +765,8 @@ module.exports ={
   updateUserGroup:         updateUserGroup,
   readNotification:        readNotification,
   createGrpTrx:            createGrpTrx,
-  readUserGroup:           readUserGroup
+  readUserGroup:           readUserGroup,
+  deleteUserGroup:         deleteUserGroup
 }
 
 

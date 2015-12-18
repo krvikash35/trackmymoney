@@ -126,6 +126,14 @@ privRouter.get('/:userId/group', utilMeth.readUserGroup);
 //---------------------------------------------------
 privRouter.put('/:userId/group', utilMeth.updateUserGroup)
 
+//----------------------------------------------
+//delete usergroup
+//
+//-----------------------------------------------
+privRouter.delete('/:userId/group/:groupId',utilMeth.deleteUserGroup)
+
+
+
 //------------------------------------------------------
 //read notification
 //@req token

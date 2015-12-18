@@ -712,7 +712,9 @@ tmmController.controller("errorCtrl", function($scope, $rootScope){
 //groupController
 //***************************************************************
 tmmController.controller("groupController", function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
-  $scope.msg="welcome"
+
+
+var getUserGroup = function(){
   $http.get("/user/"+$localStorage.userId+"/group")
   .success(function(data, status, headers, config){
     $scope.userGroup=data;
@@ -721,6 +723,10 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
   .error(function(data, status, headers, config){
     return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
   })
+}
+
+getUserGroup();
+
   var toggle=true;
   $scope.isAdminGroup  = function(a){
     a.isAdmin=toggle
@@ -752,4 +758,28 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
       m.inProgress=false;
     })
   }
+
+$scope.createNewGroup = function(grName){
+  $http.post("/user/"+$localStorage.userId+"/group", {"grName": grName})
+  .success(function(data, scope){
+    utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+    getUserGroup();
+  })
+  .error(function(data, scope){
+    utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+  })
+}
+
+$scope.deleteGroup = function(grId){
+  $http.delete("/user/"+$localStorage.userId+"/group/"+grId)
+  .success(function(data, scope){
+    utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+    getUserGroup();
+
+  })
+  .error(function(data, scope){
+    utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+  })
+}
+
 })

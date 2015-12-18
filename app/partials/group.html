@@ -1,11 +1,11 @@
 <div ng-show="isLogged">
 
   <div  class="panel panel-primary">
-    <div class="panel-heading">Group<span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
+    <div class="panel-heading"><a  href="" e-placeholder="Enter Group Name" e-style="width:65%" e-class="input-box " e-required editable-text="grName" onbeforesave=createNewGroup($data) >Group <i class="fa fa-plus-circle"></i></a> <span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
     <div class="panel-body">
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
-          <div class="panel-heading"  >{{a.grName}}<i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:4px"class="fa fa-cog fa-lg"></i> <i  ng-if="a.grAdmin==userEmail"style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">You</i><i ng-if="a.grAdmin!=userEmail" style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">{{a.grAdmin}}</i></div>
+          <div class="panel-heading"  >{{a.grName}}<i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:4px"class="fa fa-pencil-square-o fa-lg"></i> <i ng-click="deleteGroup(a._id)" ng-if="a.grAdmin==userEmail" style="margin-left:4px" class="fa fa-trash-o fa-lg"></i> <i  ng-if="a.grAdmin==userEmail"style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">You</i><i ng-if="a.grAdmin!=userEmail" style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">{{a.grAdmin}}</i></div>
           <div class="panel-body">
             <table  class="table  table-bordered table-condensed ">
               <thead>
@@ -19,7 +19,7 @@
                 <tr  ng-repeat="m in a.grMember">
                   <td ng-if="!m.isDeleted" >{{m.grMemName}}</i></td>
                   <td ng-if="!m.isDeleted" style="display: table-cell; max-width: 0; overflow: hidden;overflow: auto;">{{m.grMemEmail}}</td>
-                  <td  ng-if="a.isAdmin && !m.isDeleted"><level class="btn btn-danger "   ng-click="deleteGrMem(m, a._id, m.grMemEmail)">Delete</level></td>
+                  <td  ng-if="a.isAdmin && !m.isDeleted"><level class="btn btn-danger col-md-4 col-sm-6 col-xs-12"   ng-click="deleteGrMem(m, a._id, m.grMemEmail)"><i class="fa fa-trash-o fa-lg"></i>Delete</level></td>
                 </tr>
                 <tr ng-if="a.isAdmin">
                   <td class="row"colspan="3">
@@ -27,11 +27,10 @@
                       <div class="">
                         <input style="float:left" class="col-sm-4 col-md-4 form-control input-box" ng-model="m.inviteeEmail" type="email" ng-required="true"   ng-type="email"  placeholder="Enter Invitee Email...notification will be send to join the group"/>
                       </div>
-                      <button ng-disabled="m.inProgress"  class="btn btn-success " type="submit">Invite</button>
+                      <button style="margin-top:3px"ng-disabled="m.inProgress"  class="col-xs-12 col-md-2 col-sm-3 btn btn-success " type="submit"><i class="fa fa-user-plus"></i>Invite Member</button>
                     </form>
                   </td>
                 </tr>
-
               </tbody>
             </table>
           </div>
