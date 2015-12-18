@@ -1,7 +1,7 @@
 <div ng-show="isLogged">
 
   <div  class="panel panel-primary">
-    <div class="panel-heading">Group<span ng-if="grAcctResp" class={{msgType}} >{{grAcctResp}}</span></div>
+    <div class="panel-heading">Group<span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
     <div class="panel-body">
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
@@ -17,22 +17,25 @@
               </thead>
               <tbody>
                 <tr  ng-repeat="m in a.grMember">
-                  <td  >{{m.grMemName}}</i></td>
-                  <td style="display: table-cell; max-width: 0; overflow: hidden;overflow: auto;">{{m.grMemEmail}}</td>
-                  <td  ng-if="a.isAdmin"><level class="btn btn-danger col-sm-5 col-xs-12"   ng-click="deleteGrMem(m.grMemEmail)">Delete</level></td>
+                  <td ng-if="!m.isDeleted" >{{m.grMemName}}</i></td>
+                  <td ng-if="!m.isDeleted" style="display: table-cell; max-width: 0; overflow: hidden;overflow: auto;">{{m.grMemEmail}}</td>
+                  <td  ng-if="a.isAdmin && !m.isDeleted"><level class="btn btn-danger "   ng-click="deleteGrMem(m, a._id, m.grMemEmail)">Delete</level></td>
                 </tr>
                 <tr ng-if="a.isAdmin">
-                  <td colspan=2>  <input class="form-control input-box"type="text"  placeholder="Enter Invitee Email...notification will be send to join the group"/>  </td>
-                  <td><level class=" btn btn-success col-sm-5 col-xs-12" >Invite   </level>  </td>
+                  <td class="row"colspan="3">
+                    <form class="form  " ng-submit="sendInviteForAddtoGroup(m,  a._id, m.inviteeEmail)">
+                      <div class="">
+                        <input style="float:left" class="col-sm-4 col-md-4 form-control input-box" ng-model="m.inviteeEmail" type="email" ng-required="true"   ng-type="email"  placeholder="Enter Invitee Email...notification will be send to join the group"/>
+                      </div>
+                      <button ng-disabled="m.inProgress"  class="btn btn-success " type="submit">Invite</button>
+                    </form>
+                  </td>
                 </tr>
 
               </tbody>
             </table>
           </div>
         </div>
-
-
-
       </i>
     </div>
   </div>

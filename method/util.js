@@ -224,7 +224,7 @@ var updateUserGroup = function(req, res){
     if ( !(mongoose.Types.ObjectId.isValid(req.body.notificationId)) ) {
       return res.status(400).send(errConfig.E153);
     }
-    userNoti.findById({_id: req.body.notificationId, notiUser: req.email}).exec()
+    userNoti.findOne({_id: req.body.notificationId, notiUser: req.email}).exec()
     .then(function(data){
       if(!data){
         throw ({name: "BadRequestError", message: errConfig.E153})
@@ -270,6 +270,8 @@ var updateUserGroup = function(req, res){
       if(!gData){
         throw ({name: "BadRequestError", message: errConfig.E151})
       }
+      if(req.email === req.body.grMemEmail)
+      throw ({name: "BadRequestError", message: errConfig.E156})
     })
     .then(function(){
       userGroup.update({_id: req.body.groupId}, {$pull: {grMember: {grMemEmail: req.body.grMemEmail}}}).exec()

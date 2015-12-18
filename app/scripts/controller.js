@@ -721,13 +721,35 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
   .error(function(data, status, headers, config){
     return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
   })
-  var test=true;
+  var toggle=true;
   $scope.isAdminGroup  = function(a){
-    // if(a.grAdmin==$localStorage.email){
+    a.isAdmin=toggle
+    toggle=!toggle;
+  }
 
-      a.isAdmin=test
-      test=!test;
-    // }
+  $scope.deleteGrMem = function(m, grId, grMemEmail){
+    $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "3", "grMemEmail": grMemEmail, "groupId": grId})
+    .success(function(data, status){
+      utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      m.isDeleted=true;
+    })
+    .error(function(data, status){
+      utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+    })
+  }
 
+  $scope.sendInviteForAddtoGroup = function(m, grId, grMemEmail){
+    m.inProgress=true;
+    $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "1", "groupId":grId, "inviteeEmail": grMemEmail})
+    .success(function(data, status){
+      utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      m.inviteeEmail=""
+      m.inProgress=false;
+    })
+    .error(function(data, status){
+      utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+      m.inviteeEmail=""
+      m.inProgress=false;
+    })
   }
 })

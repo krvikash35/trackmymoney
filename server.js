@@ -120,7 +120,7 @@ privRouter.get('/:userId/group', utilMeth.readUserGroup);
 //@req.body.[updateTypeCode, groupId, inviteeEmail]
 //1- updateTypeCode, groupId, inviteeEmail, token
 //2- updateTypeCode, notificationId, token
-//3- updateTypeCode, notificationId, grMemEmail, token
+//3- updateTypeCode, groupId, grMemEmail, token
 //@response-error:
 //@response-success:
 //---------------------------------------------------
