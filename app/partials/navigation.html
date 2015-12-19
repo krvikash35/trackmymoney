@@ -39,8 +39,14 @@
 
     <script type="text/ng-template" id="noti.html">
     <div style="color:#212121;height:300px;overflow:hidden; overflow:auto">
-    <i ng-repeat="a in userNoti | orderBy:'notiIsRead':false">
+    <i ng-click="deleteNoti('2')" class="btn btn-danger fa fa-trash-o fa-lg">All</i>
+    <i ng-click="deleteNoti('3')" style="float:right;padding-right:10px"class="btn btn-danger fa fa-trash-o fa-lg">Read</i>
 
+    <i  style="margin:3px" class="fa fa-search fa-2x"><input style="float:right;width:85%" ng-model="searchText" placeholder="Type any keyword" class="form-control"></input></i>
+
+
+    <i>{{searchText}}</i>
+    <i ng-repeat="a in userNoti | filter:searchText | orderBy:['notiIsRead', '-notiDate']">
     <fieldset ng-disabled="a.notiIsRead==true">
     <div   class="panel panel-primary">
     <div class="panel-heading">{{a.notiSubject}}</div>

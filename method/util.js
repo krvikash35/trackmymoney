@@ -115,19 +115,20 @@ var getTempUserByEmail = function(email){
 var readUserGroup = function(req, res){
   logger.debug("Inside readUserGroup")
   logger.info("readUserGroup Request by: "+ req.email)
-    userGroup.find({'grMember.grMemEmail': req.email}, function(err, userGroupData){
-      if(err){
-        logger.error(JSON.stringify(err))
-        return res.status(500).end(errConfig.E120)
-      }else{
-        console.log(userGroupData);
-        return res.status(200).send(userGroupData)
-      }
-    })
+  userGroup.find({'grMember.grMemEmail': req.email}, function(err, userGroupData){
+    if(err){
+      logger.error(JSON.stringify(err))
+      return res.status(500).end(errConfig.E120)
+    }else{
+      console.log(userGroupData);
+      return res.status(200).send(userGroupData)
+    }
+  })
 }
 
 var createUserGroup = function(req, res){
   logger.info("createUserGroup Request By: "+req.email+" req: "+JSON.stringify(req.body))
+  console.log(req.fullname);
   var err;
   if(err=valMeth.valGrName(req.body.grName)){
     return res.status(400).send(err);
@@ -154,14 +155,14 @@ var deleteUserGroup = function(req, res){
     return res.status(400).send(errConfig.E143);
   }
 
-userGroup.findById({_id: req.params.groupId }, function(err, userGroup){
-  if(err)
-  res.status(500).send(errConfig.E120);
-  if(userGroup.grAdmin !== req.email)
-  return res.status(400).send(errConfig.E157)
-  userGroup.remove()
-  return res.status(200).send(errConfig.S110)
-})
+  userGroup.findById({_id: req.params.groupId }, function(err, userGroup){
+    if(err)
+    res.status(500).send(errConfig.E120);
+    if(userGroup.grAdmin !== req.email)
+    return res.status(400).send(errConfig.E157)
+    userGroup.remove()
+    return res.status(200).send(errConfig.S110)
+  })
 }
 
 
@@ -198,7 +199,7 @@ var updateUserGroup = function(req, res){
     })
     .then(function isInviteeAlreadyAdded(iData){
       if(iData)
-        throw ({name: "BadRequestError", message: errConfig.E150})
+      throw ({name: "BadRequestError", message: errConfig.E150})
     })
     .then(function isInviteAlreadySend(){
       return userNoti.find({notiType:1, notiIsRead: false, notiUser: req.body.inviteeEmail, 'notiParam.pValue': req.body.groupId} ).exec()
@@ -208,17 +209,17 @@ var updateUserGroup = function(req, res){
       throw ({name: "BadRequestError", message: errConfig.E158})
     })
     .then(function prepareNoti(){
-        var noti={};
-        grName    = this.gData.grName;
-        gAdminEmail = this.gData.grMember[0].grMemEmail;
-        gAdminName = this.gData.grMember[0].grMemName;
-        noti.nSub=sConfig.addToGrNotiSub;
-        noti.nText = gAdminName+"["+ gAdminEmail+"] has invited you to join group "+grName
-        noti.nUsers = [{"grMemEmail": req.body.inviteeEmail}]
-        noti.notiDate = new Date();
-        noti.nParams =[{pName: "groupId", pValue: req.body.groupId}];
-        noti.nType = sConfig.nType.reqToAddGrpMem;
-        return createNotification(noti)
+      var noti={};
+      grName    = this.gData.grName;
+      gAdminEmail = this.gData.grMember[0].grMemEmail;
+      gAdminName = this.gData.grMember[0].grMemName;
+      noti.nSub=sConfig.addToGrNotiSub;
+      noti.nText = "["+ gAdminEmail+"] has invited you to join group "+grName
+      noti.nUsers = [{"grMemEmail": req.body.inviteeEmail}]
+      noti.notiDate = new Date();
+      noti.nParams =[{pName: "groupId", pValue: req.body.groupId}];
+      noti.nType = sConfig.nType.reqToAddGrpMem;
+      return createNotification(noti)
 
     })
     .then(function(noti){
@@ -256,15 +257,16 @@ var updateUserGroup = function(req, res){
       }
     })
     .then(function(gData){
+      if(!gData)
+      throw ({name: "BadRequestError", message: errConfig.E159})
       gData.grUpdateDate = new Date();
       gData.grMember.push({grMemName: req.fullname, grMemEmail: req.email})
       return gData.save();
     })
     .then(function(upGData){
-      console.log(upGData);
       this.nData.notiIsRead=true;
       this.nData.save()
-      return res.status(200).send(upGData)
+      return res.status(200).send(errConfig.S105)
     })
     .catch(function(err){
       if(err.name === "BadRequestError"){
@@ -312,15 +314,30 @@ var updateUserGroup = function(req, res){
 }
 
 var updateNotification = function(req, res){
-  if ( !(mongoose.Types.ObjectId.isValid(req.body.notificationId)) ) {
-    return res.status(400).send(errConfig.E143);
-  }
+  logger.debug("inside updateNotification")
+  logger.info("updateNotification request by: "+ req.email+" req: "+JSON.stringify(req.body))
+
   switch (req.body.updateTypeCode) {
     case "1":
+    if ( !(mongoose.Types.ObjectId.isValid(req.body.notificationId)) ) {
+      return res.status(400).send(errConfig.E143);
+    }
     userNoti.update({_id: req.body.notificationId},{notiIsRead: true}).exec()
-      break;
+    break;
+    case "2":
+    userNoti.remove({notiUser: req.email}).exec()
+    .then(function(){
+      return res.status(200).send()
+    })
+    break;
+    case "3":
+    userNoti.remove({notiUser: req.email, notiIsRead:true}).exec()
+    .then(function(){
+      return res.status(200).send()
+    })
+    break
     default:
-      return res.status(400).send(errConfig.E139)
+    return res.status(400).send(errConfig.E139)
   }
 }
 
@@ -476,6 +493,7 @@ var processAuthAccessReq = function processAuthAccessReq(req, res, next){
     req.userId = decoded.userId;
     req.email  = decoded.email;
     req.fullname = decoded.fullname;
+    console.log("docode fullname"+decoded.fullname);
     next();
   });
 }

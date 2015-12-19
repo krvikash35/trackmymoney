@@ -88,7 +88,7 @@ module.exports = {
   E156: 'Admin can not delete himself from group',
   E157: 'Only Admin can delete group',
   E158: 'notification already sent',
-  E159: '',
+  E159: 'Admin deleted group',
   E160: '',
   E161: '',
   E162: '',

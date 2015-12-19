@@ -146,7 +146,7 @@ privRouter.get('/:userId/notification', utilMeth.readNotification)
 //------------------------------------------------------
 //update notification
 //@req token, updateTypeCode
-//1-markasread
+//1-markasread, 2-deleteAll, 3-deleteUnread
 //1, notificationId
 //@response-error:
 //@response-success:

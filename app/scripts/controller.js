@@ -654,6 +654,17 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   //***************************************
   //Logout function redirecteding to home
   //**************************************
+  $scope.deleteNoti = function(updateTypeCode){
+    $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": updateTypeCode})
+    .success(function(data, status){
+      utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      $scope.getUserNoti();
+    })
+    .error(function(data, status){
+      utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+    })
+  }
+
   $scope.getUserNoti = function(){
     $http.get("/user/"+$localStorage.userId+"/notification")
     .success(function(data, status, headers, config){
@@ -664,10 +675,10 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
     })
   }
   $scope.markNotiAsRead = function(nId){
-    console.log(nId);
     $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": "1", "notificationId": nId})
     .success(function(data, status){
       utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      $scope.getUserNoti()
     })
     .error(function(data, status){
       utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
@@ -675,10 +686,10 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   }
 
   $scope.accetAddToGroupInvite = function(nId){
-    console.log(nId);
     $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "2", "notificationId": nId})
     .success(function(data, status){
       utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      $scope.getUserNoti()
     })
     .error(function(data, status){
       utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
