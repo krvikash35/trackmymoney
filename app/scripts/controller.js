@@ -585,7 +585,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
       $scope.userEmail=$localStorage.email;
     })
     .error(function(data, status, headers, config){
-      return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
+      return utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
     })
   }
   getUserGroup();
@@ -630,6 +630,8 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 //***********************************************************************************
 tmmController.controller('userReportController', function( $routeParams, $filter, valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   // $http.get($location.path())
+$scope.toggleGrDelBtn=false;
+  $scope.userEmail=$localStorage.email;
   $http.get("/user/"+$routeParams.userId+"/trx")
   .success(function(data, status, headers, config){
     $scope.userTrxReport=data;
@@ -678,6 +680,36 @@ tmmController.controller('userReportController', function( $routeParams, $filter
     })
   }
 
+
+
+  $scope.grReport={};
+  var getUserGroup = function(){
+    $http.get("/user/"+$localStorage.userId+"/group")
+    .success(function(data, status, headers, config){
+      $scope.grReport.group=data[0];
+      $scope.userGroup=data;
+    })
+    .error(function(data, status, headers, config){
+      return utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
+    })
+  }
+
+  getUserGroup();
+
+
+  var getGroupTrx = function(){
+    $http.get("/user/"+$localStorage.userId+"/group/trx")
+    .success(function(data, status, headers, config){
+      $scope.userGrpReport=data;
+    })
+    .error(function(data, status, headers, config){
+      return utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
+    })
+  }
+getGroupTrx()
+
+
+
 })
 
 
@@ -693,6 +725,8 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   //***************************************
   //Logout function redirecteding to home
   //**************************************
+
+  $scope.userName=$localStorage.email
   $scope.deleteNoti = function(updateTypeCode){
     $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": updateTypeCode})
     .success(function(data, status){

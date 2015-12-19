@@ -161,6 +161,7 @@ privRouter.put('/:userId/notification', utilMeth.updateNotification)
 //---------------------------------------------------
 privRouter.post('/:userId/group/trx', utilMeth.createGrpTrx)
 
+privRouter.get('/:userId/group/trx', utilMeth.readGrpTrx);
 
 
 

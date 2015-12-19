@@ -1,71 +1,139 @@
-<div ng-show="isLogged"   class="panel panel-primary">
-  <div class="panel-heading">Individual Transaction<span ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</span></div>
-  <div class="panel-body">
+<div ng-show="isLogged">
+  <div    class="panel panel-primary">
+    <div ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Individual Report<span ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</span></div>
+    <div ng-if="toggleGrInd" class="panel-body">
 
-    <div class="row">
-      <div class="form-inline col-sm-12 col-md-12 ">
-        <div class="form-group">
-          <label >Search In:</label>
-          <select  ng-init="prop='$'" ng-model="prop" class="input-box form-control">
-            <option value="$">All</option>
-            <option value="amount">amount</option>
-            <option value="type">type</option>
-            <option value="source">source</option>
-            <option value="destination">destination</option>
-            <option value="description">description</option>
-          </select>
-          <input  style="background-color:#795548;color:#D7CCC8" class="input-box form-control" ng-model="trxSearch[prop]" placeholder="Type Here" id="query">
+      <div class="row">
+        <div class="form-inline col-sm-12 col-md-12 ">
+          <div class="form-group">
+            <select  ng-init="prop='$'" ng-model="prop" class="input-box form-control">
+              <option value="$">All</option>
+              <option value="amount">amount</option>
+              <option value="type">type</option>
+              <option value="source">source</option>
+              <option value="destination">destination</option>
+              <option value="description">description</option>
+            </select>
+            <input  style="background-color:#795548;color:#D7CCC8" class="input-box form-control" ng-model="trxSearch[prop]" placeholder="Search in field selected..." id="query">
 
 
-          <div class="input-group">
-            <input  ng-show="false" ng-model="fromDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
-            <span class="input-group-btn">
-              <button  type="button" class="input-box btn btn-primary" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
-            </span>
+            <div class="input-group">
+              <input  ng-show="false" ng-model="fromDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
+              <span class="input-group-btn">
+                <button  type="button" class="input-box btn btn-primary" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
+              </span>
+            </div>
+            <div class="input-group">
+              <input ng-show="false" ng-model="toDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
+              <span class="input-group-btn">
+                <button  type="button" class="input-box btn btn-primary" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
+              </span>
+            </div>
+
+            <button class="btn input-box btn-primary" ng-init="toggleDeleteButton=true" ng-click="toggleDeleteButton=!toggleDeleteButton" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete button</button>
+
           </div>
-          <div class="input-group">
-            <input ng-show="false" ng-model="toDate" ng-change="ValDate()" type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
-            <span class="input-group-btn">
-              <button  type="button" class="input-box btn btn-primary" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
-            </span>
-          </div>
-
-          <button class="btn input-box btn-primary" ng-init="toggleDeleteButton=true" ng-click="toggleDeleteButton=!toggleDeleteButton" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete button</button>
-
         </div>
       </div>
-    </div>
-    <p></p>
-    <div class="table-responsive col-md-12">
-      <table class="table table-bordered  table-condensed ">
-        <thead uib-tooltip="Click to any column to sort" tooltip-placement="bottom" tooltip-trigger="mouseenter">
-          <tr >
-            <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date" class="info-text-header"><u>Date</u></th>
-            <th ng-click="asc=!asc; orderProp=amount" class="info-text-header"> <u> Amount</u></th>
-            <th ng-click="asc=!asc; orderProp=type" class="info-text-header"><u>Trx Type</u></th>
-            <th ng-click="asc=!asc; orderProp=source" class="info-text-header"><u>Trx Source</u></th>
-            <th ng-click="asc=!asc; orderProp=destination" class="info-text-header"><u>Trx Destination</u></th>
-            <th ng-click="asc=!asc; orderProp=description" class="info-text-header"><u>Description</u></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr  ng-init="test=true" ng-show='true' ng-repeat="a in (filterdTrx=(userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc)) ">
-            <td >{{a.date | date:'dd-MMM-yyyy'}}</td>
-            <td >{{a.amount}}</td>
-            <td >{{a.type}}</td>
-            <td >{{a.source}}</td>
-            <td >{{a.destination}}</td>
-            <td >{{a.description}}</td>
-            <td ng-if="toggleDeleteButton"><level class="btn btn-danger"   ng-click="deletePrsTrx(a._id)">Delete</level></td>
-          </tr>
-          <tr>
-            <td class="info-text-header"><b>Total:</b></td>
-            <td class="info-text-header"><b>{{calTotalAmount(filterdTrx)}}<b></td>
+      <p></p>
+      <div class="table-responsive col-md-12">
+        <table class="table table-bordered  table-condensed ">
+          <thead uib-tooltip="Click to any column to sort" tooltip-placement="bottom" tooltip-trigger="mouseenter">
+            <tr >
+              <th ng-init="asc=!asc; orderProp=date" ng-click="asc=!asc; orderProp=date" class="info-text-header"><u>Date</u></th>
+              <th ng-click="asc=!asc; orderProp=amount" class="info-text-header"> <u> Amount</u></th>
+              <th ng-click="asc=!asc; orderProp=type" class="info-text-header"><u>Trx Type</u></th>
+              <th ng-click="asc=!asc; orderProp=source" class="info-text-header"><u>Trx Source</u></th>
+              <th ng-click="asc=!asc; orderProp=destination" class="info-text-header"><u>Trx Destination</u></th>
+              <th ng-click="asc=!asc; orderProp=description" class="info-text-header"><u>Description</u></th>
             </tr>
-          </tbody>
-        </table>
+          </thead>
+          <tbody>
+            <tr   ng-show='true' ng-repeat="a in (filterdTrx=(userTrxReport | reportDateRange:fromDate:toDate | filter:trxSearch | orderBy:orderProp:asc)) ">
+              <td >{{a.date | date:'dd-MMM-yyyy'}}</td>
+              <td >{{a.amount}}</td>
+              <td >{{a.type}}</td>
+              <td >{{a.source}}</td>
+              <td >{{a.destination}}</td>
+              <td >{{a.description}}</td>
+              <td ng-if="toggleDeleteButton"><level class="btn btn-danger"   ng-click="deletePrsTrx(a._id)">Delete</level></td>
+            </tr>
+            <tr>
+              <td class="info-text-header"><b>Total:</b></td>
+              <td class="info-text-header"><b>{{calTotalAmount(filterdTrx)}}<b></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
 
       </div>
 
     </div>
+
+
+
+
+
+
+
+    <div    class="panel panel-primary">
+      <div  ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Group Report<span ng-show="usrGrpReportResp" class={{msgType}} >{{usrGrpReportResp}}</span></div>
+      <div ng-if="!toggleGrInd" class="panel-body">
+
+        <div class="form-group col-sm-3 col-md-2 ">
+          <i><select   ng-model="grReport.group" ng-options="a as a.grName for a in userGroup" class="input-box form-control"></i>
+          </select>
+        </div>
+
+        <div class="form-group col-sm-3 col-md-3">
+          <input  ng-show="false" ng-model="fromDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
+          <span class="input-group-btn">
+            <button  type="button" class="input-box btn btn-primary" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
+          </span>
+        </div>
+        <div class="form-group col-sm-3 col-md-3">
+          <input ng-show="false" ng-model="toDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
+          <span class="input-group-btn">
+            <button  type="button" class="input-box btn btn-primary" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
+          </span>
+        </div>
+        <div class="form-group  col-sm-3 col-md-2">
+          <select  ng-init="propGr='$'" ng-model="propGr" class="col-sm-6 input-box form-control">
+            <option value="$">All</option>
+            <option value="gtInitiator">Initiator</option>
+          </select>
+          <input  style="display:inline;background-color:#795548;color:#D7CCC8" class="form-control input-box " ng-model="trxSearchGr[propGr]" placeholder="Search in field selected..." id="query">
+        </div>
+        <button ng-show="grReport.group.grAdmin==userEmail" ng-init="toggleGrDelBtn=true" class="col-md-2 btn input-box btn-primary"  ng-click="toggleGrDelBtn=!toggleGrDelBtn" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete</button>
+
+        <div class="table-responsive col-md-12 col-sm-12">
+          <table class="table table-bordered  table-condensed ">
+            <thead>
+              <tr>
+                <th ng-init="asc=!asc; orderPropGr=gtDate" ng-click="asc=!asc; orderProp=date"><u>Date</u></th>
+                <th>Amount</th>
+                <th>Initiator</th>
+                <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
+                <th>Desc</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr ng-repeat=" g in userGrpReport | grReportDateRange:fromDate:toDate | filter:{grId: grReport.group._id} | filter:trxSearchGr | orderBy:orderPropGr:asc">
+                <td>{{g.gtDate | date:'dd-MMM-yyyy'}}</td>
+                <td>{{g.gtAmount}}</td>
+                <td>{{g.gtInitiator | limitTo:10}}</td>
+                <td ng-repeat="gtm in g.gtMem  | orderBy:'gtMemEmail'">{{gtm.gtMemAmount}}</td>
+                <td>{{g.gtDesc}}</td>
+                <td ng-if="!toggleGrDelBtn"><level class="btn btn-danger"   ng-click="deleteGrTrx(g._id)">Delete</level></td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+    </div>
+
   </div>

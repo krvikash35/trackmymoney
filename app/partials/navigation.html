@@ -41,7 +41,7 @@
         <li><a href="#/user/{{userId}}/trx" ng-click="navCollapsed = !navCollapsed">Transaction</a></li>
         <li><a href="#/user/{{userId}}/report" ng-click="navCollapsed = !navCollapsed">Report</a></li>
         <li><a href="http://blog.trackourmoney.com" ng-click="navCollapsed = !navCollapsed" target="_blank">Blog</a></li>
-        <li><a ng-show="isLogged" href=""ng-click="navCollapsed = !navCollapsed;logout()"><b><i class="fa fa-lg fa-sign-out"></i>Logout</b></a></li>
+        <li><a ng-show="isLogged" href=""ng-click="navCollapsed = !navCollapsed;logout()"><b><i class="fa fa-lg fa-sign-out"></i>Logout{{userName}}</b></a></li>
       </ul>
     </div>
 

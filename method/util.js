@@ -542,6 +542,8 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+tempUser.verCode;
+
+              return res.status(200).send(emilVerCodeText);
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
@@ -558,6 +560,7 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
+              return res.status(200).send(emilVerCodeText);
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
@@ -783,6 +786,15 @@ var deleteUserPrsTrx  = function(req, res){
   }
 }
 
+var readGrpTrx = function(req, res){
+  userGroupTrx.find({'gtMem.gtMemEmail': req.email}).exec()
+  .then(function(usrGpTrx){
+    return res.status(200).send(usrGpTrx)
+  })
+  .catch(function(err){
+    return res.status(500).send(err.message)
+  })
+}
 
 
 
@@ -807,7 +819,8 @@ module.exports ={
   createGrpTrx:            createGrpTrx,
   readUserGroup:           readUserGroup,
   deleteUserGroup:         deleteUserGroup,
-  updateNotification:      updateNotification
+  updateNotification:      updateNotification,
+  readGrpTrx:              readGrpTrx
 }
 
 
