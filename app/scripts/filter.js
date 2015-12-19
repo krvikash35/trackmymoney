@@ -17,8 +17,6 @@ tmmFilter.filter('reportDateRange', function(){
 
 tmmFilter.filter('grReportDateRange', function(){
   return function(grTrx, fromDate, toDate){
-    console.log(grTrx);
-    // console.log(grTrx.gtDate);
     var filtered = [];
     angular.forEach(grTrx, function(grTrx){
       var  dateInMilli = new Date(grTrx.gtDate)

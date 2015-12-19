@@ -441,8 +441,37 @@ var createGrpTrx = function(req, res){
   })
 }
 
-var deleteGrpTrx = function(){
-
+var deleteGrpTrx = function(req, res){
+  logger.debug("inside deleteGrpTrx")
+  logger.info("deleteGrpTrx request by: "+req.email)
+  if ( !(mongoose.Types.ObjectId.isValid(req.params.grpTrxId)) ) {
+    return res.status(400).send(errConfig.E140);
+  }
+  userGroupTrx.find({_id: req.params.grpTrxId}).exec()
+  .then(function(grpTrxData){
+    if(grpTrxData.length==0)
+    throw ({name: "BadRequestError", message: errConfig.E140})
+    return grpTrxData
+  })
+  .then(function(data){
+    return userGroup.find({_id: data[0].grId, grAdmin: req.email}).exec()
+  })
+  .then(function(data){
+    if(data.length==0)
+    throw ({name: "BadRequestError", message: errConfig.E157})
+    userGroupTrx.remove({_id: req.params.grpTrxId})
+    .then(function(count){
+      return res.status(200).send()
+    })
+  })
+  .catch(function(err){
+    if(err.name === "BadRequestError"){
+      logger.warn(JSON.stringify(err))
+      return res.status(400).send(err.message)
+    }
+    logger.error(JSON.stringify(err))
+    return res.status(500).send(err.message)
+  })
 }
 
 var sendPwdToEmail = function(req, res){
@@ -820,7 +849,8 @@ module.exports ={
   readUserGroup:           readUserGroup,
   deleteUserGroup:         deleteUserGroup,
   updateNotification:      updateNotification,
-  readGrpTrx:              readGrpTrx
+  readGrpTrx:              readGrpTrx,
+  deleteGrpTrx:           deleteGrpTrx
 }
 
 

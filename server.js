@@ -20,7 +20,7 @@ var logger     = utilMeth.logger;
 
 
 //use middleware stack, these are executed in declared order whenever any req, res occur
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(utilMeth.setPreReq);
@@ -162,6 +162,12 @@ privRouter.put('/:userId/notification', utilMeth.updateNotification)
 privRouter.post('/:userId/group/trx', utilMeth.createGrpTrx)
 
 privRouter.get('/:userId/group/trx', utilMeth.readGrpTrx);
+
+//--------------------------------------------------
+//Delete Group transaction
+//#req grpTrxId
+//--------------------------------------------------
+privRouter.delete('/:userId/group/trx/:grpTrxId', utilMeth.deleteGrpTrx)
 
 
 

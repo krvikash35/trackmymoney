@@ -86,51 +86,55 @@
           </select>
         </div>
 
-        <div class="form-group col-sm-3 col-md-3">
-          <input  ng-show="false" ng-model="fromDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
-          <span class="input-group-btn">
-            <button  type="button" class="input-box btn btn-primary" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
-          </span>
-        </div>
-        <div class="form-group col-sm-3 col-md-3">
-          <input ng-show="false" ng-model="toDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
-          <span class="input-group-btn">
-            <button  type="button" class="input-box btn btn-primary" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
-          </span>
-        </div>
-        <div class="form-group  col-sm-3 col-md-2">
-          <select  ng-init="propGr='$'" ng-model="propGr" class="col-sm-6 input-box form-control">
-            <option value="$">All</option>
-            <option value="gtInitiator">Initiator</option>
-          </select>
-          <input  style="display:inline;background-color:#795548;color:#D7CCC8" class="form-control input-box " ng-model="trxSearchGr[propGr]" placeholder="Search in field selected..." id="query">
-        </div>
-        <button ng-show="grReport.group.grAdmin==userEmail" ng-init="toggleGrDelBtn=true" class="col-md-2 btn input-box btn-primary"  ng-click="toggleGrDelBtn=!toggleGrDelBtn" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete</button>
+        <div ng-if="grReport.group">
 
-        <div class="table-responsive col-md-12 col-sm-12">
-          <table class="table table-bordered  table-condensed ">
-            <thead>
-              <tr>
-                <th ng-init="asc=!asc; orderPropGr=gtDate" ng-click="asc=!asc; orderProp=date"><u>Date</u></th>
-                <th>Amount</th>
-                <th>Initiator</th>
-                <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
-                <th>Desc</th>
-              </tr>
-            </thead>
+          <div class="form-group col-sm-3 col-md-3">
+            <input  ng-show="false" ng-model="fromDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
+            <span class="input-group-btn">
+              <button  type="button" class="input-box btn btn-primary" ng-click="isFromDateOpen=!isFromDateOpen"><i class="glyphicon glyphicon-calendar"><b>From:</b>{{fromDate | date:'dd-MMM-yyyy'}}</i></button>
+            </span>
+          </div>
+          <div class="form-group col-sm-3 col-md-3">
+            <input ng-show="false" ng-model="toDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup  is-open="isToDateOpen"  ng-required="true" />
+            <span class="input-group-btn">
+              <button  type="button" class="input-box btn btn-primary" ng-click="isToDateOpen=!isToDateOpen"><i class="glyphicon glyphicon-calendar"><b>To:</b>{{toDate | date:'dd-MMM-yyyy'}}</i></button>
+            </span>
+          </div>
+          <div class="form-group  col-sm-3 col-md-2">
+            <select  ng-init="propGr='$'" ng-model="propGr" class="col-sm-6 input-box form-control">
+              <option value="$">All</option>
+              <option value="gtInitiator">Initiator</option>
+            </select>
+            <input  style="display:inline;background-color:#795548;color:#D7CCC8" class="form-control input-box " ng-model="trxSearchGr[propGr]" placeholder="Search in field selected..." id="query">
+          </div>
+          <button ng-show="grReport.group.grAdmin==userEmail" ng-init="toggleGrDelBtn=true" class="col-md-2 btn input-box btn-primary"  ng-click="toggleGrDelBtn=!toggleGrDelBtn" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete</button>
 
-            <tbody>
-              <tr ng-repeat=" g in userGrpReport | grReportDateRange:fromDate:toDate | filter:{grId: grReport.group._id} | filter:trxSearchGr | orderBy:orderPropGr:asc">
-                <td>{{g.gtDate | date:'dd-MMM-yyyy'}}</td>
-                <td>{{g.gtAmount}}</td>
-                <td>{{g.gtInitiator | limitTo:10}}</td>
-                <td ng-repeat="gtm in g.gtMem  | orderBy:'gtMemEmail'">{{gtm.gtMemAmount}}</td>
-                <td>{{g.gtDesc}}</td>
-                <td ng-if="!toggleGrDelBtn"><level class="btn btn-danger"   ng-click="deleteGrTrx(g._id)">Delete</level></td>
-              </tr>
-            </tbody>
+          <div class="table-responsive col-md-12 col-sm-12">
+            <table class="table table-bordered  table-condensed ">
+              <thead>
+                <tr>
+                  <th ng-init="asc=!asc; orderPropGr=gtDate" ng-click="asc=!asc; orderProp=date"><u>Date</u></th>
+                  <th>Amount</th>
+                  <th>Initiator</th>
+                  <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
+                  <th>Desc</th>
+                </tr>
+              </thead>
 
-          </table>
+              <tbody>
+                <tr ng-repeat=" g in userGrpReport | grReportDateRange:fromDate:toDate | filter:{grId: grReport.group._id} | filter:trxSearchGr | orderBy:orderPropGr:asc">
+                  <td ng-if="!g.isDeleted">{{g.gtDate | date:'dd-MMM-yyyy'}}</td>
+                  <td ng-if="!g.isDeleted">{{g.gtAmount}}</td>
+                  <td ng-if="!g.isDeleted">{{g.gtInitiator | limitTo:10}}</td>
+                  <td ng-if="!g.isDeleted" ng-repeat="gtm in g.gtMem  | orderBy:'gtMemEmail'">{{gtm.gtMemAmount}}</td>
+                  <td ng-if="!g.isDeleted">{{g.gtDesc}}</td>
+                  <td ng-if="!g.isDeleted" ng-show="!toggleGrDelBtn"><level class="btn btn-danger"   ng-click="deleteGrTrx(g._id, g)">Delete</level></td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
         </div>
 
       </div>

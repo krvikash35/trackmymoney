@@ -708,7 +708,18 @@ $scope.toggleGrDelBtn=false;
   }
 getGroupTrx()
 
+$scope.deleteGrTrx = function(grpTrxId, g){
 
+  $http.delete("/user/"+$localStorage.userId+"/group/trx/"+grpTrxId)
+  .success(function(data, scope){
+    utilSer.showFlashMsg($scope, "success", 'usrGrpReportResp', data, true);
+    g.isDeleted=true;
+  })
+  .error(function(data, scope){
+    utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
+  })
+
+}
 
 })
 
