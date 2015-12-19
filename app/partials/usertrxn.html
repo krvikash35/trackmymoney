@@ -1,13 +1,13 @@
 <div ng-show="isLogged">
 
-  <div ng-show="false" class="panel panel-primary">
-    <div class="panel-heading">Personal Trx<span ng-if="prsTrxResp" class={{msgType}} >{{prsTrxResp}}</span></div>
-    <div class="panel-body">
+  <div   class="panel panel-primary">
+    <div ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Personal Trx<span ng-if="prsTrxResp" class={{msgType}} >{{prsTrxResp}}</span></div>
+    <div ng-if="!toggleGrInd" class="panel-body">
 
       <form ng-submit="submitTrxForm(trx)" role="form" class="trx-form">
         <div class="form-group col-sm-2 ">
           <label >Amount</label>
-          <input ng-model="trx.amount" type="text" class="input-box form-control" required  autofocus>
+          <input ng-model="trx.amount" type="text" class="input-box form-control" placeholder="Enter Amount" required  autofocus>
         </div>
 
         <div class="form-group col-sm-5">
@@ -57,46 +57,46 @@
 
 
   <div  class="panel panel-primary">
-    <div class="panel-heading">Group Trx<span ng-if="prsTrxResp" class={{msgType}} >{{grpTrxResp}}</span></div>
-    <div class="panel-body">
+    <div ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Group Trx<span ng-if="grpTrxResp" class={{msgType}} >{{grpTrxResp}}</span></div>
+    <div ng-if="toggleGrInd" class="panel-body">
 
-      <form ng-submit="submitGrpTrxForm(grTrx)" role="form" class="trx-form">
+      <form ng-submit="submitGrpTrxForm(grTrx)" role="form" class="grtrx-form">
         <div class="form-group col-sm-3 ">
           <label>Group</label>
           <select  ng-model="grTrx.group" ng-options="a as a.grName for a in userGroup" class="input-box form-control">
           </select>
         </div>
 
-        <div class="form-group"ng-if="grTrx.group">
+        <div class="form-group" ng-if="grTrx.group">
 
           <div class="form-group col-sm-3 ">
             <label >Total Amount</label>
-            <input ng-model="grTrx.amount" type="text" class="input-box form-control" placeholder="Expense by you?" required  autofocus>
+            <input ng-model="grTrx.amount" type="text" ng-change="" class="input-box form-control" placeholder="Expense by you?" required  autofocus>
           </div>
 
           <i ng-repeat="g in grTrx.group.grMember">
 
             <div class="form-group col-sm-3 ">
               <label >{{g.grMemName|limitTo:10}}</label>
-              <input ng-model="grTrx.amount" type="text" class="input-box form-control"placeholder="will share?"  required  autofocus>
+              <input ng-model="grTrx[g.grMemEmail]"  type="text" class="input-box form-control"placeholder="will share?"  required  autofocus>
             </div>
 
           </i>
 
           <div class="form-group col-sm-3 ">
             <label >Desc</label>
-            <input ng-model="grTrx.amount" type="text" class="input-box form-control" placeholder="about item or event" required  autofocus>
+            <input ng-model="grTrx.desc" type="text" class="input-box form-control" placeholder="about item or event"   >
           </div>
 
           <div class="form-group col-sm-3">
             <label >Date</label>
             <input  ng-show="false" ng-init="initGrTrxDate()" ng-model="grTrx.date"  type="date" class="form-control" show-weeks=false uib-datepicker-popup show-button-bar=false  is-open="isGrtrxDateOpen"   ng-required="true" />
-            <button   type="button" class="input-box form-control" ng-click="isGrtrxDateOpen=!isGrtrxDateOpen"><i class="glyphicon glyphicon-calendar">{{trx.date | date:'dd-MMM-yyyy'}}</i></button>
+            <button   type="button" class="input-box form-control" ng-click="isGrtrxDateOpen=!isGrtrxDateOpen"><i class="glyphicon glyphicon-calendar">{{grTrx.date | date:'dd-MMM-yyyy'}}</i></button>
           </div>
 
           <div class="col-sm-12">
-            <button type="submit"  class="input-button btn btn-primary col-xs-4 col-sm-2 col-md-3 col-lg-3">Submit</button>
-          </di>
+            <button type="submit"  ng-click="" class="input-button btn btn-primary col-xs-4 col-sm-2 col-md-3 col-lg-3">Submit</button>
+          </div>
         </div>
       </form>
     </div>

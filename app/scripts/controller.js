@@ -505,6 +505,7 @@ tmmController.controller('userInfoController', function($routeParams, valSer, ut
 // Controller for handling user transaction
 //**************************************************************************************
 tmmController.controller('userTrxController', function(valSer,utilSer, $localStorage, $scope, $routeParams, $rootScope, $location, $http,  $window){
+  $scope.trx={};
   var usrIncomeSrc=[];
   var usrExpenseSrc=[];
   var usrMoneyAcct=[];
@@ -557,7 +558,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
       return err;
     }
 
-    $http.post($location.path(), trxForm)
+    $http.post("/user/"+$routeParams.userId+"/trx", trxForm)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
     })
@@ -575,7 +576,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
   }
 
 
-$scope.grTrx={};
+  $scope.grTrx={};
   var getUserGroup = function(){
     $http.get("/user/"+$localStorage.userId+"/group")
     .success(function(data, status, headers, config){
@@ -587,8 +588,27 @@ $scope.grTrx={};
       return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
     })
   }
-
   getUserGroup();
+  $scope.submitGrpTrxForm = function(grpTrx){
+    var gtMem=[];
+    for(var i=grpTrx.group.grMember.length; i--;){
+      gtMem.push({"gtMemAmount": grpTrx[grpTrx.group.grMember[i].grMemEmail], "gtMemEmail": grpTrx.group.grMember[i].grMemEmail})
+    }
+    var grTrx={"grId":grpTrx.group._id, "gtAmount":grpTrx.amount, "gtMem": gtMem, "gtDate": grpTrx.date, "gtDesc": grpTrx.desc};
+
+    $http.post("/user/"+$routeParams.userId+"/group/trx", grTrx)
+    .success(function(data, status, headers, config){
+      utilSer.showFlashMsg($scope, "success", 'grpTrxResp', data, true);
+    })
+    .error(function(data, status, headers, config){
+      utilSer.showFlashMsg($scope, "error", 'grpTrxResp', data, true);
+    })
+
+  }
+
+  $scope.initGrTrxDate = function(){
+    $scope.grTrx.date = new Date()
+  }
 
 
 })
@@ -658,7 +678,6 @@ tmmController.controller('userReportController', function( $routeParams, $filter
 
 tmmController.controller('ModalInstanceCtrl', function($scope, $uibModalInstance){
   $scope.closeModal = function(){
-    console.log("called");
     $uibModalInstance.dismiss();
   }
 })
