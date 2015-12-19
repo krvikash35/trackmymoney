@@ -567,15 +567,30 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 
 
   }
-
   $scope.initTrxDate = function() {
     $scope.trx.date = new Date();
   };
-
-
   $scope.trxTypeChanged = function(trxType){
     trxUiHandler(trxType);
   }
+
+
+$scope.grTrx={};
+  var getUserGroup = function(){
+    $http.get("/user/"+$localStorage.userId+"/group")
+    .success(function(data, status, headers, config){
+      $scope.grTrx.group=data[0];
+      $scope.userGroup=data;
+      $scope.userEmail=$localStorage.email;
+    })
+    .error(function(data, status, headers, config){
+      return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
+    })
+  }
+
+  getUserGroup();
+
+
 })
 
 
