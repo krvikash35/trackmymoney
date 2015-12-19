@@ -610,6 +610,11 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     $scope.grTrx.date = new Date()
   }
 
+  $scope.initEqualAmount = function(grMem){
+    for(var i=grMem.length; i--;){
+      $scope.grTrx[grMem[i].grMemEmail]=$scope.grTrx.amount/grMem.length
+    }
+  }
 
 })
 
