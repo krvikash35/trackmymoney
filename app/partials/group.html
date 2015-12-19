@@ -25,9 +25,9 @@
                   <td class="row"colspan="3">
                     <form class="form  " ng-submit="sendInviteForAddtoGroup(m,  a._id, m.inviteeEmail)">
                       <div class="">
-                        <input style="float:left" class="col-sm-4 col-md-4 form-control input-box" ng-model="m.inviteeEmail" type="email" ng-required="true"   ng-type="email"  placeholder="Enter Invitee Email...notification will be send to join the group"/>
+                        <input style="float:left" id="inviteeEmail" class="col-sm-4 col-md-4 form-control input-box" ng-model="m.inviteeEmail" type="email" ng-required="true"   ng-type="email"  placeholder="Enter Invitee Email...notification will be send to join the group"/>
                       </div>
-                      <button style="margin-top:3px"ng-disabled="m.inProgress"  class="col-xs-12 col-md-2 col-sm-3 btn btn-success " type="submit"><i class="fa fa-user-plus"></i>Invite Member</button>
+                      <button style="margin-top:3px" ng-disabled="m.inProgress"  class="col-xs-12 col-md-2 col-sm-3 btn btn-success " type="submit"><i class="fa fa-user-plus"></i>Invite Member</button>
                     </form>
                   </td>
                 </tr>

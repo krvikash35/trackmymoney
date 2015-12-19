@@ -197,9 +197,17 @@ var updateUserGroup = function(req, res){
       return userGroup.findOne({_id: req.body.groupId, 'grMember.grMemEmail': req.body.inviteeEmail}).exec()
     })
     .then(function isInviteeAlreadyAdded(iData){
-      if(iData){
+      if(iData)
         throw ({name: "BadRequestError", message: errConfig.E150})
-      }else {
+    })
+    .then(function isInviteAlreadySend(){
+      return userNoti.find({notiType:1, notiIsRead: false, notiUser: req.body.inviteeEmail, 'notiParam.pValue': req.body.groupId} ).exec()
+    })
+    .then(function(data){
+      if(data.length!=0)
+      throw ({name: "BadRequestError", message: errConfig.E158})
+    })
+    .then(function prepareNoti(){
         var noti={};
         grName    = this.gData.grName;
         gAdminEmail = this.gData.grMember[0].grMemEmail;
@@ -211,7 +219,7 @@ var updateUserGroup = function(req, res){
         noti.nParams =[{pName: "groupId", pValue: req.body.groupId}];
         noti.nType = sConfig.nType.reqToAddGrpMem;
         return createNotification(noti)
-      }
+
     })
     .then(function(noti){
       return res.status(201).send(noti)
@@ -253,6 +261,7 @@ var updateUserGroup = function(req, res){
       return gData.save();
     })
     .then(function(upGData){
+      console.log(upGData);
       this.nData.notiIsRead=true;
       this.nData.save()
       return res.status(200).send(upGData)
@@ -302,6 +311,19 @@ var updateUserGroup = function(req, res){
 
 }
 
+var updateNotification = function(req, res){
+  if ( !(mongoose.Types.ObjectId.isValid(req.body.notificationId)) ) {
+    return res.status(400).send(errConfig.E143);
+  }
+  switch (req.body.updateTypeCode) {
+    case "1":
+    userNoti.update({_id: req.body.notificationId},{notiIsRead: true}).exec()
+      break;
+    default:
+      return res.status(400).send(errConfig.E139)
+  }
+}
+
 var createNotification = function(noti){
   logger.debug("Inside createNotification")
   return new promise(function(resolve, reject){
@@ -329,9 +351,9 @@ var createNotification = function(noti){
 var readNotification = function(req, res){
   logger.debug("inside readNotification")
   logger.info("readNotification request by: "+req.email)
-  userNoti.find({notiUser: req.email})
-  .exec()
+  userNoti.find({notiUser: req.email}).exec()
   .then(function(userNoti){
+    console.log(userNoti);
     res.status(200).send(userNoti)
   })
   .catch(function(err){
@@ -766,7 +788,8 @@ module.exports ={
   readNotification:        readNotification,
   createGrpTrx:            createGrpTrx,
   readUserGroup:           readUserGroup,
-  deleteUserGroup:         deleteUserGroup
+  deleteUserGroup:         deleteUserGroup,
+  updateNotification:      updateNotification
 }
 
 

@@ -144,6 +144,16 @@ privRouter.get('/:userId/notification', utilMeth.readNotification)
 
 
 //------------------------------------------------------
+//update notification
+//@req token, updateTypeCode
+//1-markasread
+//1, notificationId
+//@response-error:
+//@response-success:
+//---------------------------------------------------
+privRouter.put('/:userId/notification', utilMeth.updateNotification)
+
+//------------------------------------------------------
 //Create Group Transaction
 //@req token, grId, gtAmount, gtDate, gtMem, gtItem, gtDesc
 //@response-error:
