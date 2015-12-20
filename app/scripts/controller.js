@@ -724,6 +724,7 @@ tmmController.controller('userReportController', function( $routeParams, $filter
 
   $scope.finalGrpBalance = function(data){
     if(data && data.length!=0){
+      console.log("dat: "+data);
       var grMem=data[0].gtMem;
       var result={}
       for(var i=grMem.length;i--;){
@@ -739,6 +740,7 @@ tmmController.controller('userReportController', function( $routeParams, $filter
         }
       }
       $scope.finalBalance=result;
+      console.log(result);
     }else {
       return $scope.finalBalance=null;
     }
