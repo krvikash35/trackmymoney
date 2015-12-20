@@ -117,8 +117,8 @@
                   <th>Amount</th>
                   <th>Initiator</th>
                   <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
-<th>Activity</th>
-<th>Desc</th>
+                  <th>Activity</th>
+                  <th>Desc</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,7 +151,7 @@
               <tbody>
                 <tr >
                   <td > <i><select ng-init="bInitiator=userEmail"  ng-model="bInitiator" ng-options="a.grMemEmail as a.grMemName for a in grReport.group.grMember" class="input-box form-control"></select></i> </td>
-                  <td  ng-repeat="m in grReport.group.grMember  | orderBy:'gtMemEmail'">{{finalBalance[bInitiator][m.grMemEmail]-finalBalance[m.grMemEmail][bInitiator]}}</td>
+                  <td  ng-repeat="m in grReport.group.grMember ">{{finalBalance[bInitiator][m.grMemEmail]-finalBalance[m.grMemEmail][bInitiator]}}</td>
                 </tr>
               </tbody>
             </table>
