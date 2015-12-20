@@ -138,6 +138,7 @@ var createUserGroup = function(req, res){
   usrGp.grAdmin  = req.email;
   usrGp.grMember.push({grMemName: req.fullname, grMemEmail:req.email})
   usrGp.grCreateDate = new Date()
+  usrGp.grTemplate = sConfig.grTemplate;
   usrGp.save(function(err, usrGpData){
     if(err){
       logger.error(JSON.String(err));
@@ -370,7 +371,6 @@ var readNotification = function(req, res){
   logger.info("readNotification request by: "+req.email)
   userNoti.find({notiUser: req.email}).exec()
   .then(function(userNoti){
-    console.log(userNoti);
     res.status(200).send(userNoti)
   })
   .catch(function(err){
@@ -420,15 +420,6 @@ var createGrpTrx = function(req, res){
     return grTrx.save()
   })
   .then(function(){
-    var noti={};
-    noti.nSub=sConfig.addGrTrx;
-    noti.nText = req.fullname + "has added transaction in group "+this.grData.grName;
-    noti.nUsers = this.grData.grMember;
-    noti.notiDate = new Date();
-    noti.nType = sConfig.nType.addGrTrx;
-    createNotification(noti)
-  })
-  .then(function(){
     return res.status(201).send(errConfig.S103)
   })
   .catch(function(err){
@@ -444,6 +435,7 @@ var createGrpTrx = function(req, res){
 var deleteGrpTrx = function(req, res){
   logger.debug("inside deleteGrpTrx")
   logger.info("deleteGrpTrx request by: "+req.email)
+  var notiDetail={};
   if ( !(mongoose.Types.ObjectId.isValid(req.params.grpTrxId)) ) {
     return res.status(400).send(errConfig.E140);
   }
@@ -451,6 +443,9 @@ var deleteGrpTrx = function(req, res){
   .then(function(grpTrxData){
     if(grpTrxData.length==0)
     throw ({name: "BadRequestError", message: errConfig.E140})
+    notiDetail.amount=grpTrxData[0].gtAmount;
+    notiDetail.initiator=grpTrxData[0].gtInitiator;
+    notiDetail.gtDate=grpTrxData[0].gtDate;
     return grpTrxData
   })
   .then(function(data){
@@ -459,8 +454,18 @@ var deleteGrpTrx = function(req, res){
   .then(function(data){
     if(data.length==0)
     throw ({name: "BadRequestError", message: errConfig.E157})
+    notiDetail.grName=data[0].grName
+    notiDetail.grMem=data[0].grMember;
     userGroupTrx.remove({_id: req.params.grpTrxId})
     .then(function(count){
+      var noti={};
+      noti.nSub=sConfig.delGrTrx;
+      noti.nText = "Group record created by "+notiDetail.initiator+" Date: "+notiDetail.gtDate
+      +" Amount: "+notiDetail.amount+ " is rejected by "+notiDetail.grName+" admin ";
+      noti.nUsers = notiDetail.grMem;
+      noti.notiDate = new Date();
+      noti.nType = sConfig.nType.delGrTrx;
+      createNotification(noti)
       return res.status(200).send()
     })
   })

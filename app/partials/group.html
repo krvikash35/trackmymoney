@@ -5,7 +5,41 @@
     <div class="panel-body">
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
-          <div class="panel-heading"  >{{a.grName}}<i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:4px"class="fa fa-pencil-square-o fa-lg"></i> <i ng-click="deleteGroup(a._id)" ng-if="a.grAdmin==userEmail" style="margin-left:4px" class="fa fa-trash-o fa-lg"></i> <i  ng-if="a.grAdmin==userEmail"style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">You</i><i ng-if="a.grAdmin!=userEmail" style="float:right; overflow: hidden;text-overflow: ellipsis;max-width:40%">{{a.grAdmin}}</i></div>
+          <div class="panel-heading"  >{{a.grName}}
+            <i ng-click="isAdminGroup(a)"
+            ng-if="a.grAdmin==userEmail" style="margin-left:4px"class="fa fa-pencil-square-o fa-lg"> </i>
+            <i ng-if="a.grAdmin==userEmail" ></i>
+
+
+            <div class="btn-group" auto-close="disabled" uib-dropdown>
+              <button id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                <i class="fa fa-list-ul"></i> <span class="caret"></span>
+              </button>
+              <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
+              </ul>
+            </div>
+            <script type="text/ng-template" id="dropdown.html">
+            <ul style="background-color:red" class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
+            <table class="table table-bordered  table-condensed">
+            <tr>
+            <td><input ng-model="grItem" class="form-control"></input></td>
+            <td><button ng-click="saveGrTemplate(a.grTemplate, grItem, 1)" class="btn btn-success">Save</button>
+            </tr>
+            <tr ng-repeat="item in a.grTemplate">
+            <td >{{item}}</td>
+            <td><button ng-click="saveGrTemplate(a.grTemplate, item, 2)" class="btn btn-danger">Del</button></td>
+            </tr>
+            </table>
+            </ul>
+            </script>
+
+
+
+
+            <i ng-click="deleteGroup(a._id)" ng-if="a.grAdmin==userEmail" style="float:right;margin-left:4px"
+            class="btn btn-danger fa fa-trash-o fa-lg"></i>
+            <i style="float:right">Admin:{{a.grAdmin | nameByEmail:a.grMember}}</i>
+          </div>
           <div class="panel-body">
             <table  class="table  table-bordered table-condensed ">
               <thead>

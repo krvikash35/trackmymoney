@@ -20,11 +20,12 @@ module.exports = {
   "emailPwdText": "Please find below the password, you should chagne your password on nex login at your convenience",
   "tokenExpiresInSecond": 43200,
   "addToGrNotiSub": "you got invite to join the group",
-  "addGrTrx": "added record in GroupTrx",
+  "delGrTrx": "Group Record Deleted",
   "errMsg" : {
     "invalidRunEvn": "Please enter the valid value for run environment"
 
   },
+  "grTemplate": ["Trip",  "Breakfast", "lunch", "Dinner", "Theater"],
   "trxType":            ["Income", "Expense", "Transfer"],
   "accountLoginMethod": ["email","phone"],
   "moneyAccountType":   ["SavingAccount", "CreditCard","DigitalWallet","CashAccount"],
@@ -44,7 +45,6 @@ module.exports = {
   ],
   "nType": {
     "reqToAddGrpMem": 1,
-    "deleteGrpTrx": 2,
-    "addGrTrx": 3
+    "delGrTrx": 3
   }
 };

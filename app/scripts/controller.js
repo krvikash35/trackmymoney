@@ -933,4 +933,13 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
     })
   }
 
+  $scope.saveGrTemplate = function(items, item, code){
+    if(code==1){
+      items.push(item)
+    }
+    if(code==2){
+      items.splice(items.indexOf(item) ,1)
+    }
+  }
+
 })

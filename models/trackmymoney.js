@@ -55,7 +55,8 @@ var userGroup = new schema({
   "grMember": [{
     "grMemName": {type: String},
     "grMemEmail": {type: String}
-  }]
+  }],
+  "grTemplate": [{type: String}]
 })
 
 //User group trx schema
