@@ -117,7 +117,8 @@
                   <th>Amount</th>
                   <th>Initiator</th>
                   <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
-                  <th>Desc</th>
+<th>Activity</th>
+<th>Desc</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,6 +127,7 @@
                   <td ng-if="!g.isDeleted">{{g.gtAmount}}</td>
                   <td ng-if="!g.isDeleted">{{g.gtInitiator | nameByEmail:grReport.group.grMember }}</td>
                   <td ng-if="!g.isDeleted" ng-repeat="gtm in g.gtMem  | orderBy:'gtMemEmail'">{{gtm.gtMemAmount}}</td>
+                  <td ng-if="!g.isDeleted">{{g.gtItem}}</td>
                   <td ng-if="!g.isDeleted">{{g.gtDesc}}</td>
                   <td ng-if="!g.isDeleted" ng-show="!toggleGrDelBtn"><level class="btn btn-danger"   ng-click="deleteGrTrx(g._id, g)">Delete</level></td>
                 </tr>
@@ -142,7 +144,7 @@
             <table class="table table-bordered  table-condensed ">
               <thead>
                 <tr>
-                  <th class="col-sm-4 info-text-header" style="background-color: #5D4037;">FINAL BALANCE Note: selected user will get from(+) or give to(-)</th>
+                  <th class="col-sm-4 info-text-header" style="">FINAL BALANCE Note: selected user will get from(+) or give to(-)</th>
                   <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
                 </tr>
               </thead>

@@ -597,7 +597,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     for(var i=grpTrx.group.grMember.length; i--;){
       gtMem.push({"gtMemAmount": grpTrx[grpTrx.group.grMember[i].grMemEmail], "gtMemEmail": grpTrx.group.grMember[i].grMemEmail})
     }
-    var grTrx={"grId":grpTrx.group._id, "gtAmount":grpTrx.amount, "gtMem": gtMem, "gtDate": grpTrx.date, "gtDesc": grpTrx.desc};
+    var grTrx={"grId":grpTrx.group._id, "gtAmount":grpTrx.amount, "gtMem": gtMem, "gtDate": grpTrx.date, "gtDesc": grpTrx.desc, "gtItem": grpTrx.grTemplate};
 
     $http.post("/user/"+$routeParams.userId+"/group/trx", grTrx)
     .success(function(data, status, headers, config){
@@ -933,12 +933,31 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
     })
   }
 
-  $scope.saveGrTemplate = function(items, item, code){
+$scope.status = {
+  isGrTempleteOpen: false,
+  isGrTempleteMod: false
+}
+  $scope.saveGrTemplate = function(items, item, code, grId){
     if(code==1){
+      if( item && items.indexOf(item)==-1){
       items.push(item)
+      $scope.status.isGrTempleteMod=true;
+      }
     }
     if(code==2){
       items.splice(items.indexOf(item) ,1)
+      $scope.status.isGrTempleteMod=true;
+    }
+    if(code==3){
+      if($scope.status.isGrTempleteOpen==false && $scope.status.isGrTempleteMod==true){
+        $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "4", "groupId":grId, "grTemplate": items})
+        .success(function(data, scope){
+          utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+        })
+        .error(function(data, scope){
+          utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+        })
+      }
     }
   }
 

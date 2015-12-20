@@ -17,7 +17,7 @@ module.exports = {
   S108: 'Group Member Deleted Successfully!!',
   S109: 'Group Created!',
   S110: 'Group Deleted!',
-  S111: '!',
+  S111: 'Group Updated !',
   S112: '!',
   S113: '',
   S114: '',

@@ -307,6 +307,16 @@ var updateUserGroup = function(req, res){
       return res.status(500).send(err.message)
     })
     break;
+
+    case "4":
+      userGroup.update({_id: req.body.groupId, 'grMember.grMemEmail': req.email}, {grTemplate: req.body.grTemplate})
+      .then(function(data){
+        return res.status(200).send(errConfig.S111)
+      })
+      .catch(function(err){
+        return res.status(200).send(err.message)
+      })
+    break;
     default:
     return res.status(400).send(errConfig.E145)
   }
@@ -494,8 +504,6 @@ var sendPwdToEmail = function(req, res){
       if(err)
       return res.status(500).send(errConfig.E120);
       var emailPwdText= sConfig.emailPwdText+"<br>"+tempPwd;
-      //devprod
-      return res.status(200).send(emailPwdText);
       sendEmail(req.body.email, sConfig.emailPwdSubject, emailPwdText)
       .then(function(data){
         return res.status(200).send(data)
@@ -576,8 +584,6 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+tempUser.verCode;
-
-              return res.status(200).send(emilVerCodeText);
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
@@ -594,7 +600,6 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
-              return res.status(200).send(emilVerCodeText);
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)

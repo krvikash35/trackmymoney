@@ -115,12 +115,13 @@ privRouter.get('/:userId/group', utilMeth.readUserGroup);
 
 //------------------------------------------------------
 //update group
-//1-sendMemAddInvite, 2-addGrMem, 3-deleteGrMem
+//1-sendMemAddInvite, 2-addGrMem, 3-deleteGrMem, 4-editTempletList
 //put('/user/:userId/group/')
 //@req.body.[updateTypeCode, groupId, inviteeEmail]
 //1- updateTypeCode, groupId, inviteeEmail, token
 //2- updateTypeCode, notificationId, token
 //3- updateTypeCode, groupId, grMemEmail, token
+//4- updateTypeCode, groupId, token, grTemplate
 //@response-error:
 //@response-success:
 //---------------------------------------------------

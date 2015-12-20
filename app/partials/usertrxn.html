@@ -63,7 +63,7 @@
       <form ng-submit="submitGrpTrxForm(grTrx)" role="form" class="grtrx-form">
         <div class="form-group col-sm-3 ">
           <label>Group</label>
-          <select  ng-model="grTrx.group" ng-options="a as a.grName for a in userGroup" class="input-box form-control">
+          <select ng-change="grTrx.grTemplate=grTrx.group.grTemplate[0]" ng-model="grTrx.group" ng-options="a as a.grName for a in userGroup" class="input-box form-control">
           </select>
         </div>
 
@@ -82,6 +82,12 @@
             </div>
 
           </i>
+
+          <div class="form-group col-sm-3 ">
+            <label>Activity</label>
+            <select ng-init="grTrx.grTemplate=grTrx.group.grTemplate[0]"  ng-model="grTrx.grTemplate" ng-options="grt as grt for grt in grTrx.group.grTemplate" class="input-box form-control">
+            </select>
+          </div>
 
           <div class="form-group col-sm-3 ">
             <label >Desc</label>
