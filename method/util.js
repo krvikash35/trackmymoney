@@ -334,6 +334,9 @@ var updateNotification = function(req, res){
       return res.status(400).send(errConfig.E143);
     }
     userNoti.update({_id: req.body.notificationId},{notiIsRead: true}).exec()
+    .then(function(){
+      return res.status(200).send()
+    })
     break;
     case "2":
     userNoti.remove({notiUser: req.email}).exec()

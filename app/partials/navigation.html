@@ -52,11 +52,11 @@
 
 
   <script type="text/ng-template" id="noti.html">
-  <div style="background-color:#2B2B2B;margin:-15px;color:#212121;width:250px;max-height:300px;overflow:hidden; overflow:auto">
-  <i style="margin:5px" g-click="deleteNoti('2')" class="btn btn-danger fa fa-trash-o fa-lg">All</i>
+  <div style="background-color:#2B2B2B;margin:-15px;color:#212121;width:300px;max-height:300px;overflow:hidden; overflow:auto">
+  <i style="margin:5px" ng-click="deleteNoti('2')" class="btn btn-danger fa fa-trash-o fa-lg">All</i>
   <i  ng-click="deleteNoti('3')" style="margin-top:5px;float:right;padding-right:10px"class="btn btn-danger fa fa-trash-o fa-lg">Read</i>
 
-  <i  style="margin:3px" class="fa fa-search fa-2x"><input style="float:right;width:85%" ng-model="searchText" placeholder="Type any keyword" class="form-control input-box"></input></i>
+  <i  style="margin:3px;color:white" class="fa fa-search fa-2x"><input style="float:right;width:85%" ng-model="searchText" placeholder="Type any keyword" class="form-control input-box"></input></i>
 
 
   <i ng-repeat="a in userNoti | filter:searchText | orderBy:['notiIsRead', '-notiDate']">

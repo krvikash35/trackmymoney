@@ -724,7 +724,6 @@ tmmController.controller('userReportController', function( $routeParams, $filter
 
   $scope.finalGrpBalance = function(data){
     if(data && data.length!=0){
-      console.log("dat: "+data);
       var grMem=data[0].gtMem;
       var result={}
       for(var i=grMem.length;i--;){
@@ -740,7 +739,6 @@ tmmController.controller('userReportController', function( $routeParams, $filter
         }
       }
       $scope.finalBalance=result;
-      console.log(result);
     }else {
       return $scope.finalBalance=null;
     }
@@ -773,6 +771,19 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
     })
   }
 
+  $scope.markNotiAsRead = function(nId){
+    $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": "1", "notificationId": nId})
+    .success(function(data, status){
+      console.log(data);
+      utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+      $scope.getUserNoti()
+    })
+    .error(function(data, status){
+      utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+    })
+  }
+
+
   $scope.getUserNoti = function(){
     $http.get("/user/"+$localStorage.userId+"/notification")
     .success(function(data, status, headers, config){
@@ -782,20 +793,11 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
       return utilSer.showFlashMsg($scope, "error", 'usrBasicInfoUpdateResp', data, true);
     })
   }
-  $scope.markNotiAsRead = function(nId){
-    $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": "1", "notificationId": nId})
-    .success(function(data, status){
-      utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
-      $scope.getUserNoti()
-    })
-    .error(function(data, status){
-      utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
-    })
-  }
 
   $scope.accetAddToGroupInvite = function(nId){
     $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "2", "notificationId": nId})
     .success(function(data, status){
+      console.log(data);
       utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
       $scope.getUserNoti()
     })
