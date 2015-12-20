@@ -87,7 +87,6 @@
         </div>
 
         <div ng-if="grReport.group">
-
           <div class="form-group col-sm-3 col-md-3">
             <input  ng-show="false" ng-model="fromDate"  type="date" class="form-control" show-weeks=false uib-datepicker-popup="dd-MMM-yyyy"  is-open="isFromDateOpen"   ng-required="true" />
             <span class="input-group-btn">
@@ -144,17 +143,18 @@
             <table class="table table-bordered  table-condensed ">
               <thead>
                 <tr>
-                  <th class="col-sm-4 info-text-header" style="">FINAL BALANCE Note: selected user will get from(+) or give to(-)</th>
+                  <th class="col-sm-4 col-xs-2 info-text-header" style="max-width:120px">FINAL BALANCE </th>
                   <th ng-repeat="m in grReport.group.grMember ">{{m.grMemName}}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr >
-                  <td > <i><select ng-init="bInitiator=userEmail"  ng-model="bInitiator" ng-options="a.grMemEmail as a.grMemName for a in grReport.group.grMember" class="input-box form-control"></select></i> </td>
+                  <td > <i><select style="max-width:120px"ng-init="bInitiator=userEmail"  ng-model="bInitiator" ng-options="a.grMemEmail as a.grMemName for a in grReport.group.grMember" class=" input-box form-control"></select></i> </td>
                   <td  ng-repeat="m in grReport.group.grMember ">{{finalBalance[bInitiator][m.grMemEmail]-finalBalance[m.grMemEmail][bInitiator]}}</td>
                 </tr>
               </tbody>
             </table>
+            <note><b>Note: </b> (-) means give, () means get</note>
           </div>
 
         </div>
