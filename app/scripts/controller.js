@@ -28,6 +28,7 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
     .success(function(data, status, headers, config){
       $localStorage.token = data;
       $localStorage.userId= (headers('location').split("/"))[1];
+
       $scope.$emit('eventLoggedIn', true);
       $location.path(headers('location'));
     })
@@ -152,6 +153,7 @@ tmmController.controller('userInfoController', function($routeParams, valSer, ut
   //******************************************
   $http.get("/user/"+$routeParams.userId+"/info")
   .success(function(data, status, headers, config){
+
     userInfoInit(data);
   })
   .error(function(data, status, headers, config){
@@ -590,6 +592,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
   }
   getUserGroup();
   $scope.submitGrpTrxForm = function(grpTrx){
+    console.log(grpTrx);
     var gtMem=[];
     for(var i=grpTrx.group.grMember.length; i--;){
       gtMem.push({"gtMemAmount": grpTrx[grpTrx.group.grMember[i].grMemEmail], "gtMemEmail": grpTrx.group.grMember[i].grMemEmail})
@@ -630,7 +633,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
 //***********************************************************************************
 tmmController.controller('userReportController', function( $routeParams, $filter, valSer, utilSer, $localStorage, $scope, $rootScope, $location, $http,  $window){
   // $http.get($location.path())
-$scope.toggleGrDelBtn=false;
+  $scope.toggleGrDelBtn=false;
   $scope.userEmail=$localStorage.email;
   $http.get("/user/"+$routeParams.userId+"/trx")
   .success(function(data, status, headers, config){
@@ -706,20 +709,41 @@ $scope.toggleGrDelBtn=false;
       return utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
     })
   }
-getGroupTrx()
+  getGroupTrx()
 
-$scope.deleteGrTrx = function(grpTrxId, g){
+  $scope.deleteGrTrx = function(grpTrxId, g){
+    $http.delete("/user/"+$localStorage.userId+"/group/trx/"+grpTrxId)
+    .success(function(data, scope){
+      utilSer.showFlashMsg($scope, "success", 'usrGrpReportResp', data, true);
+      g.isDeleted=true;
+    })
+    .error(function(data, scope){
+      utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
+    })
+  }
 
-  $http.delete("/user/"+$localStorage.userId+"/group/trx/"+grpTrxId)
-  .success(function(data, scope){
-    utilSer.showFlashMsg($scope, "success", 'usrGrpReportResp', data, true);
-    g.isDeleted=true;
-  })
-  .error(function(data, scope){
-    utilSer.showFlashMsg($scope, "error", 'usrGrpReportResp', data, true);
-  })
+  $scope.finalGrpBalance = function(data){
+    if(data && data.length!=0){
+      var grMem=data[0].gtMem;
+      var result={}
+      for(var i=grMem.length;i--;){
+        var newO={}
+        for(var j=grMem.length;j--;){
+          newO[grMem[j].gtMemEmail]=0
+        }
+        result[grMem[i].gtMemEmail]= newO
+      }
+      for(var i=data.length;i--;){
+        for(var j=data[i].gtMem.length;j--;){
+          result[data[i].gtInitiator][data[i].gtMem[j].gtMemEmail]=data[i].gtMem[j].gtMemAmount+result[data[i].gtInitiator][data[i].gtMem[j].gtMemEmail]
+        }
+      }
+      $scope.finalBalance=result;
+    }else {
+      return $scope.finalBalance=null;
+    }
+  }
 
-}
 
 })
 
@@ -736,8 +760,6 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   //***************************************
   //Logout function redirecteding to home
   //**************************************
-
-  $scope.userName=$localStorage.email
   $scope.deleteNoti = function(updateTypeCode){
     $http.put("/user/"+$localStorage.userId+"/notification", {"updateTypeCode": updateTypeCode})
     .success(function(data, status){
@@ -796,6 +818,7 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   $scope.logout = function(){
     delete $localStorage.token;
     delete $localStorage.userId;
+    delete $localStorage.email;
     $scope.userId=null;
     $scope.isLogged = false;
     $location.path('/main');

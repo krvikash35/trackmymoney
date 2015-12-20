@@ -30,7 +30,7 @@
               </span>
             </div>
 
-            <button class="btn input-box btn-primary" ng-init="toggleDeleteButton=true" ng-click="toggleDeleteButton=!toggleDeleteButton" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete button</button>
+            <button class="btn input-box btn-primary" ng-init="toggleDeleteButton=true" ng-click="toggleDeleteButton=!toggleDeleteButton" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete </button>
 
           </div>
         </div>
@@ -120,18 +120,38 @@
                   <th>Desc</th>
                 </tr>
               </thead>
-
               <tbody>
-                <tr ng-repeat=" g in userGrpReport | grReportDateRange:fromDate:toDate | filter:{grId: grReport.group._id} | filter:trxSearchGr | orderBy:orderPropGr:asc">
+                <tr ng-repeat=" g in (filteredGrpTrx=(userGrpReport | grReportDateRange:fromDate:toDate | filter:{grId: grReport.group._id} | filter:trxSearchGr | orderBy:orderPropGr:asc))">
                   <td ng-if="!g.isDeleted">{{g.gtDate | date:'dd-MMM-yyyy'}}</td>
                   <td ng-if="!g.isDeleted">{{g.gtAmount}}</td>
-                  <td ng-if="!g.isDeleted">{{g.gtInitiator | limitTo:10}}</td>
+                  <td ng-if="!g.isDeleted">{{g.gtInitiator | nameByEmail:grReport.group.grMember }}</td>
                   <td ng-if="!g.isDeleted" ng-repeat="gtm in g.gtMem  | orderBy:'gtMemEmail'">{{gtm.gtMemAmount}}</td>
                   <td ng-if="!g.isDeleted">{{g.gtDesc}}</td>
                   <td ng-if="!g.isDeleted" ng-show="!toggleGrDelBtn"><level class="btn btn-danger"   ng-click="deleteGrTrx(g._id, g)">Delete</level></td>
                 </tr>
+                <tr>
+                  <td ng-show="false" >{{finalGrpBalance(filteredGrpTrx)}}</td>
+                </tr>
               </tbody>
+            </table>
+          </div>
 
+
+
+          <div class="table-responsive col-md-12 col-sm-12">
+            <table class="table table-bordered  table-condensed ">
+              <thead>
+                <tr>
+                  <th class="col-sm-4"> final Balance Note: selected user will get from(+) or give to(-)</th>
+                  <th ng-repeat="m in grReport.group.grMember | orderBy:'grMemEmail'">{{m.grMemName}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr >
+                  <td > <i><select ng-init="bInitiator=userEmail"  ng-model="bInitiator" ng-options="a.grMemEmail as a.grMemName for a in grReport.group.grMember" class="input-box form-control"></select></i> </td>
+                  <td  ng-repeat="m in grReport.group.grMember  | orderBy:'gtMemEmail'">{{finalBalance[bInitiator][m.grMemEmail]-finalBalance[m.grMemEmail][bInitiator]}}</td>
+                </tr>
+              </tbody>
             </table>
           </div>
 
