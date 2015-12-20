@@ -1,25 +1,25 @@
 <div ng-show="isLogged">
 
   <div  class="panel panel-primary">
-    <div class="panel-heading"><a  href="" e-placeholder="Enter Group Name" e-style="width:65%" e-class="input-box " e-required editable-text="grName" onbeforesave=createNewGroup($data) >Group <i class="fa fa-plus-circle"></i></a> <span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
+    <div class="panel-heading"><a  href="" e-placeholder="Enter Group Name" e-style="width:65%;" e-class="input-box " e-required editable-text="grName" onbeforesave=createNewGroup($data) ><b style="color:white;font-size:200%">Groups</b> <i style="color:white"class="fa fa-plus-circle fa-2x"></i></a> <span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
     <div class="panel-body">
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
           <div class="panel-heading"  >{{a.grName }}
             <div ng-if="a.grAdmin==userEmail" class="btn-group" auto-close="disabled"  uib-dropdown is-open="status.isGrTempleteOpen">
-              <button ng-click="saveGrTemplate(a.grTemplate, null, 3, a._id)" id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+              <button style="height:30px"ng-click="saveGrTemplate(a.grTemplate, null, 3, a._id)" id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
                 <i class="fa fa-list-ul"></i> <span class="caret"></span>
               </button>
               <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
               </ul>
             </div>
-            <i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:1px;"class="fa fa-pencil-square-o fa-lg"></i>
+            <i ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:1px;" type="button" class="btn btn-success fa fa-pencil-square-o fa-lg"></i>
 
             <script type="text/ng-template" id="dropdown.html">
-            <ul style="background-color:#2B2B2B;max-height:220px;overflow:hidden;overflow:auto;" class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
+            <ul style="background-color:#2B2B2B;max-width:100px;max-height:220px;overflow:hidden;overflow:auto;" class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
             <table class="table table-bordered  table-condensed">
             <tr>
-            <td><input style="background-color:#795548;color:#D7CCC8" ng-model="grItem" class="form-control"></input></td>
+            <td><input style="background-color:#795548;color:#D7CCC8" ng-model="grItem" class="form-control" placeholder="items...."></input></td>
             <td><button ng-click="saveGrTemplate(a.grTemplate, grItem, 1)" class="btn btn-success">Save</button>
             </tr>
             <tr ng-repeat="item in a.grTemplate">
