@@ -1,6 +1,6 @@
 <div ng-show="isLogged">
   <div    class="panel panel-primary">
-    <div ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Individual Report<span ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</span></div>
+    <div ng-click="toggleGrInd=!toggleGrInd" class="panel-heading">Personal Report<span ng-show="usrReportResp" class={{msgType}} >{{usrReportResp}}</span></div>
     <div ng-if="toggleGrInd" class="panel-body">
 
       <div class="row">
@@ -154,7 +154,7 @@
                 </tr>
               </tbody>
             </table>
-            <note><b>Note: </b> (-) means give, () means get</note>
+            <note><b>Note: </b> Selected user will either GetFrom(No sign) or GiveTo(-ve sign)</note>
           </div>
 
         </div>

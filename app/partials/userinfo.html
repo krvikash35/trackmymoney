@@ -4,7 +4,7 @@
   <!-- <div > -->
   <div   style="padding:0px;background-color:red" class="panel panel-primary col-md-6 ">
     <div class="panel-heading">Basic Info<span ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</span></div>
-    <div style="max-height:220px;"class="panel-body">
+    <div style="height:220px;"class="panel-body">
 
       <table class="table  table-bordered  table-condensed">
         <tr>
@@ -36,7 +36,7 @@
   <!-- Money Account Related Info -->
   <div style="padding:0px" class="panel panel-primary col-md-6">
     <div class="panel-heading">Money Account Details<span ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</span></div>
-    <div style="max-height:220px;overflow:auto" class="panel-body ">
+    <div style="height:220px;overflow:auto" class="panel-body ">
 
       <form editable-form name="maform"  onaftersave="updateMoneyAccount()" oncancel="cancelMoneyAccountUpdate()">
         <table class="table  table-bordered  table-condensed">
@@ -77,7 +77,7 @@
     <!-- user source of transaction -->
     <div style="padding:0px"  class="panel panel-primary col-md-6">
       <div class="panel-heading">Expense Source<span ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</span></div>
-      <div style="max-height:300px;overflow:auto" class="panel-body ">
+      <div style="height:300px;overflow:auto" class="panel-body ">
         <div class="btn-edit">
           <button  type="button" class="input-button btn btn-primary" ng-show="!expenseSrcForm.$visible" ng-click="expenseSrcForm.$show()">
             edit
@@ -111,7 +111,7 @@
     <!-- user income soruce -->
     <div style="padding:0px"  class="panel panel-primary col-md-6">
       <div class="panel-heading">Income Source<span ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</span></div>
-      <div style="max-height:300px;overflow:auto" class="panel-body ">
+      <div style="height:300px;overflow:auto" class="panel-body ">
         <div class="btn-edit">
           <button type="button" class="input-button btn btn-primary" ng-show="!incomeSrcForm.$visible" ng-click="incomeSrcForm.$show()">
             edit
