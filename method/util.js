@@ -267,6 +267,7 @@ var updateUserGroup = function(req, res){
     .then(function(upGData){
       this.nData.notiIsRead=true;
       this.nData.save()
+      userGroupTrx.remove({grId:this.nData.notiParam[0].pValue}).exec()
       return res.status(200).send(errConfig.S105)
     })
     .catch(function(err){
@@ -296,6 +297,7 @@ var updateUserGroup = function(req, res){
       userGroup.update({_id: req.body.groupId}, {$pull: {grMember: {grMemEmail: req.body.grMemEmail}}}).exec()
     })
     .then(function(){
+      userGroupTrx.remove({grId:req.body.groupId}).exec()
       return res.status(200).send(errConfig.S108)
     })
     .catch(function(err){
@@ -603,6 +605,7 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
+              return res.send(emilVerCodeText)
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
@@ -660,7 +663,7 @@ var processSignupReq  = function(req, res){
       usrAcctRec.save(function(err, user){
         if(err)
         return res.status(500).send(errConfig.E121);
-        usrTemp.remove(function(err){console.log("error occured while deleting temp record");});
+        usrVerTemps.remove({email: req.body.email}).exec()
         var token = jwt.sign({ "userId": user._id }, sConfig.serverSecret, {expiresIn: sConfig.tokenExpiresInSecond});
         return res.location("user/"+user._id+"/info").status(201).send(token);
       });
