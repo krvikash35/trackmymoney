@@ -559,10 +559,11 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', err, true);
       return err;
     }
-
+    $scope.isPrsTrxResInProg=true;
     $http.post("/user/"+$routeParams.userId+"/trx", trxForm)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
+      $scope.isPrsTrxResInProg=false;
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
@@ -592,16 +593,16 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
   }
   getUserGroup();
   $scope.submitGrpTrxForm = function(grpTrx){
-    console.log(grpTrx);
     var gtMem=[];
     for(var i=grpTrx.group.grMember.length; i--;){
       gtMem.push({"gtMemAmount": grpTrx[grpTrx.group.grMember[i].grMemEmail], "gtMemEmail": grpTrx.group.grMember[i].grMemEmail})
     }
     var grTrx={"grId":grpTrx.group._id, "gtAmount":grpTrx.amount, "gtMem": gtMem, "gtDate": grpTrx.date, "gtDesc": grpTrx.desc, "gtItem": grpTrx.grTemplate};
-
+    $scope.isGrpTrxResInProg=true;
     $http.post("/user/"+$routeParams.userId+"/group/trx", grTrx)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'grpTrxResp', data, true);
+      $scope.isGrpTrxResInProg=false;
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'grpTrxResp', data, true);

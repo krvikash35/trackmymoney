@@ -228,7 +228,7 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $timeout, $q, $locatio
       scope[MsgVar]=MsgData;
       if(isItFlash){
         if(!timeInSec){
-          timeInSec=2;
+          timeInSec=3;
         }
         $timeout(function(){
           scope[MsgVar]=false;
