@@ -600,11 +600,11 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     }
     var grTrx={"grId":grpTrx.group._id, "gtAmount":grpTrx.amount, "gtMem": gtMem, "gtDate": grpTrx.date, "gtDesc": grpTrx.desc, "gtItem": grpTrx.grTemplate};
     $scope.isGrpTrxResInProg=true;
+    grpTrx.amount=null
     $http.post("/user/"+$routeParams.userId+"/group/trx", grTrx)
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'grpTrxResp', data, true);
       $scope.isGrpTrxResInProg=false;
-      grpTrx.amount=null
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'grpTrxResp', data, true);
