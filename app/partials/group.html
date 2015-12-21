@@ -20,7 +20,7 @@
             <table class="table table-bordered  table-condensed">
             <tr>
             <td><input style="background-color:#795548;color:#D7CCC8" ng-model="grItem" class="form-control" placeholder="items...."></input></td>
-            <td><button ng-click="saveGrTemplate(a.grTemplate, grItem, 1)" class="btn btn-success">Save</button>
+            <td><button ng-click="saveGrTemplate(a.grTemplate, grItem, 1);grItem=null" class="btn btn-success">Save</button>
             </tr>
             <tr ng-repeat="item in a.grTemplate">
             <td style="overflow:hidden;overflow-text:auto">{{item |limitTo:20}}</td>

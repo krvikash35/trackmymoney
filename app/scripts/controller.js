@@ -564,6 +564,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'prsTrxResp', data, true);
       $scope.isPrsTrxResInProg=false;
+      $scope.trx.amount=null
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'prsTrxResp', data, true);
@@ -603,6 +604,7 @@ tmmController.controller('userTrxController', function(valSer,utilSer, $localSto
     .success(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "success", 'grpTrxResp', data, true);
       $scope.isGrpTrxResInProg=false;
+      grpTrx.amount=null
     })
     .error(function(data, status, headers, config){
       utilSer.showFlashMsg($scope, "error", 'grpTrxResp', data, true);
@@ -645,10 +647,15 @@ tmmController.controller('userReportController', function( $routeParams, $filter
   })
   $scope.calTotalAmount = function(filterdTrx){
     var totalAmount=0
-    for(var i=filterdTrx.length;i--;){
-      totalAmount=totalAmount+filterdTrx[i].amount
+    if(filterdTrx && filterdTrx.length>0){
+      for(var i=filterdTrx.length;i--;){
+        totalAmount=totalAmount+filterdTrx[i].amount
+      }
+      return totalAmount;
+    }else {
+      return totalAmount;
     }
-    return totalAmount;
+
   }
   $scope.today = function() {
     $scope.toDate = new Date();
@@ -947,6 +954,7 @@ $scope.status = {
     if(code==1){
       if( item && items.indexOf(item)==-1){
       items.push(item)
+        // $scope.grItem=null
       $scope.status.isGrTempleteMod=true;
       }
     }
