@@ -604,8 +604,9 @@ var processSignupReq  = function(req, res){
             usrVerRec.save(function(err, data){
               if (err)
               return res.status(500).send(errConfig.E121);
-              var emilVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
-              sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
+              var emailVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
+              return res.status(200).send(emailVerCodeText)
+              sendEmail(usrEmail, sConfig.emailVerSubject, emailVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
               })
