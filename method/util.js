@@ -588,7 +588,7 @@ var processSignupReq  = function(req, res){
             tempUser.save(function(err, data){
               if (err)
               return res.status(500).send(errConfig.E121);
-              var emilVerCodeText= sConfig.emailverText+"<br>"+tempUser.verCode;
+              var emailVerCodeText= sConfig.emailverText+"<br>"+tempUser.verCode;
               sendEmail(usrEmail, sConfig.emailVerSubject, emilVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
@@ -605,7 +605,6 @@ var processSignupReq  = function(req, res){
               if (err)
               return res.status(500).send(errConfig.E121);
               var emailVerCodeText= sConfig.emailverText+"<br>"+usrVerRec.verCode;
-              return res.status(200).send(emailVerCodeText)
               sendEmail(usrEmail, sConfig.emailVerSubject, emailVerCodeText)
               .then(function(data){
                 return res.status(200).send(data)
