@@ -210,8 +210,8 @@ tmmSer.factory("utilSer", function utilSerFactory(valSer, $timeout, $q, $locatio
         });
       };
       var slideDetails=[
-        {"imgSrc": "img/tomslide1.jpg", "link": "http://blog.trackourmoney.com/"},
-        {"imgSrc": "img/tomslide2.jpg", "link": "http://blog.trackourmoney.com/"}
+        {"imgSrc": "img/tomslide1.jpg", "link": "http://blog.trackourmoney.com/2015/12/about-trackourmoney.html"},
+        {"imgSrc": "img/tomslide2.jpg", "link": "http://blog.trackourmoney.com/2015/12/managing-group.html"}
       ];
 
       for (var i=slideDetails.length;i--;) {
