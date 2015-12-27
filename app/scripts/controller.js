@@ -950,11 +950,10 @@ $scope.status = {
   isGrTempleteOpen: false,
   isGrTempleteMod: false
 }
-  $scope.saveGrTemplate = function(items, item, code, grId){
+  $scope.saveGrTemplate = function(items, item, code, grId, a){
     if(code==1){
       if( item && items.indexOf(item)==-1){
       items.push(item)
-        // $scope.grItem=null
       $scope.status.isGrTempleteMod=true;
       }
     }
@@ -963,6 +962,9 @@ $scope.status = {
       $scope.status.isGrTempleteMod=true;
     }
     if(code==3){
+      if($scope.status.isGrTempleteOpen){
+        a.showGrIndTemplate=true;
+      }
       if($scope.status.isGrTempleteOpen==false && $scope.status.isGrTempleteMod==true){
         $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "4", "groupId":grId, "grTemplate": items})
         .success(function(data, scope){
@@ -972,6 +974,10 @@ $scope.status = {
           utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
         })
       }
+      if(!$scope.status.isGrTempleteOpen){
+        a.showGrIndTemplate=false;
+      }
+
     }
   }
 
