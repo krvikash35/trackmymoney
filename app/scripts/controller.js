@@ -951,19 +951,11 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
     isGrTempleteMod: false
   }
   $scope.toggled = function(open) {
-    if(!open){
-      for(var i=$scope.userGroup.length;i--;){
-        $scope.userGroup[i].showGrIndTemplate=false;
-      }
-      // console.log($scope.userGroup);
-      // for (var grTemplate in $scope.userGroup){
-      //   console.log(grTemplate.showGrIndTemplate);
-      //   // grTemplate.showGrIndTemplate=false;
-      // }
+    if(!open && $scope.status.isGrTempleteMod){
+      $scope.status.isGrTempleteMod=false;
     }
-    // $scope.userGroup[0].showGrIndTemplate=false;
   };
-  $scope.saveGrTemplate = function(items, item, code, grId, a){
+  $scope.saveGrTemplate = function(items, item, code, grId){
     if(code==1){
       if( item && items.indexOf(item)==-1){
         items.push(item)
@@ -975,9 +967,6 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
       $scope.status.isGrTempleteMod=true;
     }
     if(code==3){
-      if($scope.status.isGrTempleteOpen){
-        a.showGrIndTemplate=true;
-      }
       if($scope.status.isGrTempleteOpen==false && $scope.status.isGrTempleteMod==true){
         $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "4", "groupId":grId, "grTemplate": items})
         .success(function(data, scope){
