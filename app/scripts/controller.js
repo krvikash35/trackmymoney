@@ -946,15 +946,28 @@ tmmController.controller("groupController", function($timeout, $interval, utilSe
     })
   }
 
-$scope.status = {
-  isGrTempleteOpen: false,
-  isGrTempleteMod: false
-}
+  $scope.status = {
+    isGrTempleteOpen: false,
+    isGrTempleteMod: false
+  }
+  $scope.toggled = function(open) {
+    if(!open){
+      for(var i=$scope.userGroup.length;i--;){
+        $scope.userGroup[i].showGrIndTemplate=false;
+      }
+      // console.log($scope.userGroup);
+      // for (var grTemplate in $scope.userGroup){
+      //   console.log(grTemplate.showGrIndTemplate);
+      //   // grTemplate.showGrIndTemplate=false;
+      // }
+    }
+    // $scope.userGroup[0].showGrIndTemplate=false;
+  };
   $scope.saveGrTemplate = function(items, item, code, grId, a){
     if(code==1){
       if( item && items.indexOf(item)==-1){
-      items.push(item)
-      $scope.status.isGrTempleteMod=true;
+        items.push(item)
+        $scope.status.isGrTempleteMod=true;
       }
     }
     if(code==2){
@@ -969,15 +982,13 @@ $scope.status = {
         $http.put("/user/"+$localStorage.userId+"/group", {"updateTypeCode": "4", "groupId":grId, "grTemplate": items})
         .success(function(data, scope){
           utilSer.showFlashMsg($scope, "success", 'grAcctResp', data, true);
+          $scope.status.isGrTempleteMod=false;
         })
         .error(function(data, scope){
           utilSer.showFlashMsg($scope, "error", 'grAcctResp', data, true);
+          $scope.status.isGrTempleteMod=false;
         })
       }
-      if(!$scope.status.isGrTempleteOpen){
-        a.showGrIndTemplate=false;
-      }
-
     }
   }
 
