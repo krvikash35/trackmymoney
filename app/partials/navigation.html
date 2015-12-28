@@ -4,7 +4,7 @@
 
   <div class="navbar-header dropdown-menu-left">
     <a href="#/" class="navbar-brand"> TrackOurMoney</a>
-    <a href="" style="float:right" class="navbar-brand" ng-click="toggleTheme()" id="themeElementId" > {{themeElementId}}</a>
+    <a href="" style="float:right" class="navbar-brand" ng-click="toggleTheme()" id="themeElementId" > <i class="fa fa-adjust"></i>{{themeElementId}}</a>
   </div>
 
   <div class="navbar-header dropdown-menu-right">
@@ -16,11 +16,11 @@
     <ul class="nav pull-left">
       <li class="dropdown dropdown-menu-right" uib-dropdown is-open="status.isopen">
 
-        <div style="margin-top:15px;margin-left:15px">
+        <div style="margin-top:15px;">
           <a href="" class="dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled" style="color:#777; margin-top="50px"" >
             <i class="fa fa-share-alt"></i><i class="caret"></i></a>
 
-            <a ng-show="isLogged" style="margin-left:100px" ng-click="getUserNoti()" ng-model="noti.templateUrl"  popover-placement="bottom" uib-popover-template="noti.templateUrl" popover-title="{{dynamicPopover.title}}" ><i class=" fa fa-bell-o "></i></a>
+            <a href=""ng-show="isLogged" style="margin-left:100px" ng-click="getUserNoti()" ng-model="noti.templateUrl"  popover-placement="bottom" uib-popover-template="noti.templateUrl" popover-title="{{dynamicPopover.title}}" ><i class=" fa fa-bell-o "></i>N</a>
           </div>
           <ul class="dropdown-menu">
             <li><a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=http://www.trackourmoney.com" class="btn-facebook"><i class="fa fa-facebook">facebook</i></a></li>

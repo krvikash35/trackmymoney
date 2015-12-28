@@ -771,15 +771,15 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   //Logout function redirecteding to home
   //**************************************
 
-$scope.themeElementId="Light"
+$scope.themeElementId="L"
   var applyTheme = function(){
     if($localStorage.colorPref){
       document.getElementById('stylesheet').href='style/light.css';
-      $scope.themeElementId="Dark"
+      $scope.themeElementId="D"
       $scope.navbarTheme="navbar-default"
     }else {
       document.getElementById('stylesheet').href='style/dark.css';
-      $scope.themeElementId="Light"
+      $scope.themeElementId="L"
       $scope.navbarTheme="navbar-inverse"
     }
   }
