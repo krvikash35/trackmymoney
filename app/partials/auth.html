@@ -8,12 +8,12 @@
     <div ng-show="isLoginFormVisible">
       <form role="form"   class="login-form" ng-submit="submitLoginForm(login)">
         <div class="form-group">
-          <input style="background-color:#795548;color:#D7CCC8" id="userEmail" type="email" ng-model="login.email"  placeholder="Username..." class="form-control"/>
+          <input  id="userEmail" type="email" ng-model="login.email"  placeholder="Username..." class="form-control input-box"/>
         </div>
         <div class="form-group">
-          <input style="background-color:#795548;color:#D7CCC8" id="userPwd" type="password" ng-model="login.password"  placeholder="Password..." class="form-control"/>
+          <input  id="userPwd" type="password" ng-model="login.password"  placeholder="Password..." class="form-control input-box"/>
         </div>
-        <button style="background-color:#5D4037;color:#D7CCC8" type="submit" class="btn btn-lg btn-primary btn-block">Sign in!  </button>
+        <button  type="submit" class="btn btn-lg btn-primary btn-block input-button">Sign in!  </button>
       </form>
       <p></p>
       <a style="padding-top:15px" href="" ng-click="toggleLoginAndRegView();showForgotPwd=false"  ><span class="glyphicon glyphicon-user"></span>Register here!</a>
@@ -25,22 +25,22 @@
       <uib-progressbar ng-show="verCodeSentInProgress" value="currentVal"><span style="color:white; white-space:nowrap;">{{currentVal}} / {{max}}</span></uib-progressbar>
       <form role="form"  class="registration-form" ng-submit="verifyEmail(reg)">
         <div class="form-group" ng-init=" emailVerButton='send verification code to email' ">
-          <input style="background-color:#795548;color:#D7CCC8" ng-disabled='isEmailVerified' ng-model="reg.email" type="email" id="email" required placeholder="Enter Email to verify..." class="form-control" >
-          <input style="background-color:#795548;color:#D7CCC8" ng-disabled='isEmailVerified || !isVerCodeSent'  type="password" ng-model="reg.verCode" required placeholder="Enter verification code..." class="form-control" >
-          <button style="background-color:#5D4037;color:#D7CCC8" style="background-color:#795548;color:#D7CCC8" ng-disabled='isEmailVerified || verCodeSentInProgress' class="btn btn-primary btn-block"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>
+          <input  ng-disabled='isEmailVerified' ng-model="reg.email" type="email" id="email" required placeholder="Enter Email to verify..." class="form-control input-box" >
+          <input  ng-disabled='isEmailVerified || !isVerCodeSent'  type="password" ng-model="reg.verCode" required placeholder="Enter verification code..." class="input-box form-control" >
+          <button  ng-disabled='isEmailVerified || verCodeSentInProgress' class="btn btn-primary btn-block input-button"><i ng-show="isEmailVerified" class="fa fa-check-circle-o"></i>{{emailVerButton}}</button>
         </div>
       </form>
       <form role="form" class="registration-form" ng-submit="submitRegForm(reg)">
         <div class="form-group">
-          <input style="background-color:#795548;color:#D7CCC8" ng-disabled='!isEmailVerified' type="text" ng-model="reg.fullname" required placeholder="Enter Name..." class="form-control" >
+          <input  ng-disabled='!isEmailVerified' type="text" ng-model="reg.fullname" required placeholder="Enter Name..." class="form-control input-box" >
         </div>
         <div class="form-group">
-          <input style="background-color:#795548;color:#D7CCC8" ng-disabled='!isEmailVerified' type="password" ng-model="reg.password" required placeholder="Enter password..." class="form-control" >
+          <input  ng-disabled='!isEmailVerified' type="password" ng-model="reg.password" required placeholder="Enter password..." class="form-control input-box" >
         </div>
         <div class="form-group">
-          <input style="background-color:#795548;color:#D7CCC8" ng-disabled='!isEmailVerified' type="password" ng-model="reg.password1" required placeholder="Re-Enter password..." class="form-control" >
+          <input  ng-disabled='!isEmailVerified' type="password" ng-model="reg.password1" required placeholder="Re-Enter password..." class="form-control input-box" >
         </div>
-        <button style="background-color:#5D4037;color:#D7CCC8" ng-disabled='!isEmailVerified' type="submit" class="btn btn-lg btn-primary btn-block">Sign up!</button>
+        <button  ng-disabled='!isEmailVerified' type="submit" class="btn btn-lg btn-primary btn-block input-button">Sign up!</button>
         <a href="" ng-click="toggleLoginAndRegView()" ><span class="glyphicon glyphicon-log-in">Signin here!</a>
         </form>
       </div>
@@ -48,8 +48,8 @@
       <div ng-if="showForgotPwd">
         <form role="form" class="registration-form" ng-submit="sendPwdToEmail(regEmail)">
           <div class="form-group" >
-            <input  style="background-color:#795548;color:#D7CCC8" ng-model="regEmail" type="email" id="email" required placeholder="Enter your registered email..." class="form-control" >
-            <button style="background-color:#5D4037;color:#D7CCC8" ng-disabled='resAwaiting' class="btn btn-primary btn-block">Send password to email</button>
+            <input   ng-model="regEmail" type="email" id="email" required placeholder="Enter your registered email..." class="form-control input-box" >
+            <button  ng-disabled='resAwaiting' class="btn btn-primary btn-block input-button">Send password to email</button>
           </div>
         </form>
       </div>

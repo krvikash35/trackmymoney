@@ -1,7 +1,7 @@
 <div ng-show="isLogged">
 
   <div  class="panel panel-primary">
-    <div class="panel-heading"><a  href="" e-placeholder="Enter Group Name" e-style="width:65%;" e-class="input-box " e-required editable-text="grName" onbeforesave=createNewGroup($data) ><b style="color:white;font-size:200%">Groups</b> <i style="color:white"class="fa fa-plus-circle fa-2x"></i></a> <span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
+    <div class="panel-heading"><a  href="" e-placeholder="Enter Group Name" e-style="width:65%;" e-class="input-box " e-required editable-text="grName" onbeforesave=createNewGroup($data) ><b style="color:white;">Groups</b> <i style="color:white"class="fa fa-plus-circle "></i></a> <span ng-if="grAcctResp"  class={{msgType}} >{{grAcctResp}}</span></div>
     <div class="panel-body">
       <i   ng-repeat="a in userGroup">
         <div  class="panel panel-primary">
@@ -15,10 +15,10 @@
             <i  uib-tooltip="Add or Delete Group Member " tooltip-placement="bottom" tooltip-trigger="mouseenter" ng-click="isAdminGroup(a)" ng-if="a.grAdmin==userEmail" style="margin-left:1px;" type="button" class="btn btn-success fa fa-pencil-square-o fa-lg"></i>
 
             <script  type="text/ng-template" ng-attr-id="grTemplate.html">
-            <ul  style="background-color:#2B2B2B;width:200px;max-height:300px;overflow:hidden;overflow:auto;" class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
+            <ul  style="width:200px;max-height:300px;overflow:hidden;overflow:auto;" class="uib-dropdown-menu groupItemTemplete" role="menu" aria-labelledby="button-template-url">
             <table class="table table-bordered  table-condensed">
             <tr>
-            <td><input style="background-color:#795548;color:#D7CCC8" ng-model="grItem" class="form-control" placeholder="items...."></input></td>
+            <td><input  ng-model="grItem" class="form-control input-box" placeholder="items...."></input></td>
             <td><button ng-click="saveGrTemplate(a.grTemplate, grItem, 1);grItem=null" class="btn btn-success">Save</button>
             </tr>
             <tr ng-repeat="item in a.grTemplate">

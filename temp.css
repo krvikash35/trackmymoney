@@ -1,0 +1,86 @@
+.body{
+  background-color: #2B2B2B;
+  color: #D7CCC8
+}
+
+.panel-primary > .panel-heading {
+  background-color: #5D4037;
+}
+
+.panel-primary > .panel-body {
+  background-color: #795548;
+}
+
+.panel-danger > .panel-heading {
+  background-color: #5D4037;
+  color: #FF5252
+}
+
+.panel-danger > .panel-body {
+  background-color: #795548;
+}
+
+.info-text-header{
+  color:#FFFFFF
+}
+
+.input-box{
+  background-color:#795548;
+  color:#D7CCC8
+}
+
+.input-button{
+  background-color:#5D4037;
+  color:#D7CCC8
+}
+
+.input-button-red{
+  color:#FFFFFF;
+  background-color: #FF5252;
+}
+
+
+
+.msg-green{
+  display: inline;
+  border-radius: 4px;
+  border: 1px solid #999;
+  background-color: #388E3C;
+  color: #D7CCC8;
+  float: right;
+  font-size: 100%;
+}
+
+.msg-red{
+  display: inline;
+  border-radius: 4px;
+  border: 2px solid #999;
+  background-color: #D32F2F;
+  color: #D7CCC8;
+  float: right;
+  font-size: 100%;
+}
+
+.myarticle{
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #D7CCC8;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #795548;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@media (min-width: 1200px) {
+  .container{
+    width: 970px;
+  }
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

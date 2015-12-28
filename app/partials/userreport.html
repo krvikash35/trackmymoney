@@ -14,7 +14,7 @@
               <option value="destination">destination</option>
               <option value="description">description</option>
             </select>
-            <input  style="background-color:#795548;color:#D7CCC8" class="input-box form-control" ng-model="trxSearch[prop]" placeholder="Search in field selected..." id="query">
+            <input  class="input-box form-control" ng-model="trxSearch[prop]" placeholder="Search in field selected..." id="query">
 
 
             <div class="input-group">
@@ -104,7 +104,7 @@
               <option value="$">All</option>
               <option value="gtInitiator">Initiator</option>
             </select>
-            <input  style="display:inline;background-color:#795548;color:#D7CCC8" class="form-control input-box " ng-model="trxSearchGr[propGr]" placeholder="Search in field selected..." id="query">
+            <input  style="display:inline;" class="form-control input-box " ng-model="trxSearchGr[propGr]" placeholder="Search in field selected..." id="query">
           </div>
           <button ng-show="grReport.group.grAdmin==userEmail" ng-init="toggleGrDelBtn=true" class="col-md-2 btn input-box btn-primary"  ng-click="toggleGrDelBtn=!toggleGrDelBtn" ><i class="fa fa-lg fa-toggle-on"></i>Toggle Delete</button>
 

@@ -5,6 +5,8 @@ var tmmController = angular.module('tmmController', []);
 // Main controller for handling landing page and controlling navigation item
 //**************************************************************************
 tmmController.controller('mainController', function($timeout, $interval, utilSer, valSer, $localStorage, $route,$rootScope, $scope,$location, $http, $window){
+
+
   $scope.isLoginFormVisible=true;
   $scope.isRegFormVisible=false;
   //***************************************
@@ -768,6 +770,24 @@ tmmController.controller('naviCtrl', function($http, $uibModal, utilSer, $interv
   //***************************************
   //Logout function redirecteding to home
   //**************************************
+
+$scope.themeElementId="Light"
+  var applyTheme = function(){
+    if($localStorage.colorPref){
+      document.getElementById('stylesheet').href='style/light.css';
+      $scope.themeElementId="Dark"
+      $scope.navbarTheme="navbar-default"
+    }else {
+      document.getElementById('stylesheet').href='style/dark.css';
+      $scope.themeElementId="Light"
+      $scope.navbarTheme="navbar-inverse"
+    }
+  }
+  applyTheme();
+  $scope.toggleTheme= function(){
+    $localStorage.colorPref=!$localStorage.colorPref
+    applyTheme();
+  }
   $scope.deleteNoti = function(updateTypeCode){
     if($scope.userNoti.length==0)
     return 0

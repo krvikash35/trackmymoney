@@ -1,8 +1,8 @@
-<div  ng-show="isLogged">
+<div  ng-show="isLogged" >
   <!-- User Basic Info -->
 
   <!-- <div > -->
-  <div   style="padding:0px;background-color:red" class="panel panel-primary col-md-6 ">
+  <div   style="padding:0px;" class="panel panel-primary col-md-5">
     <div class="panel-heading">Basic Info<span ng-show="usrBasicInfoUpdateResp" class={{msgType}} >{{usrBasicInfoUpdateResp}}</span></div>
     <div style="height:220px;"class="panel-body">
 
@@ -31,10 +31,11 @@
     </div>
 
   </div>
+
   <!-- </div> -->
 
   <!-- Money Account Related Info -->
-  <div style="padding:0px" class="panel panel-primary col-md-6">
+  <div style="padding:0px" class="panel panel-primary col-md-6 col-md-offset-1">
     <div class="panel-heading">Money Account Details<span ng-show="usrMoneyAcctUpdateResp" class={{msgType}} >{{usrMoneyAcctUpdateResp}}</span></div>
     <div style="height:220px;overflow:auto" class="panel-body ">
 
@@ -75,7 +76,7 @@
     </div>
 
     <!-- user source of transaction -->
-    <div style="padding:0px"  class="panel panel-primary col-md-6">
+    <div style="padding:0px"  class="panel panel-primary col-md-5">
       <div class="panel-heading">Expense Source<span ng-show="usrExpSrcUpdateResp" class={{msgType}} >{{usrExpSrcUpdateResp}}</span></div>
       <div style="height:300px;overflow:auto" class="panel-body ">
         <div class="btn-edit">
@@ -109,7 +110,7 @@
     </div>
 
     <!-- user income soruce -->
-    <div style="padding:0px"  class="panel panel-primary col-md-6">
+    <div style="padding:0px;"  class="panel panel-primary col-md-6 col-md-offset-1">
       <div class="panel-heading">Income Source<span ng-show="usrIncSrcUpdateResp" class={{msgType}} >{{usrIncSrcUpdateResp}}</span></div>
       <div style="height:300px;overflow:auto" class="panel-body ">
         <div class="btn-edit">

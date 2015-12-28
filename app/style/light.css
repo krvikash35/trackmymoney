@@ -1,0 +1,55 @@
+@media (min-width: 1200px) {
+  .container{
+    width: 1000px;
+  }
+}
+
+.msg-green{
+  display: inline;
+  border-radius: 4px;
+  border: 1px solid #999;
+  background-color: #388E3C;
+  color: #D7CCC8;
+  float: right;
+  font-size: 100%;
+}
+
+.msg-red{
+  display: inline;
+  border-radius: 4px;
+  border: 2px solid #999;
+  background-color: #D32F2F;
+  color: #D7CCC8;
+  float: right;
+  font-size: 100%;
+}
+
+.myarticle{
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: black;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  border: 1px solid #999;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.notification{
+    color:black;
+}
+
+.navbar-theme {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+}
+
+.groupItemTemplete{
+  background-color:white;
+  color:#2B2B2B;
+}
