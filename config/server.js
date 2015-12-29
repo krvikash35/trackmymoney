@@ -2,9 +2,9 @@ module.exports = {
 
   "runEnv": process.env.runEnv || "prod",
   "prodUrl":{
-    "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+ process.env.OPENSHIFT_APP_NAME || process.env.HEROKU_MONGODB_URL || "mongodb://admin:Sur3536@ds037215.mongolab.com:37215/trackourmoney",
+    "dbUrl" : process.env.OPENSHIFT_MONGODB_DB_URL+ process.env.OPENSHIFT_APP_NAME || process.env.HEROKU_MONGODB_URL || process.env.MONGO_LAB_DB_URL,
     "appUrl": process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "8080"
+    "appPort": process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || "80"
   },
   "devUrl":{
     "dbUrl" : "mongodb://localhost/trackourmoney",
