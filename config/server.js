@@ -11,9 +11,9 @@ module.exports = {
     "appUrl": "0.0.0.0",
     "appPort": "8080"
   },
-  "serverSecret": process.env.serverSecret || null,
+  "serverSecret": process.env.SERVER_SECRET || null,
   "mailSerUser": "vikash@trackourmoney.com" || null,
-  "mailSerUserPwd": process.env.mailSerUserPwd,
+  "mailSerUserPwd": process.env.MAIL_SERVER_PWD,
   "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
   "emailPwdSubject": "Forgot password of your trackourmoney account",
