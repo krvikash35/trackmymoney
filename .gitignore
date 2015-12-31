@@ -6,3 +6,6 @@ bower_components/
 tmp
 .DS_Store
 .idea
+.gnome2
+.local
+.openshift
