@@ -172,39 +172,19 @@ privRouter.delete('/:userId/group/trx/:grpTrxId', utilMeth.deleteGrpTrx)
 
 
 
-
-
-
-logger.debug("choosing env")
-if(sConfig.runEnv === 'dev') {
-  mongoDBUrl = sConfig.devUrl.dbUrl;
-  appPort       = sConfig.devUrl.appPort;
-  appUrl      = sConfig.devUrl.appUrl;
-} else {
-  if(sConfig.runEnv === 'prod'){
-    mongoDBUrl  = sConfig.prodUrl.dbUrl;
-    appPort        = sConfig.prodUrl.appPort;
-    appUrl      = sConfig.prodUrl.appUrl;
-  }
-  else{
-    return logger.error("Invalid run env: "+sConfig.runEnv)
-  }
-}
-logger.info("using env: "+sConfig.runEnv)
-
 logger.debug("connecting to Database")
-mongoose.connect(mongoDBUrl, function(err){
+mongoose.connect(sConfig.prodUrl.dbUrl, function(err){
   if(err){
-    return logger.error("failed to connect to: "+mongoDBUrl+" "+err)
+    return logger.error("failed to connect to: "+sConfig.prodUrl.dbUrl+" "+err)
   }else{
-    logger.info("connected to "+mongoDBUrl)
+    logger.info("connected to "+sConfig.prodUrl.dbUrl)
     logger.debug("checking sConfigInit env value");
     if(!utilMeth.isSconfigEnvValid()){
       return logger.error("Invalid sConfigInit env value")
     }
     logger.debug("Starting app server")
-    app.listen(appPort, appUrl, function () {
-      logger.info("Listening on " + appUrl + ", server_port " + appPort)
+    app.listen(sConfig.prodUrl.appPort, sConfig.prodUrl.appUrl, function () {
+      logger.info("Listening on " + sConfig.prodUrl.appUrl + ", server_port " + sConfig.prodUrl.appPort)
     });
   }
 });
