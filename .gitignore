@@ -1,4 +1,5 @@
 logs/all-logs1.log
+test/report/*
 !.gitkeep
 node_modules/
 bower_components/
