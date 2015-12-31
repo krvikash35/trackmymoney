@@ -3,7 +3,7 @@
     <div ng-include="'partials/feed.html'"></div>
   </div>
   <div ng-show="!isLogged" style="padding-top:15px" class="col-sm-4 col-md-4 auth">
-    <div ng-show="authResMsg" class={{msgType}} >{{authResMsg}}</div>
+    <div ng-show="authResMsg"  >{{authResMsg}}</div>
 
     <div ng-show="isLoginFormVisible">
       <form role="form"   class="login-form" ng-submit="submitLoginForm(login)">
@@ -13,7 +13,7 @@
         <div class="form-group">
           <input  id="userPwd" type="password" ng-model="login.password"  placeholder="Password..." class="form-control input-box"/>
         </div>
-        <button  type="submit" class="btn btn-lg btn-primary btn-block input-button">Sign in!  </button>
+        <button  id="loginButton" type="submit" class="btn btn-lg btn-primary btn-block input-button">Sign in!  </button>
       </form>
       <p></p>
       <a style="padding-top:15px" href="" ng-click="toggleLoginAndRegView();showForgotPwd=false"  ><span class="glyphicon glyphicon-user"></span>Register here!</a>

@@ -35,6 +35,7 @@ tmmController.controller('mainController', function($timeout, $interval, utilSer
       $location.path(headers('location'));
     })
     .error(function(data, status, headers, config){
+      //$scope.authResMsg="Wrong password!"
       utilSer.showFlashMsg($scope, "error", 'authResMsg', data, true);
     })
   }
