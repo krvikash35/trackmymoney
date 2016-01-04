@@ -3,7 +3,7 @@ module.exports = {
   "prodUrl":{
     "dbUrl" : process.env.TOM_DB_URL,
     "appUrl": process.env.TOM_HOST  || '0.0.0.0',
-    "appPort": process.env.TOM_PORT || "8080"
+    "appPort": process.env.TOM_PORT || "8081"
   },
   "serverSecret": process.env.SERVER_SECRET,
   "mailSerUser": "krvikash35@gmail.com",
