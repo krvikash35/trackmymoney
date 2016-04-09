@@ -26,5 +26,5 @@
   "devDependencies": {
     "protractor": "^2.1.0",
     "jasmine-reporters": "^0.4.1"
-  },
+  }
 }
