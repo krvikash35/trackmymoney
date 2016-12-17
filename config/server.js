@@ -6,7 +6,7 @@ module.exports = {
     "appPort": process.env.TOM_PORT || "8081"
   },
   "serverSecret": process.env.SERVER_SECRET,
-  "mailSerUser": proess.env.MAIL_SERVER_USR,
+  "mailSerUser": process.env.MAIL_SERVER_USR,
   "mailSerUserPwd": process.env.MAIL_SERVER_PWD,
   "emailVerSubject": "verify your email to use on trackourmoney",
   "emailverText": "Please find below the 4 digit verification code and enter it while signup",
